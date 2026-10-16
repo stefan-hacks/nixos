@@ -5,22 +5,28 @@
 
 {
   imports = [
-    ./accessibility.nix
-    ./app-folders.nix
-    ./evolution.nix
-    ./gtk.nix
-    ./input-devices.nix
-    ./media.nix
-    ./misc.nix
-    ./misc-apps.nix
-    ./mutter.nix
-    ./nautilus.nix
-    ./notifications.nix
-    ./settings-daemon.nix
-    ./shell.nix
-    ./shell-extensions.nix
-    ./system-monitor.nix
-    ./virt-manager.nix
-    ./window-manager.nix
+    ./hardware-configuration.nix
   ];
+
+  boot.initrd.luks.devices."cryptroot" = {
+    device = "/dev/disk/by-uuid/8a350d7a-ce96-4ba6-938c-61b2739239f6";
+  };
+
+  # Ensure graphics drivers are properly mapped
+  boot.initrd.kernelModules = [ "amdgpu" ];
+  services.xserver.videoDrivers = [ "amdgpu" ];
+
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+    extraPackages = with pkgs; [
+      rocmPackages.clr.icd # OpenCL support for AMD
+      libva-vdpau-driver
+      libvdpau-va-gl
+    ];
+  };
+
+  networking.hostName = "titan"; # Define your hostname.
+
+  system.stateVersion = "26.05";
 }

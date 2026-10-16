@@ -1,0 +1,335 @@
+{ ... }:
+
+{
+  environment.systemPackages = with pkgs; [
+    ###########################################################################
+    # Core Utilities
+    ###########################################################################
+
+    bash
+    coreutils
+    findutils
+    gnugrep
+    gnused
+    gawk
+    util-linux
+    man-pages
+    man-pages-posix
+    file
+    which
+    tree
+    wget
+    curl
+    rsync
+    unzip
+    zip
+    p7zip
+    vim
+    hw-probe
+
+    tokei
+    # Image manipulation
+    imagemagick
+    exiftool
+
+    less
+
+    ###########################################################################
+    # Shell Utilities
+    ###########################################################################
+
+    blesh
+    carapace
+    atuin
+    starship
+    zoxide
+    fzf
+    direnv
+
+    eza
+    bat
+    bat-extras.core # bat extras suite
+    ripgrep
+    fd
+    zathura
+    jq
+    yq-go
+
+    ###########################################################################
+    # Build tools (for nvim-treesitter parser compilation)
+    ###########################################################################
+
+    gcc
+    gnumake
+
+    ###########################################################################
+    # LSP Servers (declarative — Nix-managed, no Mason)
+    ###########################################################################
+
+    rust-analyzer
+    nixd
+    basedpyright
+    bash-language-server
+    yaml-language-server
+    marksman
+    taplo
+    lua-language-server
+    vscode-langservers-extracted
+
+    ###########################################################################
+    # Formatters
+    ###########################################################################
+
+    rustfmt
+    nixfmt
+    shfmt
+    ruff
+    stylua
+    black
+    isort
+    prettier
+
+    ###########################################################################
+    # Linters
+    ###########################################################################
+
+    cargo
+    clippy
+    shellcheck
+    statix
+    yamllint
+    markdownlint-cli
+
+    ###########################################################################
+    # Git
+    ###########################################################################
+
+    git
+    git-lfs
+    delta
+    gh
+    lazygit
+
+    ###########################################################################
+    # Networking
+    ###########################################################################
+
+    inetutils
+    dnsutils
+    nmap
+    mtr
+    traceroute
+    tcpdump
+    wireshark
+    openssh
+    lazyssh
+
+    ###########################################################################
+    # Archives
+    ###########################################################################
+
+    xz
+    gzip
+    bzip2
+
+    ###########################################################################
+    # Monitoring
+    ###########################################################################
+
+    btop
+    fastfetch
+    lsof
+    pciutils
+    usbutils
+    lm_sensors
+    smartmontools
+    nvme-cli
+    libva-utils
+    libinput
+
+    ###########################################################################
+    # Nix
+    ###########################################################################
+
+    nix-tree
+    nix-output-monitor
+    nix-index
+    comma
+
+    ###########################################################################
+    # Hardware
+    ###########################################################################
+
+    kanata
+
+    ###########################################################################
+    # Sysadmin Tools (Power Bash Experience)
+    ###########################################################################
+
+    # File Operations & Analysis
+    exfatprogs
+    ntfs3g
+    parted
+    gparted
+    ddrescue
+    binsider
+    ghgrab
+
+    # Disk & Storage
+    ncdu
+    duf
+    dust
+    iotop
+
+    # Network Tools
+    iperf3
+    nethogs
+    socat
+    netcat
+    whois
+    bind
+    doggo # DNS tool (replaces removed dogdns)
+
+    # Process & System Monitoring
+    htop
+    procps
+    sysstat
+    strace
+    ltrace
+
+    # Security
+    gnupg
+    openssl
+    age
+    sops
+
+    # Archive & Compression
+    zstd
+    lz4
+    unrar
+    p7zip
+    rar
+
+    # Text Processing
+    miller
+    csvkit
+    jid
+    fx
+
+    # JSON/YAML/TOML
+    jc
+    yj
+
+    # System Info
+    onefetch
+    cpufetch
+    inxi
+
+    # TUI Tools
+    lf
+    ranger
+    mc
+    fzf
+    skim
+
+    ###########################################################################
+    # Security / CTF Tools (from .bash_aliases)
+    ###########################################################################
+
+    # Enumeration
+    netdiscover
+    arp-scan
+
+    # Additional utilities
+    asciinema
+    cmatrix
+    lolcat
+    figlet
+
+    ###########################################################################
+    # Terminal
+    ###########################################################################
+
+    kitty
+
+    ###########################################################################
+    # Media
+    ###########################################################################
+
+    yt-dlp
+
+    ###########################################################################
+    # System Tools
+    ###########################################################################
+
+    btop
+    glow
+    gum
+    tealdeer
+    grc
+    chafa
+    yazi
+    cava
+    dog
+    doggo
+    xh
+    lazydocker
+    fd
+    ouch
+    hexyl
+    hevi
+    wtfis
+
+    ###########################################################################
+    # NixOS-Specific Tools
+    ###########################################################################
+    nh
+    nix-output-monitor
+    nix-fast-build
+    nix-tree
+    nix-diff
+    nix-init
+    nix-update
+    nix-index
+    comma
+    deadnix
+    statix
+    alejandra
+    nil
+    nixd
+    home-manager
+    deploy-rs
+    colmena
+    nvd
+
+    ###########################################################################
+    # External flake tools
+    ###########################################################################
+    nix-graph.packages.${pkgs.stdenv.hostPlatform.system}.default
+    # Interactive TUI for Nix dependency graphs (github:AlexAntonik/nix-graph)
+
+    ###########################################################################
+    # Development Tools
+    ###########################################################################
+
+    amp
+    bandwhich
+    bacon
+    netfetch
+    atop
+    tailspin
+    dust
+    zellij
+    ncdu
+    dua
+    wiper
+    qemu
+    qemu_kvm
+    spice-gtk
+    spice
+    spice-vdagent
+    dnsmasq
+    bridge-utils
+    cmatrix
+  ];
+}
