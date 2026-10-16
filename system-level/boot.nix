@@ -5,6 +5,12 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # Allow Unfree
+  nixpkgs.config.allowUnfree = true;
+
+  # Allow experimental features and flakes
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   # Nixos - Maintenance
   nix = {
     settings = {

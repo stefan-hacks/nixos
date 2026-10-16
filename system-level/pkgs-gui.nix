@@ -6,7 +6,6 @@
     # Productivity
     ###########################################################################
 
-    firefox
     chromium
     joplin-desktop
     evolution
