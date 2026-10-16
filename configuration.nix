@@ -34,7 +34,7 @@ in
     enable32Bit = true;
     extraPackages = with pkgs; [
       rocmPackages.clr.icd # OpenCL support for AMD
-      vaapiVdpau
+      libva-vdpau-driver
       libvdpau-va-gl
     ];
   };
