@@ -65,7 +65,6 @@ in
 
   # Configure network connections interactively with nmcli or nmtui.
   networking.networkmanager.enable = true;
-  networking.networkmanager.dns = "systemd-resolved";
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -174,11 +173,18 @@ in
   programs.gpaste.enable = true;
   programs.starship.enable = true;
   
-  # Atuin
+  # Configure the Atuin Shell Client System-Wide
   programs.atuin = {
     enable = true;
-    enableBashIntegration = true;
+    
+    # Declarative client parameters written automatically to /etc/atuin/config.toml
+    settings = {
+      auto_sync = true;
+      sync_address = "https://atuin.sh"; # Change to https://api.atuin.sh if using the default public sync server
+      update_check = false;
+    };
   };
+
   # Zoxide
   programs.zoxide = {
     enable = true;
