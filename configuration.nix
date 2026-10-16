@@ -25,6 +25,23 @@ in
     device = "/dev/disk/by-uuid/8a350d7a-ce96-4ba6-938c-61b2739239f6";
   };
 
+  # Ensure graphics drivers are properly mapped
+  boot.initrd.kernelModules = [ "amdgpu" ];
+  services.xserver.videoDrivers = [ "amdgpu" ];
+  
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+    extraPackages = with pkgs; [
+      rocmPackages.clr.icd # OpenCL support for AMD
+      vaapiVdpau
+      libvdpau-va-gl
+    ];
+  };
+  
+
+
+  # Nixos - Maintenance
   nix = {
     settings = {
       auto-optimise-store = true;
@@ -45,15 +62,18 @@ in
 
   networking.hostName = "nixos"; # Define your hostname.
 
+
   # Configure network connections interactively with nmcli or nmtui.
   networking.networkmanager.enable = true;
-
-  # Set your time zone.
-  time.timeZone = "America/Sao_Paulo";
+  networking.networkmanager.dns = "systemd-resolved";
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+
+  # Set your time zone.
+  time.timeZone = "America/Sao_Paulo";
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -110,6 +130,22 @@ in
   #   spiceUSBRedirection.enable = true;
   # };
 
+ 
+  # Avahi - network printing & file sharing, local discovery, local hostname resolution
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true; # Automatically installs and configures nss-mdns for IPv4
+    # nssmdns6 = true; # Uncomment if you explicitly need IPv6 local resolution
+    
+    # Open necessary firewall ports for mDNS discovery
+    openFirewall = true; 
+  };
+
+  # Fix the "Invalid group-name group='netdev'" D-Bus warning
+  # This declaratively creates the netdev group that Avahi's D-Bus config expects
+  users.groups.netdev = {};
+
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   # When to use mutable: Temporary testing, transitioning from another distro. When to use immutable: Production, reproducibility, version control.
   # users.mutableUsers = false;
@@ -135,7 +171,7 @@ in
 
   # Programs
   programs.firefox.enable = true;
-
+  programs.gpaste.enable = true;
   programs.starship.enable = true;
   
   # Atuin
@@ -593,6 +629,11 @@ in
 
 
   # Logging
+  services.logrotate = {
+   enable = true;
+  # Native NixOS options wrap formatting neatly without defaulting to dry-run states
+  };
+
   security.auditd.enable = true;
 
   security.audit = {
@@ -610,9 +651,6 @@ in
       # Log all authentication attempts.
       "-w /var/log/auth.log -p wa -k auth-log-access"
     ];
-
-    # Backlog size (how many events to queue).
-    backlogLimit = 8192;
   };
 
 
