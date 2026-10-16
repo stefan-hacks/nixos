@@ -1,65 +1,59 @@
 {
-  description = "My nixos setup";
+  description = "NixOS config";
 
   inputs = {
-    # NixOS official package source, using the nixos-26.05 branch here
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
-
-    flake-parts = {
-      url = "github:hercules-ci/flake-parts";
-      inputs.nixpkgs-lib.follows = "nixpkgs";
-    };
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
 
     home-manager = {
-    url = "github:nix-community/home-manager/release-26.05";
-    inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-community/home-manager/release-26.05";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-my-gnome = {
+      url = "github:stefan-hacks/nix-my-gnome";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
+    nix-graph = {
+      url = "github:AlexAntonik/nix-graph";
+      # NOTE: nix-graph pins nixos-unstable. Do NOT add follows here,
+      #       because its buildGoModule may need a newer Go toolchain
+      #       than what nixos-26.05 stable provides.
+    };
+
+    hermes-agent = {
+      url = "github:NousResearch/hermes-agent";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{flake-parts, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [ "x86_64-linux" ];
-      imports = [
-        # NixOS feature modules — exported as flake.nixosModules.<name>
-        ./modules/system/flake-parts.nix
-        ./modules/users/flake-parts.nix
-        ./modules/programs/flake-parts.nix
-
-        # Home-manager feature modules — exported as flake.homeManagerModules.<name>
-        ./modules/home/flake-parts.nix
-
-        # Host declarations — each host is a small flake-parts module that
-        # selects which NixOS / home-manager aspects to enable.
-        ./host/flake-parts.nix
-
-      ];
-
+  outputs = inputs@{ self, nixpkgs, home-manager, ... }:
     let
-      # Automatically get all directory names under the ./hosts folder
-      hostDirs = builtins.attrNames (builtins.readDir ./hosts);
-
-      mkSystem = hostname: nixpkgs.lib.nixosSystem {
+      # Helper for automatic host discovery
+      mkHost = hostname: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        # Pass the hostname down into the modules
-        specialArgs = { inherit inputs hostname; };
+        specialArgs = { inherit inputs; };
         modules = [
-          ./hosts/${hostname}/default.nix
+          ./hosts/${hostname}
+          ./modules/system
           home-manager.nixosModules.home-manager
           {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = { inherit inputs hostname; };
+            networking.hostName = hostname;
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users."stefan-hacks" = import ./user-level/home-manager/stefan-hacks
+              extraSpecialArgs = { inherit inputs; };
+            };
           }
         ];
       };
     in {
-      # Dynamically generate nixosConfigurations based on folder names
-      nixosConfigurations = nixpkgs.lib.genAttrs hostDirs (hostname: mkSystem hostname);
-    };
-
-    perSystem = { pkgs, ... }: {
-        formatter = pkgs.nixfmt-tree;
+      nixosConfigurations = {
+        titan = mkHost "titan";
+        # Adding new hosts is trivial:
+        # laptop = mkHost "laptop";
+        # server = mkHost "server";
+      };
     };
 }
