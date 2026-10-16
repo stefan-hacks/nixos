@@ -4,16 +4,9 @@
 
 { config, lib, pkgs, ... }:
 
-let
-  nixvim = import (builtins.fetchGit {
-    url = "https://github.com/nix-community/nixvim";
-    ref = "nixos-26.05";
-  });
-in
 {
   imports = [
     ./hardware-configuration.nix
-    nixvim.nixosModules.nixvim
   ];
 
 
@@ -28,7 +21,7 @@ in
   # Ensure graphics drivers are properly mapped
   boot.initrd.kernelModules = [ "amdgpu" ];
   services.xserver.videoDrivers = [ "amdgpu" ];
-  
+
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
@@ -38,7 +31,7 @@ in
       libvdpau-va-gl
     ];
   };
-  
+
 
 
   # Nixos - Maintenance
@@ -93,7 +86,7 @@ in
   # GNOME Desktop
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
-  
+
   programs.dconf.enable = true;
 
   # Configure keymap in X11
@@ -118,7 +111,7 @@ in
   # virtualisation = {
   #   docker.enable = false;
   #   podman.enable = false;
-  #  
+  #
   #   libvirtd = {
   #     enable = true;
   #     qemu = {
@@ -129,15 +122,15 @@ in
   #   spiceUSBRedirection.enable = true;
   # };
 
- 
+
   # Avahi - network printing & file sharing, local discovery, local hostname resolution
   services.avahi = {
     enable = true;
     nssmdns4 = true; # Automatically installs and configures nss-mdns for IPv4
     # nssmdns6 = true; # Uncomment if you explicitly need IPv6 local resolution
-    
+
     # Open necessary firewall ports for mDNS discovery
-    openFirewall = true; 
+    openFirewall = true;
   };
 
   # Fix the "Invalid group-name group='netdev'" D-Bus warning
@@ -152,9 +145,9 @@ in
   users.users."stefan-hacks" = {
     isNormalUser = true;
      # hashedPassword removed for security — set via sops-nix or interactive passwd
-    extraGroups = [ 
-      "wheel" 
-      "networkmanager"  
+    extraGroups = [
+      "wheel"
+      "networkmanager"
       "audio"
       "video"
       "kvm"
@@ -162,21 +155,21 @@ in
       "uinput"
    #   "dialout"
    #   "libvirtd"
-    ]; 
+    ];
     packages = with pkgs; [
     #  tree
     ];
-  }; 
+  };
 
   # Programs
   programs.firefox.enable = true;
   programs.gpaste.enable = true;
   programs.starship.enable = true;
-  
+
   # Configure the Atuin Shell Client System-Wide
   programs.atuin = {
     enable = true;
-    
+
     # Declarative client parameters written automatically to /etc/atuin/config.toml
     settings = {
       auto_sync = true;
@@ -191,21 +184,11 @@ in
     enableBashIntegration = true;
   };
 
-  # Nixvim — declarative Neovim configuration
-  programs.nixvim = {
-    enable = true;
-    defaultEditor = true;
-
-    # Add your Nixvim settings here.
-    # Example:
-    # colorschemes.catppuccin.enable = true;
-    # plugins.lualine.enable = true;
-  };
 
 
   # Allow Unfree
   nixpkgs.config.allowUnfree = true;
-  
+
   # Allow experimental features and flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
@@ -307,7 +290,7 @@ in
     tree
     parted
     nvme-cli
-    
+
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -331,7 +314,7 @@ in
           tap-time 200
           hold-time 200
          )
-         
+
          ;; Defsrc contains the original unmapped keyboard layout. Often this is qwerty.
          (defsrc
            esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
@@ -341,20 +324,20 @@ in
            lsft z    x    c    v    b    n    m    ,    .    /    rsft
            lctl lmet lalt           spc            ralt rmet rctl
          )
-         
+
          ;; Aliases
          ;; Layer toggles — accessed by holding modifier keys
          (defalias
            ;; Spacebar → Layer 2: Symbols / programming characters
            l2 (tap-hold $tap-time $hold-time spc (layer-toggle two))
-         
+
            ;; Left Meta (S key) → Layer 3: Window/Workspace management
            l3 (tap-hold $tap-time $hold-time lmet (layer-toggle three))
-         
+
            ;; Left Ctrl → Layer 4: Text editing / mouse wheel emulation
            l4 (tap-hold $tap-time $hold-time lctl (layer-toggle four))
-         
-         
+
+
            ;; Home row tap-hold modifiers
            ;; S key: tap=s, hold=Left Meta (Super/Windows key)
            ss (tap-hold $tap-time $hold-time s lmet)
@@ -370,13 +353,13 @@ in
            kk (tap-hold $tap-time $hold-time k ralt)
            ;; L key: tap=l, hold=Right Meta
            ll (tap-hold $tap-time $hold-time l rmet)
-         
+
            ;; Thumb cluster tap-hold modifiers
            ;; Backspace: tap=backspace, hold=delete
            la (tap-hold $tap-time $hold-time bspc del)
            ;; Enter: tap=enter, hold=Right Alt
            ra (tap-hold $tap-time $hold-time ret ralt)
-         
+
            ;; F-row system controls (hold activates media/window actions)
            ;; F1: tap=F1, hold=quake terminal dropdown
            qtd (tap-hold $tap-time $hold-time f1 C-A-q)
@@ -398,7 +381,7 @@ in
            psc (tap-hold $tap-time $hold-time f9 C-S-A-r)
            ;; F10: tap=F10, hold=lock screen
            lts (tap-hold $tap-time $hold-time f10 M-l)
-         
+
            ;; Number row tap-hold: tap=digit, hold=shifted symbol
            ;; ` key: tap=`, hold=~
            gm (tap-hold $tap-time $hold-time grv S-grv)
@@ -426,7 +409,7 @@ in
            mi (tap-hold $tap-time $hold-time - S--)
            ;; = key: tap==, hold=+
            pl (tap-hold $tap-time $hold-time = S-=)
-         
+
            ;; Top row tap-hold: tap=letter, hold=Ctrl+letter (common shortcuts)
            ;; Q key: tap=q, hold=Ctrl+Q (quit application)
            qq (tap-hold $tap-time $hold-time q C-q)
@@ -438,7 +421,7 @@ in
            rr (tap-hold $tap-time $hold-time r C-r)
            ;; T key: tap=t, hold=Ctrl+T (new tab)
            tt (tap-hold $tap-time $hold-time t C-t)
-         
+
            ;; Navigation tap-hold on home row right side
            ;; Y key: tap=y, hold=Home (beginning of line)
            yy (tap-hold $tap-time $hold-time y home)
@@ -448,7 +431,7 @@ in
            ii (tap-hold $tap-time $hold-time i pgup)
            ;; O key: tap=o, hold=End (end of line)
            oo (tap-hold $tap-time $hold-time o end)
-         
+
            ;; Media controls (tap and hold both trigger same action)
            ;; P key: tap/hold=play/pause media
            pp (tap-hold $tap-time $hold-time C-M-/ C-M-/)
@@ -460,8 +443,8 @@ in
            mls (tap-hold $tap-time $hold-time S-M-h S-M-h)
            ;; ' key: tap/hold=scroll right (Shift+Meta+L)
            mrs (tap-hold $tap-time $hold-time S-M-l S-M-l)
-         
-         
+
+
            ;; Bracket and punctuation tap-hold: tap=unshifted, hold=shifted
            ;; [ key: tap=[, hold={
            so (tap-hold $tap-time $hold-time [ S-[)
@@ -475,7 +458,7 @@ in
            se (tap-hold $tap-time $hold-time ; rsft)
            ;; ' key: tap=', hold="
            ap (tap-hold $tap-time $hold-time ' S-')
-         
+
            ;; Bottom row tap-hold: tap=letter, hold=Ctrl+letter
            ;; Z key: tap=z, hold=Ctrl+Z (undo)
            zz (tap-hold $tap-time $hold-time z C-z)
@@ -491,7 +474,7 @@ in
            fu (tap-hold $tap-time $hold-time . S-.)
            ;; / key: tap=/, hold=?
            fs (tap-hold $tap-time $hold-time / S-/)
-         
+
            ;; Text deletion aliases for Layer 4 (Editing)
            ;; , key: tap=C-w (delete word backward, terminal style)
            tbd (tap-hold $tap-time $hold-time , C-w)
@@ -505,9 +488,9 @@ in
            dwb (tap-hold $tap-time $hold-time , C-bspc)
            ;; . key: tap=C-del (delete word forward)
            dwf (tap-hold $tap-time $hold-time . C-del)
-         
+
            ;; Window snapping (GNOME)
-         
+
            ;; H key: tap/hold=snap to left (Meta+Left)
            rpl (tap-hold $tap-time $hold-time M-left M-left)
            ;; J key: tap/hold=restore window size (Meta+Down)
@@ -516,8 +499,8 @@ in
            rpu (tap-hold $tap-time $hold-time M-up M-up)
            ;; L key: tap/hold=snap to right (Meta+Right)
            rpr (tap-hold $tap-time $hold-time M-rght M-rght)
-         
-         
+
+
            ;; GNOME workspace navigation
            ;; Y key: tap/hold=switch to first workspace (Super+Home)
            wtl (tap-hold $tap-time $hold-time M-home M-home)
@@ -527,7 +510,7 @@ in
            dsl (tap-hold $tap-time $hold-time M-pgup M-pgup)
            ;; ] key: tap/hold=switch to workspace on the right (Super+Pgdn)
            dsr (tap-hold $tap-time $hold-time M-pgdn M-pgdn)
-         
+
            ;; Moving windows (GNOME)
            ;; N key: tap/hold=Move window one monitor to the left  (Shift+Super+left)
            w1 (tap-hold $tap-time $hold-time S-M-left S-M-left)
@@ -537,8 +520,8 @@ in
            w3 (tap-hold $tap-time $hold-time S-M-pgdn S-M-pgdn)
            ;; . key: tap/hold=Move window one monitor right (Shift+Super+Right)
            w4 (tap-hold $tap-time $hold-time S-M-rght S-M-rght)
-         
-         
+
+
            ;; Mouse wheel emulation (Layer 4 — Editing)
            ;; H key: mouse wheel left
            mwl (mwheel-left 50 120)
@@ -549,7 +532,7 @@ in
            ;; L key: mouse wheel right
            mwr (mwheel-right 50 120)
          )
-         
+
          ;; LAYER ONE - main mods - the caps and esc key are swapped for all layers
          (deflayer one
            caps @qtd @pum @dsb @isb @mut @vdn @vup @mic @psc @lts f11  f12
@@ -559,7 +542,7 @@ in
            lsft @zz  @xx  @cc  @vv  b    n    m    @co  @fu  @fs  rsft
            @l4  @l3  @la           @l2             @ra  _    rctl
          )
-         
+
          ;; LAYER TWO - Symbols - programming layer - spacebar held
          (deflayer two
            caps @qtd @pum @dsb @isb @mut @vdn @vup @mic @psc @lts _    _
@@ -587,9 +570,9 @@ in
            _    _    _    _    _    _    @dwb @dwf @tbd @tfd _    _
            _    _    _           _                 _    _    _
          )
-         
+
          ;; lrld is a default shortcut to reload the configuration found on layer 3 in place of f12
-         
+
         '';
       };
     };
@@ -613,18 +596,18 @@ in
     interfaces."wlp3s0".allowedTCPPorts = [ 8080 ];
   };
 
-  
+
   services.fail2ban = {
     enable = true;
     maxretry = 5;
     bantime = "1h";
-  
+
     bantime-increment = {
       enable = true;
       maxtime = "7d";
       overalljails = true;
     };
-  
+
     jails.sshd.settings = {
       enabled = true;
       maxretry = 5;
@@ -677,7 +660,7 @@ in
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
   # accidentally delete configuration.nix.
-  system.copySystemConfiguration = true;
+  # system.copySystemConfiguration = true;
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
