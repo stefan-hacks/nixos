@@ -32,7 +32,7 @@
     ])
     [
       ./packages/gui.nix
-      ../../profiles/ctf.nix
+      # ../../profiles/ctf.nix  # disabled — not installing CTF tooling on this machine right now
     ];
 
   home.username = "stefan-hacks";
