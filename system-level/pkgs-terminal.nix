@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }:
 
@@ -296,7 +297,7 @@
     ###########################################################################
     # External flake tools
     ###########################################################################
-    nix-graph.packages.${pkgs.stdenv.hostPlatform.system}.default
+    inputs.nix-graph.packages.${pkgs.stdenv.hostPlatform.system}.default
     # Interactive TUI for Nix dependency graphs (github:AlexAntonik/nix-graph)
 
     ###########################################################################

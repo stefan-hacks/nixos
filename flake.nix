@@ -8,6 +8,11 @@
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-graph = {
+     url = "github:AlexAntonik/nix-graph";
+     inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
