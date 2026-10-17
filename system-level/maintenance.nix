@@ -1,4 +1,4 @@
-{ ... }: {
+{ config, pkgs, lib, ... }: {
   nix = {
     settings = {
       auto-optimise-store = true;
