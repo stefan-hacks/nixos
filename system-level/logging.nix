@@ -1,10 +1,15 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   # Logging
   services.logrotate = {
-   enable = true;
-  # Native NixOS options wrap formatting neatly without defaulting to dry-run states
+    enable = true;
+    # Native NixOS options wrap formatting neatly without defaulting to dry-run states
   };
 
   security.auditd.enable = true;

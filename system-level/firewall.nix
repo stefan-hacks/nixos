@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   networking.firewall = {
@@ -29,17 +34,17 @@
     ];
 
     # Container interfaces
-#    trustedInterfaces = [
-#      "lo"
-#      "eno1"
-#      "wlp3s0"
-#      "docker0"
-#      "br-*"
-#      "vboxnet*"
-#      "virbr*"
-#      "cni0"
-#      "podman*"
-#      "tailscale0"
-#    ];
+    #    trustedInterfaces = [
+    #      "lo"
+    #      "eno1"
+    #      "wlp3s0"
+    #      "docker0"
+    #      "br-*"
+    #      "vboxnet*"
+    #      "virbr*"
+    #      "cni0"
+    #      "podman*"
+    #      "tailscale0"
+    #    ];
   };
 }

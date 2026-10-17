@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   # Use the systemd-boot EFI boot loader.
@@ -9,6 +14,9 @@
   nixpkgs.config.allowUnfree = true;
 
   # Allow experimental features and flakes
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
 }

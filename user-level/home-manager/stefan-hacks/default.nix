@@ -8,11 +8,15 @@
     ./packages/terminal.nix
     ./gnome.nix
   ]
-  ++ lib.optionals
-    (builtins.elem hostName [ "ghost" "titan" ])
-    [
-      ./packages/gui.nix
-    ];
+  ++
+    lib.optionals
+      (builtins.elem hostName [
+        "ghost"
+        "titan"
+      ])
+      [
+        ./packages/gui.nix
+      ];
 
   home.username = "stefan-hacks";
   home.homeDirectory = "/home/stefan-hacks";

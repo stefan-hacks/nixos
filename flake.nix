@@ -10,7 +10,8 @@
     };
   };
 
-  outputs = inputs@{ nixpkgs, ... }:
+  outputs =
+    inputs@{ nixpkgs, ... }:
     let
       system = "x86_64-linux";
 
@@ -21,7 +22,8 @@
         "server"
       ];
 
-      mkHost = hostName:
+      mkHost =
+        hostName:
         nixpkgs.lib.nixosSystem {
           inherit system;
 
