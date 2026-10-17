@@ -11,21 +11,4 @@
   # Allow experimental features and flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  # Nixos - Maintenance
-  nix = {
-    settings = {
-      auto-optimise-store = true;
-      warn-dirty = false;
-      trusted-users = [
-        "root"
-        "@wheel"
-      ];
-    };
-
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 7d";
-    };
-  };
 }
