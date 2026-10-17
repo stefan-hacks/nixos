@@ -1,55 +1,52 @@
+
 {
-  description = "Stefan's Modular Sysadmin NixOS Flake";
+  description = "NixOS fleet — Ghost, Titan, Minimal and Server";
 
   inputs = {
-    # Pinning to your preferred stable channel
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
 
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Keep your existing nixvim, and
+    # other required inputs here as well.
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs: {
-    nixosConfigurations = {
+  outputs = inputs@{ nixpkgs, home-manager, ... }:
+    let
+      system = "x86_64-linux";
 
-      # Example Host: titan (e.g., your primary workstation with GNOME)
-      titan = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./hosts/titan/default.nix               # Machine-specific base & hardware
-          ./system-level/default.nix             # Global system-level infrastructure
-          ./desktops/gnome/default.nix            # Complete GNOME desktop suite
+      hostNames = [
+        "ghost"
+        "titan"
+        "minimal"
+        "server"
+      ];
 
-          # Wire Home Manager as a core NixOS module
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            # Link the exact home-manager profile path from your tree
-            home-manager.users.stefan = import ./user-level/home-manager/stefan-hacks/default.nix;
-          }
-        ];
-      };
+      mkHost = hostName:
+        nixpkgs.lib.nixosSystem {
+          inherit system;
 
-      # Example Host: server (Headless infrastructure - NO GNOME module)
-      server = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./hosts/server/default.nix
-          ./system-level/default.nix
+          specialArgs = {
+            inherit inputs hostName;
+          };
 
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.stefan = import ./user-level/home-manager/stefan-hacks/default.nix;
-          }
-        ];
-      };
-
+          modules = [
+            home-manager.nixosModules.home-manager
+            ./hosts/${hostName}
+          ];
+        };
+    in
+    {
+      nixosConfigurations =
+        builtins.listToAttrs (
+          map (hostName: {
+            name = hostName;
+            value = mkHost hostName;
+          }) hostNames
+        );
     };
-  };
 }
 
