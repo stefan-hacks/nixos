@@ -1,59 +1,55 @@
 {
-  description = "NixOS config";
+  description = "Stefan's Modular Sysadmin NixOS Flake";
 
   inputs = {
+    # Pinning to your preferred stable channel
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
 
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    nix-my-gnome = {
-      url = "github:stefan-hacks/nix-my-gnome";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nix-graph = {
-      url = "github:AlexAntonik/nix-graph";
-      # NOTE: nix-graph pins nixos-unstable. Do NOT add follows here,
-      #       because its buildGoModule may need a newer Go toolchain
-      #       than what nixos-26.05 stable provides.
-    };
-
-    hermes-agent = {
-      url = "github:NousResearch/hermes-agent";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, ... }:
-    let
-      # Helper for automatic host discovery
-      mkHost = hostname: nixpkgs.lib.nixosSystem {
+  outputs = { self, nixpkgs, home-manager, ... }@inputs: {
+    nixosConfigurations = {
+
+      # Example Host: titan (e.g., your primary workstation with GNOME)
+      titan = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { inherit inputs; };
         modules = [
-          ./hosts/${hostname}
-          ./modules/system
+          ./hosts/titan/default.nix               # Machine-specific base & hardware
+          ./system-level/default.nix             # Global system-level infrastructure
+          ./desktops/gnome/default.nix            # Complete GNOME desktop suite
+
+          # Wire Home Manager as a core NixOS module
           home-manager.nixosModules.home-manager
           {
-            networking.hostName = hostname;
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              users."stefan-hacks" = import ./user-level/home-manager/stefan-hacks
-              extraSpecialArgs = { inherit inputs; };
-            };
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            # Link the exact home-manager profile path from your tree
+            home-manager.users.stefan = import ./user-level/home-manager/stefan-hacks/default.nix;
           }
         ];
       };
-    in {
-      nixosConfigurations = {
-        titan = mkHost "titan";
-        # Adding new hosts is trivial:
-        # laptop = mkHost "laptop";
-        # server = mkHost "server";
+
+      # Example Host: server (Headless infrastructure - NO GNOME module)
+      server = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./hosts/server/default.nix
+          ./system-level/default.nix
+
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.stefan = import ./user-level/home-manager/stefan-hacks/default.nix;
+          }
+        ];
       };
+
     };
+  };
 }
+
