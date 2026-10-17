@@ -7,4 +7,6 @@
   ];
 
   networking.hostName = "minimal";
+
+  system.stateVersion = "26.05";
 }

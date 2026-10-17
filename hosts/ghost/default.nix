@@ -20,4 +20,5 @@
   # Keep genuinely host-specific settings here.
   # For example:
   # services.ollama.enable = true;
+  system.stateVersion = "26.05";
 }
