@@ -1,3 +1,10 @@
+# System-wide packages: fleet baseline available to root, pre-login, and on
+# every host. User-facing tooling lives at user-level (home-manager) so it
+# only exists inside stefan-hacks' session:
+#   direnv delta gh lazygit fzf kitty nh home-manager -> HM modules (programs/)
+#   gcc gnumake LSPs formatters linters               -> profiles/dev-base.nix
+#   nil deadnix alejandra statix                      -> profiles/dev-base.nix
+#   netdiscover arp-scan + the CTF set                -> profiles/ctf.nix (ghost/titan)
 {
   config,
   pkgs,
@@ -31,78 +38,25 @@
     p7zip
     vim
     hw-probe
-
+    less
     tokei
-    # Image manipulation
     imagemagick
     exiftool
-
-    less
 
     ###########################################################################
     # Shell Utilities
     ###########################################################################
-
-    direnv
 
     eza
     zathura
     yq-go
 
     ###########################################################################
-    # Build tools (for nvim-treesitter parser compilation)
-    ###########################################################################
-
-    gcc
-    gnumake
-
-    ###########################################################################
-    # LSP Servers (declarative — Nix-managed, no Mason)
-    ###########################################################################
-
-    rust-analyzer
-    nixd
-    basedpyright
-    bash-language-server
-    yaml-language-server
-    marksman
-    taplo
-    lua-language-server
-    vscode-langservers-extracted
-
-    ###########################################################################
-    # Formatters
-    ###########################################################################
-
-    rustfmt
-    nixfmt
-    shfmt
-    ruff
-    stylua
-    black
-    isort
-    prettier
-
-    ###########################################################################
-    # Linters
-    ###########################################################################
-
-    cargo
-    clippy
-    shellcheck
-    statix
-    yamllint
-    markdownlint-cli
-
-    ###########################################################################
-    # Git
+    # Git (CLI present for root too; user config in HM programs/git.nix)
     ###########################################################################
 
     git
     git-lfs
-    delta
-    gh
-    lazygit
 
     ###########################################################################
     # Networking
@@ -125,9 +79,13 @@
     xz
     gzip
     bzip2
+    zstd
+    lz4
+    unrar
+    rar
 
     ###########################################################################
-    # Monitoring
+    # Monitoring & Hardware Info
     ###########################################################################
 
     btop
@@ -142,7 +100,7 @@
     libinput
 
     ###########################################################################
-    # Nix
+    # Nix CLI quality-of-life
     ###########################################################################
 
     nix-tree
@@ -151,13 +109,13 @@
     comma
 
     ###########################################################################
-    # Hardware
+    # Hardware (CLI for kanata --check etc.; the service is in kanata.nix)
     ###########################################################################
 
     kanata
 
     ###########################################################################
-    # Sysadmin Tools (Power Bash Experience)
+    # Sysadmin Tools
     ###########################################################################
 
     # File Operations & Analysis
@@ -173,6 +131,7 @@
     ncdu
     duf
     dust
+    dua
     iotop
 
     # Network Tools
@@ -182,7 +141,8 @@
     netcat
     whois
     bind
-    doggo # DNS tool (replaces removed dogdns)
+    doggo # DNS tool
+    dog
 
     # Process & System Monitoring
     htop
@@ -191,26 +151,17 @@
     strace
     ltrace
 
-    # Security
+    # Security plumbing (agent lives at user-level)
     gnupg
     openssl
     age
     sops
-
-    # Archive & Compression
-    zstd
-    lz4
-    unrar
-    p7zip
-    rar
 
     # Text Processing
     miller
     csvkit
     jid
     fx
-
-    # JSON/YAML/TOML
     jc
     yj
 
@@ -219,32 +170,20 @@
     cpufetch
     inxi
 
-    # TUI Tools
+    # TUI Tools (yazi/zellij/tmux configs are user-level; fzf moved to HM)
     lf
     ranger
     mc
-    fzf
     skim
 
     ###########################################################################
-    # Security / CTF Tools (from .bash_aliases)
+    # Fun / UX
     ###########################################################################
 
-    # Enumeration
-    netdiscover
-    arp-scan
-
-    # Additional utilities
     asciinema
     cmatrix
     lolcat
     figlet
-
-    ###########################################################################
-    # Terminal
-    ###########################################################################
-
-    kitty
 
     ###########################################################################
     # Media
@@ -253,17 +192,14 @@
     yt-dlp
 
     ###########################################################################
-    # System Tools
+    # Shell chrome
     ###########################################################################
 
-    btop
     glow
     gum
     grc
     chafa
     cava
-    dog
-    doggo
     xh
     lazydocker
     fd
@@ -273,23 +209,13 @@
     wtfis
 
     ###########################################################################
-    # NixOS-Specific Tools
+    # NixOS Fleet Tooling (operating this config/repo)
     ###########################################################################
-    nh
-    nix-output-monitor
+
     nix-fast-build
-    nix-tree
     nix-diff
     nix-init
     nix-update
-    nix-index
-    comma
-    deadnix
-    statix
-    alejandra
-    nil
-    nixd
-    home-manager
     deploy-rs
     colmena
     nvd
@@ -297,11 +223,12 @@
     ###########################################################################
     # External flake tools
     ###########################################################################
+
     inputs.nix-graph.packages.${pkgs.stdenv.hostPlatform.system}.default
     # Interactive TUI for Nix dependency graphs (github:AlexAntonik/nix-graph)
 
     ###########################################################################
-    # Development Tools
+    # Development / Virtualization Tools
     ###########################################################################
 
     amp
@@ -310,9 +237,6 @@
     netfetch
     atop
     tailspin
-    dust
-    ncdu
-    dua
     wiper
     qemu
     qemu_kvm
@@ -321,6 +245,5 @@
     spice-vdagent
     dnsmasq
     bridge-utils
-    cmatrix
   ];
 }

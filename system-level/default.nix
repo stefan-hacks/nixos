@@ -23,4 +23,8 @@
     ./user.nix
     ./virtualization.nix
   ];
+  # Desktop-only modules (fonts, kanata, bluetooth, pkgs-gui, ollama) are
+  # imported per-host in hosts/ghost and hosts/titan — keeping `minimal` and
+  # `server` lean. hermes.nix intentionally NOT imported anywhere: WIP
+  # (empty environmentFiles).
 }

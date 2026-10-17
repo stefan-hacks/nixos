@@ -12,7 +12,12 @@
     # Shared operating-system configuration
     ../../system-level
 
-    # Host-specific modules can be added here
+    # Desktop-level (GUI) modules
+    ../../system-level/bluetooth.nix
+    ../../system-level/fonts.nix
+    ../../system-level/kanata.nix
+    ../../system-level/ollama.nix
+    ../../system-level/pkgs-gui.nix
   ];
 
   boot.initrd.luks.devices."cryptroot" = {

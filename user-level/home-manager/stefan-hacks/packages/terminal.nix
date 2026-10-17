@@ -1,19 +1,9 @@
+# User packages WITHOUT home-manager modules (or with nothing to configure).
+# Everything managed by a programs.* module lives under ../programs/.
 { pkgs, ... }:
 
 {
   home.packages = with pkgs; [
-    atuin
-    blesh
-    bat
-    bat-extras.core
-    carapace
-    fzf
-    gh
-    lazygit
-    starship
-    tealdeer
-    yazi
-    zellij
-    zoxide
+    blesh # ble.sh — no HM module exists (verified release-26.05); sourced in programs/bash.nix initExtra
   ];
 }

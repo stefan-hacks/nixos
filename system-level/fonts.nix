@@ -18,6 +18,7 @@
 
       nerd-fonts.jetbrains-mono
       nerd-fonts.hack
+      nerd-fonts.symbols-only
 
       inter
     ];

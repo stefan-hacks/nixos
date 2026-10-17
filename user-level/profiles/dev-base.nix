@@ -46,5 +46,14 @@
     statix
     yamllint
     markdownlint-cli
+
+    ###########################################################################
+    # Nix language tooling (moved from system-level/pkgs-terminal.nix —
+    # an LSP/QA tool belongs to the editing session, not the OS profile)
+    ###########################################################################
+
+    nil
+    deadnix
+    alejandra
   ];
 }

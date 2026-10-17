@@ -9,6 +9,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nixvim = {
+      url = "github:nix-community/nixvim/nixos-26.05";
+      # programs.nixvim.nixpkgs.useGlobalPackages = true (user-level) reuses
+      # HM's pkgs instance; follows keeps the flake graph deduplicated.
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nix-graph = {
      url = "github:AlexAntonik/nix-graph";
      inputs.nixpkgs.follows = "nixpkgs";
