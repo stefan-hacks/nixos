@@ -17,7 +17,6 @@
     man-pages-posix
     file
     which
-    tree
     wget
     curl
     rsync
@@ -38,21 +37,10 @@
     # Shell Utilities
     ###########################################################################
 
-    blesh
-    carapace
-    atuin
-    starship
-    zoxide
-    fzf
     direnv
 
     eza
-    bat
-    bat-extras.core # bat extras suite
-    ripgrep
-    fd
     zathura
-    jq
     yq-go
 
     ###########################################################################
@@ -265,10 +253,8 @@
     btop
     glow
     gum
-    tealdeer
     grc
     chafa
-    yazi
     cava
     dog
     doggo
@@ -319,7 +305,6 @@
     atop
     tailspin
     dust
-    zellij
     ncdu
     dua
     wiper
