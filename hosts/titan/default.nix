@@ -13,8 +13,6 @@
     # Host-specific modules can be added here
   ];
 
-  networking.hostName = "ghost";
-
   boot.initrd.luks.devices."cryptroot" = {
     device = "/dev/disk/by-uuid/8a350d7a-ce96-4ba6-938c-61b2739239f6";
   };
