@@ -7,9 +7,6 @@
     # Shared operating-system configuration
     ../../system-level
 
-    # Desktop-specific operating-system configuration
-    ../../desktops/gnome
-
     # Host-specific modules can be added here
   ];
 
