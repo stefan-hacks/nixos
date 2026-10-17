@@ -1,4 +1,3 @@
-
 {
   description = "NixOS fleet — Ghost, Titan, Minimal and Server";
 
@@ -9,12 +8,9 @@
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # Keep your existing nixvim, and
-    # other required inputs here as well.
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, ... }:
+  outputs = inputs@{ nixpkgs, ... }:
     let
       system = "x86_64-linux";
 
@@ -35,19 +31,16 @@
           };
 
           modules = [
-            home-manager.nixosModules.home-manager
+            inputs.home-manager.nixosModules.home-manager
             ./hosts/${hostName}
           ];
         };
     in
     {
-      nixosConfigurations =
-        builtins.listToAttrs (
-          map (hostName: {
-            name = hostName;
-            value = mkHost hostName;
-          }) hostNames
-        );
+      # Modern Nix formatter
+      formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt;
+
+      # NixOS configurations for the fleet
+      nixosConfigurations = nixpkgs.lib.genAttrs hostNames mkHost;
     };
 }
-
