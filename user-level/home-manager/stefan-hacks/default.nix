@@ -6,6 +6,7 @@
     ../../profiles/dev-base.nix
 
     ./packages/terminal.nix
+    ./gnome.nix
   ]
   ++ lib.optionals
     (builtins.elem hostName [ "ghost" "titan" ])
