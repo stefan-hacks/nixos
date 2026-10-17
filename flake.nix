@@ -31,6 +31,7 @@
 
           specialArgs = {
             inherit inputs hostName;
+            usernames = [ "stefan-hacks" ];
           };
 
           modules = [
