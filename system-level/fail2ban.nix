@@ -1,9 +1,5 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+# Fail2ban intrusion prevention
+{ config, lib, pkgs, ... }:
 
 {
   services.fail2ban = {

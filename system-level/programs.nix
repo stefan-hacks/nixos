@@ -1,27 +1,33 @@
+# System-wide program configuration
+{ config, lib, pkgs, ... }:
+
 {
-  config,
-  pkgs,
-  lib,
-  ...
-}:
-{
-  programs.bash = {
+  programs.firefox.enable = true;
+  programs.gpaste.enable = true;
+  programs.starship.enable = true;
+
+  # Configure the Atuin Shell Client System-Wide
+  programs.atuin = {
     enable = true;
-    completion.enable = true;
+
+    # Declarative client parameters written automatically to /etc/atuin/config.toml
+    settings = {
+      auto_sync = true;
+      sync_address = "https://atuin.sh"; # Change to https://api.atuin.sh if using the default public sync server
+      update_check = false;
+    };
   };
 
-  programs.git.enable = true;
-
-  # User-facing program configuration lives at user-level (home-manager):
-  #   atuin / starship / zoxide / carapace / direnv  -> programs/shell-tools.nix
-  #   gpg + gpg-agent/SSH agent                       -> programs/security.nix
-  #   (this also resolves the old gnupg.agent-vs-gcr-ssh-agent contradiction)
-
-  programs.firefox.enable = true; # stefan-hacks' default daily browser (mime defaults at user-level/desktop.nix)
-
-  programs.virt-manager = {
+  # Zoxide
+  programs.zoxide = {
     enable = true;
+    enableBashIntegration = true;
   };
 
-  programs.command-not-found.enable = true;
+  programs.mtr.enable = true;
+
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
 }

@@ -1,41 +1,22 @@
+# System maintenance and auto-upgrade
+{ config, lib, pkgs, ... }:
+
 {
-  config,
-  pkgs,
-  lib,
-  inputs,
-  ...
-}:
-{
-  nix = {
-    settings = {
-      auto-optimise-store = true;
-      warn-dirty = false;
-      trusted-users = [
-        "root"
-        "@wheel"
-      ];
-    };
-
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 30d";
-    };
-
-    # Pin the system registry to the flake's nixpkgs: `nix search nixpkgs`,
-    # `nix-shell '<nixpkgs>'` & co. now track nixos-26.05 from flake.lock
-    # instead of the (per-user) channels.
-    registry.nixpkgs.flake = inputs.nixpkgs;
-  };
-
-  # Ported from the legacy configuration.nix (was channel-based, daily 04:00,
-  # no auto-reboot). Flake variant: builds the nixosConfiguration whose name
-  # matches the machine's hostname from the PUSHED main branch of the repo —
-  # so it only picks up committed state, matching the old channel semantics.
   system.autoUpgrade = {
     enable = true;
+
+    # Run daily at 4:00 AM.
     dates = "04:00";
-    allowReboot = false; # set true to auto-reboot when kernel/initrd/modules change
-    flake = "github:stefan-hacks/nixos";
+
+    # Use the nixos-26.05 stable channel for automatic updates.
+    channel = "https://nixos.org/channels/nixos-26.05";
+
+    # Allow reboot if required (for kernel updates).
+    allowReboot = false; # Set to true for automatic reboots.
   };
+
+  # Copy the NixOS configuration file and link it from the resulting system
+  # (/run/current-system/configuration.nix). This is useful in case you
+  # accidentally delete configuration.nix.
+  system.copySystemConfiguration = true;
 }

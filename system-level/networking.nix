@@ -1,20 +1,18 @@
+# Network configuration
+{ config, lib, pkgs, ... }:
+
 {
-  config,
-  pkgs,
-  lib,
-  ...
-}:
-{
+  # Configure network connections interactively with nmcli or nmtui.
   networking.networkmanager.enable = true;
 
-  # Network Discovery
+  # Avahi — network printing & file sharing, local discovery, local hostname resolution
   services.avahi = {
     enable = true;
-    nssmdns4 = true;
+    nssmdns4 = true; # Automatically installs and configures nss-mdns for IPv4
     openFirewall = true;
   };
 
-  # Mullvad VPN
-  services.mullvad-vpn.enable = true;
-  services.mullvad-vpn.package = pkgs.mullvad-vpn;
+  # Fix the "Invalid group-name group='netdev'" D-Bus warning.
+  # This declaratively creates the netdev group that Avahi's D-Bus config expects.
+  users.groups.netdev = {};
 }

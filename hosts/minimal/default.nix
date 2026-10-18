@@ -1,14 +1,9 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 {
   imports = [
     ./hardware-configuration.nix
-    ../../system-level
+    ../../system.nix
   ];
 
   networking.hostName = "minimal";

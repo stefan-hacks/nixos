@@ -1,50 +1,18 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+# Firewall configuration
+{ config, lib, pkgs, ... }:
 
 {
   networking.firewall = {
     enable = true;
-
-    # GSConnect / KDE Connect
+    # Allow TCP ports.
+    allowedTCPPorts = [ 22 80 443 ];
+    # Allow UDP ports.
+    allowedUDPPorts = [ 53 ];
+    # Allow a port range.
     allowedTCPPortRanges = [
-      {
-        from = 1714;
-        to = 1764;
-      }
+      { from = 1000; to = 2000; }
     ];
-    allowedUDPPortRanges = [
-      {
-        from = 1714;
-        to = 1764;
-      }
-    ];
-
-    # GNOME Network Displays
-    allowedTCPPorts = [
-      7236
-      7238
-    ];
-    allowedUDPPorts = [
-      5353
-      7236
-    ];
-
-    # Container interfaces
-    #    trustedInterfaces = [
-    #      "lo"
-    #      "eno1"
-    #      "wlp3s0"
-    #      "docker0"
-    #      "br-*"
-    #      "vboxnet*"
-    #      "virbr*"
-    #      "cni0"
-    #      "podman*"
-    #      "tailscale0"
-    #    ];
+    # Allow traffic on specific interfaces.
+    interfaces."wlp3s0".allowedTCPPorts = [ 8080 ];
   };
 }

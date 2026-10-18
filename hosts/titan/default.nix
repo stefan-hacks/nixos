@@ -1,30 +1,19 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 {
   imports = [
     ./hardware-configuration.nix
-
-    # Shared operating-system configuration
-    ../../system-level
-
-    # Desktop-level (GUI) modules
-    ../../system-level/bluetooth.nix
-    ../../system-level/fonts.nix
-    ../../system-level/kanata.nix
-    ../../system-level/ollama.nix
-    ../../system-level/pkgs-gui.nix
+    ../../system.nix
   ];
 
+  networking.hostName = "titan";
+
+  # LUKS encrypted root (shared UUID with ghost)
   boot.initrd.luks.devices."cryptroot" = {
     device = "/dev/disk/by-uuid/8a350d7a-ce96-4ba6-938c-61b2739239f6";
   };
 
-  # Ensure graphics drivers are properly mapped
+  # AMD graphics (titan-specific)
   boot.initrd.kernelModules = [ "amdgpu" ];
   services.xserver.videoDrivers = [ "amdgpu" ];
 
@@ -37,8 +26,6 @@
       libvdpau-va-gl
     ];
   };
-
-  networking.hostName = "titan"; # Define your hostname.
 
   system.stateVersion = "26.05";
 }

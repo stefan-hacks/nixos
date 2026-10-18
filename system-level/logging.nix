@@ -1,12 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+# Logging and audit configuration
+{ config, lib, pkgs, ... }:
 
 {
-  # Logging
   services.logrotate = {
     enable = true;
     # Native NixOS options wrap formatting neatly without defaulting to dry-run states
