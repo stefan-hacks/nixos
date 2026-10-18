@@ -4,10 +4,20 @@
 {
   nixpkgs.config.allowUnfree = true;
 
-  # Ensures the system always knows where to look for rebuilds
+  # nix.nixPath is used by `nix-shell`, `nix repl`, and tools that use
+  # angle-bracket syntax like `<nixpkgs>` and `<nixos-config>`.
+  #
+  # IMPORTANT: This repo lives in ~/.config/nixos and uses a multi-host
+  # modular layout. `nixos-rebuild` must be run from that directory with
+  # the -I flag pointing to the correct host entry:
+  #
+  #   cd ~/.config/nixos
+  #   sudo nixos-rebuild switch -I nixos-config=hosts/titan/default.nix
+  #
+  # The legacy /etc/nixos/configuration.nix is intentionally NOT referenced
+  # here — it contains the old monolith and is no longer the source of truth.
   nix.nixPath = [
     "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
-    "nixos-config=/etc/nixos/configuration.nix"
   ];
 
   nix = {
