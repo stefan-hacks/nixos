@@ -11,10 +11,10 @@
     host = "127.0.0.1";
     port = 11434;
 
-    # Pull Kimi 2.6 automatically on activation so it's ready before
-    # hermes-agent tries to talk to it. Adjust the exact tag if the
-    # published name in the Ollama library differs.
-    loadModels = [ "kimi-2.6:cloud" ];
+    # Pull models automatically on activation (optional).
+    # The model must exist in the Ollama library (https://ollama.com/library).
+    # Example: loadModels = [ "llama3.2" ];
+    # loadModels = [ "kimi-2.6:cloud" ];  # disabled — tag not found in registry
 
     # Uncomment if you have a GPU and want Ollama to use it.
     # acceleration = "cuda"; # or "rocm"
