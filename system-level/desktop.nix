@@ -19,6 +19,7 @@
     appindicator
     blur-my-shell
     dynamic-music-pill
+    pomodoro-timer
     quick-settings-audio-panel
     quake-terminal
     vitals

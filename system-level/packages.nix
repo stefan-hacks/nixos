@@ -146,6 +146,7 @@
     pciutils
     usbutils
     lm_sensors
+    libgtop
     smartmontools
     nvme-cli
     libva-utils
