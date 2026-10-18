@@ -18,6 +18,7 @@
   environment.systemPackages = with pkgs.gnomeExtensions; [
     appindicator
     blur-my-shell
+    dynamic-music-pill
     quick-settings-audio-panel
     quake-terminal
     vitals
