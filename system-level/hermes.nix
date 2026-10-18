@@ -1,32 +1,50 @@
 # Hermes Agent — desktop AI assistant
-# IMPORTANT: services.hermes-agent is NOT in nixpkgs 26.05. It was previously
-# provided by the flake input github:NousResearch/hermes-agent.
-# In this non-flake setup we reference the existing store derivation directly.
-# If the store path is garbage-collected, rebuild from a flake checkout first.
+# =============================================================================
+# IMPORTANT BUILD LIMITATION (nixpkgs 26.05)
+# -----------------------------------------------------------------------------
+# hermes-agent is NOT in nixpkgs 26.05. The upstream repo (NousResearch/
+# hermes-agent) builds via a flake using uv2nix + pyproject.nix, which
+# resolve ~17 Python dependencies from PyPI exact pins.
+#
+# A proper fetchFromGitHub + buildPythonPackage derivation would require
+# packaging all of these deps in nixpkgs first:
+#   openai, certifi, truststore, python-dotenv, fire, httpx[socks], rich,
+#   tenacity, tomli-w, ruamel.yaml, requests, jinja2, firecrawl-anydoc,
+#   pydantic, prompt_toolkit, croniter, snowballstemmer
+#
+# nixpkgs 26.05's python314Packages set is too minimal for this today.
+#
+# OPTIONS:
+# 1. Store-path bridge (below) — references the existing build from the
+#    previous flake era. Works now; breaks if GC'd.
+# 2. Re-enable flakes and import github:NousResearch/hermes-agent — the
+#    upstream-supported path.
+# 3. Wait for nixpkgs unstable to land the Python deps, then write a
+#    proper buildPythonPackage derivation.
+# =============================================================================
 { config, lib, pkgs, ... }:
 
 let
-  # Store path from the last flake build. Replace with a proper source build
-  # (fetchFromGitHub + buildPythonPackage) if this path disappears.
-  hermes-agent = pkgs.runCommand "hermes-agent" {} ''
-    mkdir -p $out
-    cp -r ${/nix/store/paijdg6jkza5lahajx5s8k3hkkirbpdr-hermes-agent-0.0.0}/* $out/
-  '';
+  # These store paths come from the last flake-based build. They must be
+  # kept alive (e.g. via nix-store --add-root) to survive GC.
+  # To pin: sudo nix-store --add-root /nix/var/nix/gcroots/hermes-agent \
+  #   /nix/store/paijdg6jkza5lahajx5s8k3hkkirbpdr-hermes-agent-0.0.0
+  hermes-agent = pkgs.runCommand "hermes-agent"
+    {
+      src = /nix/store/paijdg6jkza5lahajx5s8k3hkkirbpdr-hermes-agent-0.0.0;
+    }
+    ''
+      cp -r $src $out
+    '';
+
+  hermes-desktop = pkgs.runCommand "hermes-desktop"
+    {
+      src = /nix/store/3iswj33zx4plnqwxxzpbzqknl3xfqakx-hermes-desktop-0.0.0;
+    }
+    ''
+      cp -r $src $out
+    '';
 in
 {
-  environment.systemPackages = [ hermes-agent ];
-
-  # Optional systemd user service (previously provided by the flake module).
-  # The service needs OPENAI_API_KEY set, even for local Ollama.
-  # Create ~/.config/hermes/env with:
-  #   OPENAI_API_KEY=placeholder
-  # and adjust ExecStart to source it, or run hermes-agent interactively.
-  systemd.user.services.hermes-agent = {
-    description = "Hermes Agent";
-    wantedBy = [ "default.target" ];
-    serviceConfig = {
-      ExecStart = "${hermes-agent}/bin/hermes-agent";
-      Restart = "on-failure";
-    };
-  };
+  environment.systemPackages = [ hermes-agent hermes-desktop ];
 }
