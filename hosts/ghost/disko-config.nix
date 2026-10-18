@@ -34,7 +34,7 @@
               name = "cryptroot";
               settings = {
                 allowDiscards = true;
-                uuid = "8a350d7a-ce96-4ba6-938c-61b2739239f6";
+                uuid = "8a350d7a-ce96-4ba6-938c-61b2739239f5";
               };
               content = {
                 type = "lvm";
