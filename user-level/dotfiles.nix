@@ -85,6 +85,12 @@ let
             return 0
           fi
         fi
+        # Remove any existing .bak.* files for this destination before creating new backup.
+        for old_bak in "$parent_dir"/"$base_name".bak.*; do
+          [ -e "$old_bak" ] || continue
+          echo "  CLEAN: removing old $old_bak"
+          rm -rf "$old_bak"
+        done
         echo "  BACKUP: $dst → ''${dst}$BACKUP_SUFFIX"
         mv "$dst" "''${dst}$BACKUP_SUFFIX"
       fi

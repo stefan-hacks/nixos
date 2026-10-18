@@ -1,5 +1,8 @@
 source -- "$(blesh-share)"/ble.sh --attach=none
 
+# Source NixOS environment variables (FZF_DEFAULT_OPTS, etc.)
+[ -f /etc/set-environment ] && source /etc/set-environment
+
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
