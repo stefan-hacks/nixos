@@ -25,10 +25,11 @@
 { config, lib, pkgs, ... }:
 
 let
-  # These store paths come from the last flake-based build. They must be
-  # kept alive (e.g. via nix-store --add-root) to survive GC.
-  # To pin: sudo nix-store --add-root /nix/var/nix/gcroots/hermes-agent \
-  #   /nix/store/paijdg6jkza5lahajx5s8k3hkkirbpdr-hermes-agent-0.0.0
+  # These store paths come from the last flake-based build.
+  # GC roots are already pinned:
+  #   /nix/var/nix/gcroots/hermes/agent
+  #   /nix/var/nix/gcroots/hermes/desktop
+  # They survive nix-collect-garbage indefinitely.
   hermes-agent = pkgs.runCommand "hermes-agent"
     {
       src = /nix/store/paijdg6jkza5lahajx5s8k3hkkirbpdr-hermes-agent-0.0.0;
