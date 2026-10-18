@@ -61,9 +61,10 @@ let
     fi
 
     DOTFILES="${dotfilesDrv}"
-    BACKUP_SUFFIX=".bak.$(date +%Y%m%d%H%M%S)"
 
     # Ensure parent directories exist and create symlinks.
+    # If a destination exists and is NOT already a symlink to the right place,
+    # remove it outright — the repo is the single source of truth.
     link_file() {
       local src="$1"
       local dst="$2"
@@ -74,8 +75,6 @@ let
         mkdir -p "$dst_dir"
       fi
 
-      # If destination exists and is NOT already a symlink to the right place,
-      # back it up before replacing.
       if [ -e "$dst" ] || [ -L "$dst" ]; then
         if [ -L "$dst" ]; then
           local current
@@ -85,14 +84,8 @@ let
             return 0
           fi
         fi
-        # Remove any existing .bak.* files for this destination before creating new backup.
-        for old_bak in "$parent_dir"/"$base_name".bak.*; do
-          [ -e "$old_bak" ] || continue
-          echo "  CLEAN: removing old $old_bak"
-          rm -rf "$old_bak"
-        done
-        echo "  BACKUP: $dst → ''${dst}$BACKUP_SUFFIX"
-        mv "$dst" "''${dst}$BACKUP_SUFFIX"
+        echo "  REMOVE: $dst"
+        rm -rf "$dst"
       fi
 
       ln -s "$src" "$dst"
