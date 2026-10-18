@@ -25,7 +25,8 @@
     ./system-level/ollama.nix
     ./system-level/hermes.nix
 
-    # User-level modules (user accounts and per-user system config)
+    # User-level modules (user accounts, dotfiles, per-user system config)
     ./user-level/users.nix
+    ./user-level/dotfiles.nix
   ];
 }
