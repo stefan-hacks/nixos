@@ -360,6 +360,19 @@ alias nbd='sudo nixos-rebuild build'
 alias nts='sudo nixos-rebuild test'
 alias ndr='sudo nixos-rebuild dry-build'
 alias nbt='sudo nixos-rebuild boot'
+
+# Per-host rebuilds (from ~/.config/nixos)
+alias nrst='cd ~/.config/nixos && sudo nixos-rebuild switch -I nixos-config=hosts/titan/default.nix'
+alias nrsg='cd ~/.config/nixos && sudo nixos-rebuild switch -I nixos-config=hosts/ghost/default.nix'
+alias nrss='cd ~/.config/nixos && sudo nixos-rebuild switch -I nixos-config=hosts/server/default.nix'
+alias nrsm='cd ~/.config/nixos && sudo nixos-rebuild switch -I nixos-config=hosts/minimal/default.nix'
+
+# Per-host dry-builds
+alias ndrt='cd ~/.config/nixos && sudo nixos-rebuild dry-build -I nixos-config=hosts/titan/default.nix'
+alias ndrg='cd ~/.config/nixos && sudo nixos-rebuild dry-build -I nixos-config=hosts/ghost/default.nix'
+alias ndrs='cd ~/.config/nixos && sudo nixos-rebuild dry-build -I nixos-config=hosts/server/default.nix'
+alias ndrm='cd ~/.config/nixos && sudo nixos-rebuild dry-build -I nixos-config=hosts/minimal/default.nix'
+
 alias nag='alias | grep -i nix'
 
 # Editor — nixvim is the primary editor; alias vi/vim for muscle memory
