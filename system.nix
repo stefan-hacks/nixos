@@ -22,7 +22,6 @@
     ./system-level/virtualization.nix
     ./system-level/packages.nix
     ./system-level/nixvim.nix
-    ./system-level/ollama.nix
     ./system-level/hermes.nix
 
     # User-level modules (user accounts, dotfiles, per-user system config)
