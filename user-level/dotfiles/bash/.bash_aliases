@@ -117,7 +117,7 @@ alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 
 alias qfind='find . -name' # Quick filename search:  qfind "*.log"
-alias fzf='fzf --preview "bat --color=always {}"'
+
 alias bat='bat --color=always'
 
 # Find largest files under current directory
