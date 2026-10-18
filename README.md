@@ -4,6 +4,74 @@
 
 ---
 
+## 🛠️ Installing from a NixOS ISO (with Disko)
+
+This repo uses [Disko](https://github.com/nix-community/disko) for **declarative disk partitioning** — it encodes your partition table, filesystems, LUKS, and LVM directly in Nix. No manual `parted`, no `mkfs.ext4` by hand.
+
+**Important:** Disko is used **once** during initial install. After that, `nixos-generate-config` produces a `hardware-configuration.nix` with the filesystem declarations, and the disko imports are commented out.
+
+### 1. Boot the NixOS installer and identify your disk
+
+```bash
+lsblk
+# Note the device name, e.g. /dev/nvme0n1
+```
+
+### 2. Edit the host's disko template
+
+Open `hosts/<host>/disko-config.nix` and set the `device` to your real disk.
+
+| Host | Template | Layout |
+|------|----------|--------|
+| **titan** | `hosts/titan/disko-config.nix` | LUKS + LVM (`cryptroot` UUID `8a350d7a-ce96-4ba6-938c-61b2739239f6`) |
+| **ghost** | `hosts/ghost/disko-config.nix` | Same LUKS+LVM (shares cryptroot UUID with titan) |
+| **minimal** | `hosts/minimal/disko-config.nix` | Simple ext4, no LUKS |
+| **server** | `hosts/server/disko-config.nix` | Simple ext4, no LUKS |
+
+### 3. Uncomment the disko imports in the host's `default.nix`
+
+In `hosts/<host>/default.nix`, uncomment these two lines:
+
+```nix
+"${builtins.fetchTarball "https://github.com/nix-community/disko/archive/master.tar.gz"}/module.nix"
+./disko-config.nix
+```
+
+### 4. Partition, format, and mount
+
+```bash
+# From the NixOS installer, run disko via nix run (flakes are only needed here for the CLI):
+sudo nix --experimental-features "nix-command flakes" run \
+  github:nix-community/disko -- \
+  --mode destroy,format,mount ./hosts/<host>/disko-config.nix
+```
+
+> ⚠️ **This will erase the entire target disk.**
+
+### 5. Generate hardware config
+
+```bash
+# Tell nixos-generate-config NOT to write filesystems — disko already handled them.
+sudo nixos-generate-config --no-filesystems --root /mnt
+```
+
+### 6. Copy your configuration and install
+
+```bash
+# Copy your repo into the target mount
+sudo mkdir -p /mnt/etc/nixos
+sudo cp -r ~/.config/nixos/* /mnt/etc/nixos/
+
+# Install NixOS
+sudo nixos-install --root /mnt
+```
+
+### 7. Post-install cleanup
+
+After rebooting, **re-comment** the disko import lines in the host's `default.nix`. From now on, the `hardware-configuration.nix` carries the filesystem declarations.
+
+---
+
 ## Philosophy: The Three Levels
 
 NixOS is a purely functional operating system — your entire machine is a function of its configuration. We extend that concept by viewing the system in **three layers**:
