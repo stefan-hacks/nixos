@@ -1,102 +1,82 @@
-# Dotfiles — personal configuration managed via symlinks.
+# Dotfiles — personal configuration managed via convention-based symlinks.
 # No home-manager; a systemd user service creates symlinks on login.
-# The source of truth is user-level/dotfiles/ in the repo.
+#
+# CONVENTION (drop files into user-level/dotfiles/ and they auto-map):
+#   • Hidden files/dirs at root   → ~/<name>
+#       .bashrc        → ~/.bashrc
+#       .ssh/          → ~/.ssh/
+#   • Non-hidden dirs at root     → ~/.config/<name>/
+#       nvim/          → ~/.config/nvim/
+#       kitty/         → ~/.config/kitty/
+#   • Non-hidden files at root    → ~/.config/<name>
+#       starship.toml  → ~/.config/starship.toml
+#
+# The repo is the single source of truth — existing files are removed, not backed up.
 { config, lib, pkgs, ... }:
 
 let
-  # Base path to the dotfiles in the repo.
-  # In a flake this would be ${./dotfiles}; in non-flake we use
-  # toString so the evaluator sees it as a path (copied to store).
   dotfiles = ./dotfiles;
 
-  # Each entry maps a repo path under user-level/dotfiles/ to a $HOME path.
-  # Directories are symlinked as a whole; individual files are symlinked directly.
-  # Paths are relative to dotfiles/.
-  linkMap = {
-    # Shell
-    "bash/.bashrc"            = ".bashrc";
-    "bash/.bash_aliases"      = ".bash_aliases";
-    "blesh/.blerc"            = ".blerc";
-
-    # Editors
-    "nvim"                    = ".config/nvim";
-    "vim/.vimrc"              = ".vimrc";
-
-    # Terminal
-    "kitty"                   = ".config/kitty";
-    "zellij/config.kdl"       = ".config/zellij/config.kdl";
-    "starship/starship.toml"  = ".config/starship.toml";
-
-    # Git
-    "gitconfig/.gitconfig"    = ".gitconfig";
-
-    # SSH
-    ".ssh/config"             = ".ssh/config";
-
-    # System info
-    "fastfetch/config.jsonc"  = ".config/fastfetch/config.jsonc";
-
-    # Atuin (optional — comment out if you prefer system-managed /etc/atuin)
-    # "atuin/config.toml"       = ".config/atuin/config.toml";
-
-    # Foot terminal
-    "foot/foot.ini"           = ".config/foot/foot.ini";
-  };
-
-  # Build a derivation that holds the dotfiles in the store.
-  # The activation script below symlinks from $HOME into this store path.
+  # Copy dotfiles into the Nix store so they persist across GC.
+  # -L follows symlinks to ensure the store copy is self-contained.
   dotfilesDrv = pkgs.runCommand "dotfiles" {} ''
     mkdir -p $out
-    cp -r ${dotfiles}/* $out/
+    cp -rL ${dotfiles}/* $out/ 2>/dev/null || true
+    cp -rL ${dotfiles}/.[!.]* $out/ 2>/dev/null || true
   '';
 
-  # Script that creates (or updates) symlinks and backs up collisions.
-  # Runs once per user login via systemd user service.
+  # Script that discovers the store copy and symlinks based on convention.
   dotfilesScript = pkgs.writeShellScript "dotfiles-sync" ''
     set -euo pipefail
 
-    # Only apply to user "stefan-hacks". Other users get a no-op.
+    # Only apply to user "stefan-hacks".
     if [ "$(whoami)" != "stefan-hacks" ]; then
       exit 0
     fi
 
     DOTFILES="${dotfilesDrv}"
 
-    # Ensure parent directories exist and create symlinks.
-    # If a destination exists and is NOT already a symlink to the right place,
-    # remove it outright — the repo is the single source of truth.
-    link_file() {
-      local src="$1"
-      local dst="$2"
-      local dst_dir
-      dst_dir="$(dirname "$dst")"
+    # -----------------------------------------------------------------------
+    # Convention-based symlink farm
+    # -----------------------------------------------------------------------
+    for src in "$DOTFILES"/* "$DOTFILES"/.[!.]* "$DOTFILES"/..?*; do
+      [ -e "$src" ] || continue
+      name=$(basename "$src")
 
-      if [ ! -d "$dst_dir" ]; then
-        mkdir -p "$dst_dir"
+      # Skip '.' and '..' from glob expansion
+      [[ "$name" == "." || "$name" == ".." ]] && continue
+
+      # Determine target based on naming convention
+      if [[ "$name" == .* ]]; then
+        # Hidden file/dir  → directly in $HOME
+        dst="$HOME/$name"
+      else
+        # Non-hidden       → under ~/.config
+        dst="$HOME/.config/$name"
       fi
 
-      if [ -e "$dst" ] || [ -L "$dst" ]; then
-        if [ -L "$dst" ]; then
-          local current
-          current="$(readlink "$dst" 2>/dev/null || true)"
-          if [ "$current" = "$src" ]; then
-            echo "  OK: $dst"
-            return 0
-          fi
+      # Ensure parent directory exists
+      dst_dir=$(dirname "$dst")
+      [ -d "$dst_dir" ] || mkdir -p "$dst_dir"
+
+      # Already a correct symlink?  Skip.
+      if [ -L "$dst" ]; then
+        current=$(readlink "$dst" 2>/dev/null || true)
+        if [ "$current" = "$src" ]; then
+          echo "  OK: $dst"
+          continue
         fi
+      fi
+
+      # Remove existing file / dir / broken symlink and replace
+      if [ -e "$dst" ] || [ -L "$dst" ]; then
         echo "  REMOVE: $dst"
         rm -rf "$dst"
       fi
 
       ln -s "$src" "$dst"
       echo "  LINK: $dst → $src"
-    }
-
-    echo "[dotfiles] Syncing dotfiles for $(whoami)..."
-
-    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (from: to: ''
-      link_file "$DOTFILES/${from}" "$HOME/${to}"
-    '') linkMap)}
+    done
 
     echo "[dotfiles] Done."
   '';
@@ -104,7 +84,7 @@ in
 {
   # Run the sync script as a one-shot systemd user service on login.
   systemd.user.services.dotfiles = {
-    description = "Sync personal dotfiles";
+    description = "Sync personal dotfiles (convention-based)";
     wantedBy = [ "default.target" ];
     serviceConfig = {
       Type = "oneshot";
