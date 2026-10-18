@@ -30,9 +30,4 @@
     enable = true;
     enableSSHSupport = true;
   };
-
-  # fzf — fix invalid color specification from old home-manager config.
-  # The preview command must be quoted so --color=always is passed to bat,
-  # not interpreted as an fzf --color option.
-  environment.sessionVariables.FZF_DEFAULT_OPTS = "--preview 'bat --color=always {}'";
 }
