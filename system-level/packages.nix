@@ -112,6 +112,7 @@
     gnome-tweaks
     guvcview
     impression
+    qbittorrent
 
     # Fonts
     nerd-fonts.jetbrains-mono
