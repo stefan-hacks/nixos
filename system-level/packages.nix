@@ -44,6 +44,23 @@
     glow
     gum
 
+    # Nix ecosystem tools (non-flake workflow support)
+    nh                          # nix-helper: cleaner rebuilds, intelligent GC
+    nix-output-monitor          # nom: live TUI for nix builds
+    nix-index                   # nix-locate: "which package provides /bin/xyz?"
+    nix-tree                    # interactive dependency DAG browser
+    nix-du                      # accurate store disk usage (handles shared refs)
+    nix-diff                    # structural derivation diff without building
+    nix-init                    # generate nix exprs from language lockfiles
+    nixpkgs-fmt                 # opinionated nix formatter
+    alejandra                   # fast Rust nix formatter
+    deadnix                     # dead-code finder for .nix files
+    statix                      # nix linter (with --fix)
+    nixos-generators            # build ISOs, SD images, containers from config
+    nix-top                     # live view of running nix builds
+    cached-nix-shell            # instant re-entry for nix-shell
+    comma                       # run packages without installing: `, cowsay hi`
+
     # Development
     nixd
     shellcheck

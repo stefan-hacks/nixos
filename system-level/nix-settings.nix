@@ -18,6 +18,13 @@
         "root"
         "@wheel"
       ];
+      # Enable nix-command and flakes experimental features globally.
+      # Even without flakes as the primary workflow, these are required by
+      # modern tooling (nix search, nix-shell, nh, etc.).
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
     };
 
     gc = {
