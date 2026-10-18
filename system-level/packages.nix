@@ -4,135 +4,340 @@
 
 {
   environment.systemPackages = with pkgs; [
-    # Editors
-    vim # Do not forget to add an editor to edit configuration.nix!
-
-    # Core utilities
-    wget
-    git
-    curl
-    tree
-    ripgrep
-    eza
-    btop
-    fd
-    jq
-    yq-go
-    fzf
-    bat
-    bat-extras.core
-    tealdeer
+    ###########################################################################
+    # Core Utilities
+    ###########################################################################
+    bash
+    coreutils
+    findutils
+    gnugrep
+    gnused
+    gawk
+    util-linux
+    man-pages
+    man-pages-posix
     file
-    parted
-    nvme-cli
+    which
+    tree
+    wget
+    curl
+    rsync
+    unzip
+    zip
+    p7zip
+    vim
+    hw-probe
+    less
 
-    # Shell enhancements
+    ###########################################################################
+    # Shell Utilities
+    ###########################################################################
     blesh
-    lolcat
-    grc
-    starship
-    zoxide
     carapace
     atuin
-    gh
+    starship
+    zoxide
+    fzf
+    direnv
+    eza
+    bat
+    bat-extras.core
+    ripgrep
+    fd
+    zathura
+    jq
+    yq-go
+    lolcat
+    grc
 
-    # Terminal multiplexers and tools
-    zellij
-    yazi
-    lazygit
-    kitty
-    glow
-    gum
+    ###########################################################################
+    # Build tools
+    ###########################################################################
+    gcc
+    gnumake
 
-    # Nix ecosystem tools (non-flake workflow support)
-    nh                          # nix-helper: cleaner rebuilds, intelligent GC
-    nix-output-monitor          # nom: live TUI for nix builds
-    nix-index                   # nix-locate: "which package provides /bin/xyz?"
-    nix-tree                    # interactive dependency DAG browser
-    nix-du                      # accurate store disk usage (handles shared refs)
-    nix-diff                    # structural derivation diff without building
-    nix-init                    # generate nix exprs from language lockfiles
-    nixpkgs-fmt                 # opinionated nix formatter
-    alejandra                   # fast Rust nix formatter
-    deadnix                     # dead-code finder for .nix files
-    statix                      # nix linter (with --fix)
-    nixos-generators            # build ISOs, SD images, containers from config
-    nix-top                     # live view of running nix builds
-    cached-nix-shell            # instant re-entry for nix-shell
-    comma                       # run packages without installing: `, cowsay hi`
-
-    # Development
+    ###########################################################################
+    # LSP Servers (declarative — Nix-managed, no Mason)
+    ###########################################################################
+    rust-analyzer
     nixd
-    shellcheck
-    tokei
-    onefetch
+    basedpyright
+    bash-language-server
+    yaml-language-server
+    marksman
+    taplo
+    lua-language-server
+    vscode-langservers-extracted
 
-    # Networking tools
+    ###########################################################################
+    # Formatters
+    ###########################################################################
+    rustfmt
+    nixfmt
+    shfmt
+    ruff
+    stylua
+    black
+    isort
+    prettier
+
+    ###########################################################################
+    # Linters
+    ###########################################################################
+    cargo
+    clippy
+    shellcheck
+    statix
+    yamllint
+    markdownlint-cli
+
+    ###########################################################################
+    # Git
+    ###########################################################################
+    git
+    git-lfs
+    delta
+    gh
+    lazygit
+
+    ###########################################################################
+    # Networking
+    ###########################################################################
     inetutils
     dnsutils
-    traceroute
-    mtr
-    tcpdump
-    ethtool
     nmap
-    iperf3
+    mtr
+    traceroute
+    tcpdump
+    wireshark
+    openssh
     lazyssh
+    socat
+    netcat
+    whois
+    bind
+    doggo
+    ethtool
+    iperf3
 
-    # System info
+    ###########################################################################
+    # Archives
+    ###########################################################################
+    xz
+    gzip
+    bzip2
+    zstd
+    lz4
+    unrar
+    rar
+    ouch
+
+    ###########################################################################
+    # Monitoring / System Info
+    ###########################################################################
+    btop
+    htop
+    atop
     fastfetch
     cpufetch
+    inxi
+    onefetch
+    lsof
     pciutils
     usbutils
-    lshw
-    dmidecode
-    smartmontools
     lm_sensors
-
-    # Monitoring / Debugging
-    htop
+    smartmontools
+    nvme-cli
+    libva-utils
+    libinput
     iotop
     iftop
+    nethogs
+    procps
+    sysstat
     strace
-    lsof
+    ltrace
 
+    ###########################################################################
+    # Nix Ecosystem
+    ###########################################################################
+    nh
+    nix-output-monitor
+    nix-index
+    nix-tree
+    nix-du
+    nix-diff
+    nix-init
+    nixpkgs-fmt
+    alejandra
+    deadnix
+    statix
+    nixos-generators
+    nix-top
+    cached-nix-shell
+    comma
+    nix-fast-build
+    nix-update
+    nvd
+    nil
+
+    ###########################################################################
+    # Hardware / Disk / Filesystem
+    ###########################################################################
+    kanata
+    parted
+    gparted
+    exfatprogs
+    ntfs3g
+    ddrescue
+    ncdu
+    duf
+    dust
+    dua
+
+    ###########################################################################
+    # Security
+    ###########################################################################
+    gnupg
+    openssl
+    age
+    sops
+
+    ###########################################################################
+    # Text Processing / Data
+    ###########################################################################
+    miller
+    csvkit
+    jid
+    fx
+    jc
+    yj
+    glow
+    gum
+    hexyl
+    hevi
+
+    ###########################################################################
+    # TUI / File Managers
+    ###########################################################################
+    lf
+    ranger
+    mc
+    skim
+    yazi
+    zellij
+
+    ###########################################################################
+    # Terminal Emulators
+    ###########################################################################
+    kitty
+    foot
+
+    ###########################################################################
+    # Desktop / Browsers / Productivity
+    ###########################################################################
+    firefox
+    chromium
+    joplin-desktop
+    evolution
+    gnome-tweaks
+    gnome-pomodoro
+    _1password-gui
+    libreoffice
+    onlyoffice-desktopeditors
+    stirling-pdf-desktop
+    localsend
+
+    ###########################################################################
     # Media
-    ffmpeg
+    ###########################################################################
+    shortwave
     mpv
     vlc
-    chafa
+    ffmpeg
+    jellyfin-tui
+    jellyfin-desktop
+    kew
     yt-dlp
     parabolic
-    shortwave
+    soundconverter
+    blanket
+    easyeffects
+    cava
+    chafa
 
-    # Desktop / GUI
-    onlyoffice-desktopeditors
+    ###########################################################################
+    # Communication
+    ###########################################################################
+    element-desktop
     discord
     whatsie
-    _1password-gui
-    gnome-tweaks
+    resources
+
+    ###########################################################################
+    # System Tools / Misc
+    ###########################################################################
+    lazydocker
+    dog
+    xh
+    wtfis
+    tokei
+    asciinema
+    cmatrix
+    figlet
+    imagemagick
+    exiftool
     guvcview
     impression
     qbittorrent
 
+    ###########################################################################
+    # Virtualization
+    ###########################################################################
+    qemu
+    qemu_kvm
+    virt-manager
+    spice-gtk
+    spice
+    spice-vdagent
+    dnsmasq
+    bridge-utils
+
+    ###########################################################################
+    # GNOME / Desktop Integration Dependencies
+    ###########################################################################
+    # gjs — GNOME JavaScript engine used by some GNOME extensions.
+    gjs
+    # fontconfig — explicit package provides fc-list, fc-cache.
+    fontconfig
+
+    ###########################################################################
     # Fonts
+    ###########################################################################
     nerd-fonts.jetbrains-mono
     nerd-fonts.hack
     nerd-fonts.symbols-only
 
-    # Keyboard
-    kanata
-
+    ###########################################################################
     # Clipboard
+    ###########################################################################
     wl-clipboard
 
-    # Uncomment below to enable virtualization tools.
-    # virt-manager
-    # qemu
-    # qemu_kvm
-    # spice-gtk
-    # spice
-    # spice-vdagent
-    # dnsmasq
-    # bridge-utils
+    ###########################################################################
+    # Development / Misc Tools
+    ###########################################################################
+    amp
+    bandwhich
+    bacon
+    netfetch
+    tailspin
+    wiper
+    tealdeer
+
+    ###########################################################################
+    # Security / Network Scanning
+    ###########################################################################
+    netdiscover
+    arp-scan
   ];
 }

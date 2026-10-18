@@ -13,4 +13,13 @@
 
   # Configure keymap in X11
   services.xserver.xkb.layout = "us";
+
+  # GNOME Extensions
+  environment.systemPackages = with pkgs.gnomeExtensions; [
+    appindicator
+    blur-my-shell
+    quick-settings-audio-panel
+    quake-terminal
+    vitals
+  ];
 }
