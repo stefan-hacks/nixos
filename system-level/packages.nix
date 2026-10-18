@@ -265,6 +265,7 @@
     easyeffects
     cava
     chafa
+    pomodoro
 
     ###########################################################################
     # Communication
