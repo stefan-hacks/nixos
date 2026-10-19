@@ -1,5 +1,6 @@
 # Nixvim — declarative Neovim configuration via builtins.fetchGit.
 # This is the non-flake way to pull in the nixvim module.
+# We pin to the nixos-26.05 branch to match our nixpkgs version.
 { config, lib, pkgs, ... }:
 
 let
@@ -19,9 +20,17 @@ in
     viAlias = true;
     vimAlias = true;
 
-    # Add your Nixvim settings here.
-    # Example:
-    # colorschemes.catppuccin.enable = true;
-    # plugins.lualine.enable = true;
+    # Catppuccin Mocha theme
+    colorschemes.catppuccin = {
+      enable = true;
+      settings = {
+        flavour = "mocha";
+      };
+    };
+
+    # Status line
+    plugins.lualine = {
+      enable = true;
+    };
   };
 }
