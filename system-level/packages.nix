@@ -26,11 +26,7 @@
     zip
     p7zip
     vim
-    neovim
     evil-helix
-    tree-sitter
-    ripgrep
-    fd
     hw-probe
     less
 
