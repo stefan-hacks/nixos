@@ -22,6 +22,19 @@ in
       viAlias = true;
       vimAlias = true;
 
+      # ── Editor options ──
+      options = {
+        number = true;
+        relativenumber = true;
+        cursorline = true;
+        shiftwidth = 2;
+        tabstop = 2;
+        expandtab = true;
+        smartindent = true;
+        termguicolors = true;
+        clipboard = "unnamedplus";
+      };
+
       # ── Theme ──
       theme = {
         enable = true;
@@ -33,7 +46,7 @@ in
       # ── Status line ──
       statusline.lualine = {
         enable = true;
-        theme = "catppuccin";
+        setupOpts.options.theme = "catppuccin";
       };
 
       # ── Autocompletion ──
