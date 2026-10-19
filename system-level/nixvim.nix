@@ -67,6 +67,11 @@ in
       };
     };
 
+    # Required by telescope (suppresses deprecation warning)
+    plugins.web-devicons = {
+      enable = true;
+    };
+
     # ── LSP (Language Servers) ──
     plugins.lsp = {
       enable = true;
