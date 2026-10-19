@@ -26,6 +26,7 @@
     zip
     p7zip
     vim
+    neovim
     evil-helix
     hw-probe
     less

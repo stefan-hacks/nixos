@@ -6,6 +6,7 @@
 #       .bashrc        → ~/.bashrc
 #       .ssh/          → ~/.ssh/
 #   • Non-hidden dirs at root     → ~/.config/<name>/
+#       nvim/          → ~/.config/nvim/
 #       kitty/         → ~/.config/kitty/
 #   • Non-hidden files at root    → ~/.config/<name>
 #       starship.toml  → ~/.config/starship.toml
