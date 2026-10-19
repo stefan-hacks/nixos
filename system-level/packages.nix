@@ -26,6 +26,7 @@
     zip
     p7zip
     vim
+    evil-helix
     hw-probe
     less
 
@@ -232,6 +233,7 @@
     # Terminal Emulators
     ###########################################################################
     kitty
+    vimPlugins.kitty-scrollback-nvim
     foot
 
     ###########################################################################
