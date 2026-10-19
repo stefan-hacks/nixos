@@ -26,7 +26,11 @@
     zip
     p7zip
     vim
+    neovim
     evil-helix
+    tree-sitter
+    ripgrep
+    fd
     hw-probe
     less
 
@@ -69,6 +73,9 @@
     taplo
     lua-language-server
     vscode-langservers-extracted
+    clang-tools
+    gopls
+    ansible-language-server
 
     ###########################################################################
     # Formatters
@@ -81,6 +88,8 @@
     black
     isort
     prettier
+    gofumpt
+    gotools
 
     ###########################################################################
     # Linters
@@ -91,6 +100,8 @@
     statix
     yamllint
     markdownlint-cli
+    markdownlint-cli2
+    ansible-lint
 
     ###########################################################################
     # Git
