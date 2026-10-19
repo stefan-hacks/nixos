@@ -98,6 +98,8 @@ in
         jsonls.enable = true;
         # Markdown
         marksman.enable = true;
+        # TOML
+        taplo.enable = true;
         # YAML
         yamlls.enable = true;
         # Python
