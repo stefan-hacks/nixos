@@ -25,7 +25,7 @@
     unzip
     zip
     p7zip
-    vim
+    # vim          # disabled — nixvim vimAlias=true covers this
     evil-helix
     hw-probe
     less
