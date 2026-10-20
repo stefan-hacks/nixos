@@ -1,8 +1,11 @@
 # System-wide packages installed in the system profile.
 # To find more packages and options: https://search.nixos.org/
-{ config, lib, pkgs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   environment.systemPackages = with pkgs; [
     ###########################################################################
     # Core Utilities
@@ -250,7 +253,6 @@
     joplin-desktop
     evolution
     gnome-tweaks
-    gnome-pomodoro
     _1password-gui
     libreoffice
     onlyoffice-desktopeditors
