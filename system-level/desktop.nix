@@ -25,6 +25,7 @@
     pomodoro-timer
     quick-settings-audio-panel
     quake-terminal
+    steal-my-focus-window
     vitals
   ];
 }
