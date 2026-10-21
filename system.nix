@@ -38,6 +38,7 @@ in
     ./system-level/packages.nix
     ./system-level/nvf.nix
     ./system-level/hermes.nix
+    ./system-level/theming.nix
 
     # User-level module: pass the primary user name so all per-user config
     # auto-wires to the correct directory and service permissions.

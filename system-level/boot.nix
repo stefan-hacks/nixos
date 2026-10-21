@@ -19,7 +19,6 @@
   boot.consoleLogLevel = 0;
   boot.initrd.verbose = false;
 
-  # Plymouth provides a graphical splash between LUKS unlock and GDM.
-  # It also replaces the raw text LUKS prompt with a graphical one.
-  boot.plymouth.enable = true;
+  # Plymouth boot splash is configured in system-level/theming.nix
+  # (unified wallpaper with GDM).
 }
