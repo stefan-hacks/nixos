@@ -96,6 +96,8 @@ in
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
+      # Ensure D-Bus is available before dconf tries to talk to it.
+      After = [ "dbus.service" ];
       ExecStart = pkgs.writeShellScript "dconf-load-${username}" ''
         export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id - u ${username})/bus
         ${pkgs.dconf}/bin/dconf load / < ${userDir + "/dconf.ini"}
