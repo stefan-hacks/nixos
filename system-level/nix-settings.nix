@@ -4,6 +4,28 @@
 {
   nixpkgs.config.allowUnfree = true;
 
+  # ═══════════════════════════════════════════════════════════════════════════
+  # nixpkgs-unstable overlay — selectively pull newer packages
+  # ═══════════════════════════════════════════════════════════════════════════
+  # Some packages (e.g. joplin-desktop) need a version newer than what
+  # nixos-26.05 stable provides. We import nixpkgs-unstable and overlay
+  # only the packages we need, keeping the rest of the system on stable.
+  nixpkgs.overlays = [
+    (self: super: {
+      joplin-desktop-unstable = let
+        unstable = import (builtins.fetchTarball {
+          url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz";
+          # The sha256 is not pinned here so it always fetches latest.
+          # Pin it if you want reproducible builds:
+          # sha256 = "...";
+        }) {
+          config = config.nixpkgs.config;
+          system = pkgs.system;
+        };
+      in unstable.joplin-desktop;
+    })
+  ];
+
   # nix.nixPath is used by `nix-shell`, `nix repl`, and tools that use
   # angle-bracket syntax like `<nixpkgs>` and `<nixos-config>`.
   #

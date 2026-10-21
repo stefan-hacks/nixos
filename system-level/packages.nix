@@ -250,7 +250,7 @@
     ###########################################################################
     firefox
     chromium
-    joplin-desktop
+    joplin-desktop-unstable
     evolution
     gnome-tweaks
     _1password-gui
