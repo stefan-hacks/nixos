@@ -20,7 +20,7 @@
           # sha256 = "...";
         }) {
           config = config.nixpkgs.config;
-          system = pkgs.system;
+          system = pkgs.stdenv.hostPlatform.system;
         };
       in unstable.joplin-desktop;
     })
