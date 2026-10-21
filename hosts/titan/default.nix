@@ -3,6 +3,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./sensors.nix
     ../../system.nix
 
     # ── Disko (uncomment during initial install only) ──
