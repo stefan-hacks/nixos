@@ -7,10 +7,9 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Quiet boot: suppress kernel and systemd status messages.
-  # Flow: systemd-boot menu → LUKS prompt → plymouth splash → GDM → desktop
+  # Flow: systemd-boot menu → LUKS prompt → GDM → desktop
   boot.kernelParams = [
     "quiet"                       # Suppress kernel boot messages
-    "splash"                      # Enable framebuffer splash
     "systemd.show_status=auto"    # Only show status on error
     "rd.systemd.show_status=auto" # Same for initrd
     "vt.global_cursor_default=0"  # Hide blinking cursor
@@ -18,7 +17,4 @@
 
   boot.consoleLogLevel = 0;
   boot.initrd.verbose = false;
-
-  # Plymouth boot splash is configured in system-level/theming.nix
-  # (unified wallpaper with GDM).
 }
