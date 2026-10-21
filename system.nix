@@ -1,12 +1,24 @@
 # system.nix — Main entry point for the NixOS fleet.
 # Imports all system-level and user-level modules.
 # Hosts import this file plus their hardware-configuration.nix.
+{ config, lib, pkgs, ... }:
+
+let
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SINGLE SOURCE OF TRUTH: PRIMARY USER
+  # ═══════════════════════════════════════════════════════════════════════════
+  # Change this ONE value to switch all user-level config (dotfiles, GNOME,
+  # services) to a different user. The system will automatically read from
+  # user-level/${primaryUser}/ for that user's configs.
+  #
+  # To add a new user:
+  #   1. Create user-level/<username>/
+  #   2. Add <username>.nix and dotfiles/ inside it
+  #   3. Change this value and rebuild
+  # ═══════════════════════════════════════════════════════════════════════════
+  primaryUser = "stefan-hacks";
+in
 {
-  config,
-  lib,
-  pkgs,
-  ...
-}: {
   imports = [
     # System-level modules (shared OS configuration)
     ./system-level/boot.nix
@@ -27,9 +39,8 @@
     ./system-level/nvf.nix
     ./system-level/hermes.nix
 
-    # User-level modules (per-user accounts, dotfiles, GNOME settings)
-    # Each user gets their own directory under user-level/<username>/.
-    # To add a new user, create user-level/<username>/<username>.nix and import it here.
-    ./user-level/stefan-hacks/stefan-hacks.nix
+    # User-level module: pass the primary user name so all per-user config
+    # auto-wires to the correct directory and service permissions.
+    (import ./user-level/user-module.nix { username = primaryUser; })
   ];
 }
