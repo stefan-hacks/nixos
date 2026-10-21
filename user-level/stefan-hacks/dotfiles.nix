@@ -28,11 +28,6 @@ let
   dotfilesScript = pkgs.writeShellScript "dotfiles-sync" ''
     set -euo pipefail
 
-    # Only apply to user "stefan-hacks".
-    if [ "$(whoami)" != "stefan-hacks" ]; then
-      exit 0
-    fi
-
     DOTFILES="${dotfilesDrv}"
 
     # -----------------------------------------------------------------------
@@ -82,9 +77,13 @@ let
 in
 {
   # Run the sync script as a one-shot systemd user service on login.
+  # This service only starts for user "stefan-hacks".
   systemd.user.services.dotfiles = {
     description = "Sync personal dotfiles (convention-based)";
     wantedBy = [ "default.target" ];
+    unitConfig = {
+      ConditionUser = "stefan-hacks";
+    };
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;

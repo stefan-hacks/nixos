@@ -27,8 +27,9 @@
     ./system-level/nvf.nix
     ./system-level/hermes.nix
 
-    # User-level modules (user accounts, dotfiles, per-user system config)
-    ./user-level/users.nix
-    ./user-level/dotfiles.nix
+    # User-level modules (per-user accounts, dotfiles, GNOME settings)
+    # Each user gets their own directory under user-level/<username>/.
+    # To add a new user, create user-level/<username>/<username>.nix and import it here.
+    ./user-level/stefan-hacks/stefan-hacks.nix
   ];
 }
