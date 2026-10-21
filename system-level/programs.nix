@@ -41,4 +41,20 @@
   # Quoted preview command ensures --color=always is passed to bat, not parsed
   # as an fzf --color option (which would fail with "invalid color specification").
   environment.sessionVariables.FZF_DEFAULT_OPTS = "--preview 'bat --color=always {}'";
+
+  # Helix editor — default theme and settings
+  programs.helix = {
+    enable = true;
+    defaultEditor = false;  # nvf is the default editor
+    settings = {
+      theme = "nord";
+      editor = {
+        line-number = "relative";
+        mouse = true;
+        cursorline = true;
+        indent-guides.render = true;
+        lsp.display-messages = true;
+      };
+    };
+  };
 }
