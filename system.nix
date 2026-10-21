@@ -35,6 +35,7 @@ in
     ./system-level/programs.nix
     ./system-level/services.nix
     ./system-level/virtualization.nix
+    ./system-level/sensors.nix
     ./system-level/packages.nix
     ./system-level/nvf.nix
     ./system-level/hermes.nix
