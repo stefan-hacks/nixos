@@ -29,7 +29,7 @@
     zip
     p7zip
     # vim          # disabled — nixvim vimAlias=true covers this
-    helix
+    evil-helix
     hw-probe
     less
 
