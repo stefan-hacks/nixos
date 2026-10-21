@@ -94,6 +94,10 @@ export TERM=xterm-256color
 # 1Password
 #source <(op completion bash)
 
+#Brightness control from keybaord
+gsettings set org.gnome.shell.keybindings screen-brightness-down ['F3']
+gsettings set org.gnome.shell.keybindings screen-brightness-up ['F4']
+
 # colorize output
 export GRC_ALIASES=true
 
