@@ -201,6 +201,25 @@ in
           };
         };
       };
+
+      # ── Extra plugins (not bundled with nvf) ──
+      extraPlugins = {
+        vellum = {
+          package = pkgs.runCommand "vellum.nvim" {} ''
+            cp -r ${pkgs.fetchFromGitHub {
+              owner = "blackhat-7";
+              repo = "vellum.nvim";
+              rev = "main";
+              sha256 = "sha256-LZOKPiy9tpCEe84ZrbKKfdhBjqrTSsmSeVAjBbrqMFM=";
+            }} $out
+            chmod -R +w $out
+            rm -f $out/build.lua
+          '';
+          setup = ''
+            require("vellum").setup({ max_width = 100 })
+          '';
+        };
+      };
     };
   };
 }
