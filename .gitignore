@@ -1,3 +1,26 @@
+.git-filter-repo-replacements
+
+# NixOS config .gitignore
+# Result symlinks from nix-build / nixos-rebuild build
 result
 result-*
-.git-filter-repo-replacements
+
+# Temporary files from editors
+*.swp
+*.swo
+*~
+
+# Nix garbage collection roots (if you keep them in the repo)
+.gcroots/
+
+# If you use direnv, trust the nix-shell
+.direnv/
+
+# SOPS / Agenix unencrypted secrets (NEVER commit these)
+secrets/*.yaml
+!secrets/*.enc.yaml
+!secrets/*.age
+
+# IDE
+.idea/
+.vscode/
