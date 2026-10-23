@@ -1,7 +1,10 @@
 # System-wide program configuration
-{ config, lib, pkgs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   programs.firefox.enable = true;
   programs.gpaste.enable = true;
   programs.starship.enable = true;

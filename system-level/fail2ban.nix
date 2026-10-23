@@ -1,7 +1,10 @@
 # Fail2ban intrusion prevention
-{ config, lib, pkgs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   services.fail2ban = {
     enable = true;
     maxretry = 5;

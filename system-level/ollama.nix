@@ -1,7 +1,10 @@
 # Ollama — local LLM inference server
-{ config, lib, pkgs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   services.ollama = {
     enable = true;
 

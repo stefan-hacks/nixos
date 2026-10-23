@@ -1,7 +1,10 @@
 # Locale and timezone
-{ config, lib, pkgs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   # Set your time zone.
   time.timeZone = "America/Sao_Paulo";
 

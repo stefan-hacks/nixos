@@ -1,8 +1,11 @@
 # system-level/theming.nix — Unified system-wide theming.
 # GDM login screen wallpaper.
-{ config, lib, pkgs, ... }:
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   # ═══════════════════════════════════════════════════════════════════════════
   # Single wallpaper used for the GDM login screen
   # ═══════════════════════════════════════════════════════════════════════════
@@ -16,8 +19,7 @@ let
   '';
 
   wallpaperPath = "${wallpaper}/share/wallpapers/nixos-bg.png";
-in
-{
+in {
   # ═══════════════════════════════════════════════════════════════════════════
   # GDM / GNOME Shell — patched to use the same wallpaper
   # ═══════════════════════════════════════════════════════════════════════════
@@ -27,17 +29,19 @@ in
   nixpkgs.overlays = [
     (self: super: {
       gnome-shell = super.gnome-shell.overrideAttrs (old: {
-        postPatch = (old.postPatch or "") + ''
-          # Inject wallpaper background into GDM login dialog SCSS.
-          # We prepend our background rule inside the #lockDialogGroup block.
-          ${pkgs.perl}/bin/perl -i -pe '
-            if (/^#lockDialogGroup \{/) {
-              $_ .= "  background: url(\"file://${wallpaperPath}\") no-repeat center center fixed;\n";
-              $_ .= "  background-size: cover;\n";
-            }
-            s/^  background-color: \$_gdm_bg;$//;
-          ' data/theme/gnome-shell-sass/widgets/_login-lock.scss
-        '';
+        postPatch =
+          (old.postPatch or "")
+          + ''
+            # Inject wallpaper background into GDM login dialog SCSS.
+            # We prepend our background rule inside the #lockDialogGroup block.
+            ${pkgs.perl}/bin/perl -i -pe '
+              if (/^#lockDialogGroup \{/) {
+                $_ .= "  background: url(\"file://${wallpaperPath}\") no-repeat center center fixed;\n";
+                $_ .= "  background-size: cover;\n";
+              }
+              s/^  background-color: \$_gdm_bg;$//;
+            ' data/theme/gnome-shell-sass/widgets/_login-lock.scss
+          '';
       });
     })
   ];

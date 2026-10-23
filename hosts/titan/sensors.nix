@@ -1,10 +1,13 @@
 # hosts/titan/sensors.nix — Per-host hardware sensor modules.
 # Detected on AZW SER (AMD Ryzen 7 6800H) via `sudo sensors-detect`.
-{ config, lib, pkgs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   # AMD Zen 3+ thermal sensors (Ryzen 7 6800H)
-  boot.kernelModules = [ "k10temp" ];
+  boot.kernelModules = ["k10temp"];
 
   # NOTE: sensors-detect found an ITE IT8613E Super I/O chip at 0xa30,
   # but the upstream `it87` driver fails to bind with "No such device".

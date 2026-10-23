@@ -4,12 +4,11 @@
 # hosts/titan/default.nix and run the disko CLI from a NixOS installer.
 #
 # Replace /dev/nvme0n1 with the actual target disk before formatting.
-
 {
   disko.devices = {
     disk.main = {
       type = "disk";
-      device = "/dev/nvme0n1";   # ← set this to the real disk (lsblk to identify)
+      device = "/dev/nvme0n1"; # ← set this to the real disk (lsblk to identify)
       content = {
         type = "gpt";
         partitions = {
@@ -21,7 +20,7 @@
               type = "filesystem";
               format = "vfat";
               mountpoint = "/boot";
-              mountOptions = [ "umask=0077" "dmask=0077" ];
+              mountOptions = ["umask=0077" "dmask=0077"];
             };
           };
 

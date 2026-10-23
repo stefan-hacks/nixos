@@ -1,11 +1,14 @@
 # Services configuration
-{ config, lib, pkgs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   # Enable CUPS to print documents.
   services.printing = {
     enable = true;
-    drivers = [ pkgs.hplip ];
+    drivers = [pkgs.hplip];
   };
 
   # Enable the OpenSSH daemon.

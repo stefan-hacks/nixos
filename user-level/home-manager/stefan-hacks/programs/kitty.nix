@@ -1,8 +1,11 @@
 # kitty.nix — Home Manager kitty terminal configuration
 # Includes kitty-scrollback.nvim integration and Catppuccin themes.
-{ config, lib, pkgs, ... }:
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   # Catppuccin-Mocha theme (dark)
   darkTheme = ''
     # vim:ft=kitty
@@ -118,8 +121,7 @@ let
 
   # kitty-scrollback.nvim Python kitten
   kittyScrollbackNvimPy = builtins.readFile ./kitty_scrollback_nvim.py;
-in
-{
+in {
   programs.kitty = {
     enable = true;
 

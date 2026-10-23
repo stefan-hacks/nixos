@@ -1,7 +1,10 @@
 # System maintenance and auto-upgrade
-{ config, lib, pkgs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   system.autoUpgrade = {
     enable = true;
 

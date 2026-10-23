@@ -44,32 +44,40 @@
     };
   };
 
-  outputs =
-    inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, disko, nvf, hermes-agent, nixdatifier, vellum, kitty-scrollback, ... }:
-    let
-      system = "x86_64-linux";
+  outputs = inputs @ {
+    self,
+    nixpkgs,
+    nixpkgs-unstable,
+    home-manager,
+    disko,
+    nvf,
+    hermes-agent,
+    nixdatifier,
+    vellum,
+    kitty-scrollback,
+    ...
+  }: let
+    system = "x86_64-linux";
 
-      hostNames = [ "ghost" "titan" "minimal" "server" ];
+    hostNames = ["ghost" "titan" "minimal" "server"];
 
-      mkHost =
-        hostName:
-        nixpkgs.lib.nixosSystem {
-          inherit system;
+    mkHost = hostName:
+      nixpkgs.lib.nixosSystem {
+        inherit system;
 
-          specialArgs = {
-            inherit inputs hostName;
-            usernames = [ "stefan-hacks" ];
-          };
-
-          modules = [
-            home-manager.nixosModules.home-manager
-            ./hosts/${hostName}
-          ];
+        specialArgs = {
+          inherit inputs hostName;
+          usernames = ["stefan-hacks"];
         };
-    in
-    {
-      formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt;
 
-      nixosConfigurations = nixpkgs.lib.genAttrs hostNames mkHost;
-    };
+        modules = [
+          home-manager.nixosModules.home-manager
+          ./hosts/${hostName}
+        ];
+      };
+  in {
+    formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt;
+
+    nixosConfigurations = nixpkgs.lib.genAttrs hostNames mkHost;
+  };
 }

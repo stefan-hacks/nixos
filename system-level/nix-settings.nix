@@ -1,7 +1,11 @@
 # Nix package manager settings
-{ config, lib, pkgs, inputs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}: {
   nixpkgs.config.allowUnfree = true;
 
   # ═══════════════════════════════════════════════════════════════════════════

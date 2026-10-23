@@ -1,7 +1,10 @@
 # Virtualization support
-{ config, lib, pkgs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   # libvirtd — QEMU/KVM hypervisor daemon
   virtualisation.libvirtd = {
     enable = true;
@@ -23,5 +26,5 @@
   virtualisation.spiceUSBRedirection.enable = true;
 
   # Ensure user can manage VMs without sudo
-  users.users.stefan-hacks.extraGroups = [ "libvirtd" ];
+  users.users.stefan-hacks.extraGroups = ["libvirtd"];
 }

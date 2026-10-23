@@ -1,9 +1,12 @@
 # system.nix — Main entry point for the NixOS fleet.
 # Imports all system-level modules.
 # Hosts import this file plus their hardware-configuration.nix and home-manager user config.
-{ config, lib, pkgs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   imports = [
     # System-level modules (shared OS configuration)
     ./system-level/boot.nix

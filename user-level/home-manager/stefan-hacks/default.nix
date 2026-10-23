@@ -1,7 +1,11 @@
 # Home Manager entry point for stefan-hacks
-{ config, lib, pkgs, inputs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}: {
   imports = [
     ./programs/bash.nix
     ./programs/git.nix
@@ -19,7 +23,7 @@
   home.homeDirectory = "/home/stefan-hacks";
 
   # Ensure ~/.local/bin is on PATH
-  home.sessionPath = [ "$HOME/.local/bin" ];
+  home.sessionPath = ["$HOME/.local/bin"];
 
   # Let Home Manager install and manage itself
   programs.home-manager.enable = true;
@@ -46,10 +50,22 @@
     autostart = true;
     tui = {
       commands = [
-        { label = "rebuild"; cmd = "cd ~/.config/nixos && sudo nixos-rebuild switch --flake .#titan"; }
-        { label = "check"; cmd = "cd ~/.config/nixos && nix flake check"; }
-        { label = "update"; cmd = "cd ~/.config/nixos && nix flake update"; }
-        { label = "gc"; cmd = "sudo nix-collect-garbage --delete-older-than 30d"; }
+        {
+          label = "rebuild";
+          cmd = "cd ~/.config/nixos && sudo nixos-rebuild switch --flake .#titan";
+        }
+        {
+          label = "check";
+          cmd = "cd ~/.config/nixos && nix flake check";
+        }
+        {
+          label = "update";
+          cmd = "cd ~/.config/nixos && nix flake update";
+        }
+        {
+          label = "gc";
+          cmd = "sudo nix-collect-garbage --delete-older-than 30d";
+        }
       ];
       updateCheck = {
         enable = true;

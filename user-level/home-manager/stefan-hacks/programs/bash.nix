@@ -1,7 +1,10 @@
-{ pkgs, lib, ... }:
 {
+  pkgs,
+  lib,
+  ...
+}: {
   # Ble.sh — syntax-aware line editor for Bash
-  home.packages = [ pkgs.blesh ];
+  home.packages = [pkgs.blesh];
 
   home.file.".blerc".text = builtins.readFile ./blerc;
   home.file.".bash_functions".text = builtins.readFile ./bash_functions.txt;
@@ -9,7 +12,7 @@
   programs.bash = {
     enable = true;
     enableCompletion = true;
-    historyControl = [ "ignoredups" "ignorespace" ];
+    historyControl = ["ignoredups" "ignorespace"];
     historySize = 100000;
     historyFileSize = 200000;
     bashrcExtra = builtins.readFile ./bash_init_extra.sh;

@@ -1,7 +1,10 @@
 # starship.nix — Home Manager starship prompt (Nerd Font Symbols Preset)
-{ config, lib, pkgs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   programs.starship = {
     enable = true;
     enableBashIntegration = true;
@@ -109,9 +112,18 @@
         unknown_symbol = "󰂑 ";
         empty_symbol = "󰂎 ";
         display = [
-          { threshold = 10; style = "bold red"; }
-          { threshold = 30; style = "bold yellow"; }
-          { threshold = 100; style = "bold green"; }
+          {
+            threshold = 10;
+            style = "bold red";
+          }
+          {
+            threshold = 30;
+            style = "bold yellow";
+          }
+          {
+            threshold = 100;
+            style = "bold green";
+          }
         ];
       };
 

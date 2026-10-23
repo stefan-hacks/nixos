@@ -1,6 +1,10 @@
-{ config, lib, pkgs, inputs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}: {
   imports = [
     ./hardware-configuration.nix
     ./sensors.nix
@@ -24,8 +28,8 @@
   };
 
   # AMD graphics (titan-specific)
-  boot.initrd.kernelModules = [ "amdgpu" ];
-  services.xserver.videoDrivers = [ "amdgpu" ];
+  boot.initrd.kernelModules = ["amdgpu"];
+  services.xserver.videoDrivers = ["amdgpu"];
 
   hardware.graphics = {
     enable = true;
@@ -43,7 +47,7 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    sharedModules = [ inputs.nixdatifier.homeManagerModules.default ];
+    sharedModules = [inputs.nixdatifier.homeManagerModules.default];
     users.stefan-hacks = import ../../user-level/home-manager/stefan-hacks;
   };
 }

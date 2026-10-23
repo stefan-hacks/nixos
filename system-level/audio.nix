@@ -1,7 +1,10 @@
 # Audio configuration
-{ config, lib, pkgs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   services.pipewire = {
     enable = true;
     pulse.enable = true;
