@@ -18,6 +18,9 @@
   home.username = "stefan-hacks";
   home.homeDirectory = "/home/stefan-hacks";
 
+  # Ensure ~/.local/bin is on PATH
+  home.sessionPath = [ "$HOME/.local/bin" ];
+
   # Let Home Manager install and manage itself
   programs.home-manager.enable = true;
 

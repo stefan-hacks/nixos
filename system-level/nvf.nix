@@ -208,6 +208,16 @@
             require("vellum").setup({ max_width = 100 })
           '';
         };
+
+        kitty-scrollback = {
+          package = pkgs.runCommand "kitty-scrollback.nvim" {} ''
+            cp -r ${inputs.kitty-scrollback} $out
+            chmod -R +w $out
+          '';
+          setup = ''
+            require("kitty-scrollback").setup()
+          '';
+        };
       };
     };
   };

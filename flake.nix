@@ -37,10 +37,15 @@
       url = "github:blackhat-7/vellum.nvim";
       flake = false;
     };
+
+    kitty-scrollback = {
+      url = "github:mikesmithgh/kitty-scrollback.nvim/v8.0.0";
+      flake = false;
+    };
   };
 
   outputs =
-    inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, disko, nvf, hermes-agent, nixdatifier, vellum, ... }:
+    inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, disko, nvf, hermes-agent, nixdatifier, vellum, kitty-scrollback, ... }:
     let
       system = "x86_64-linux";
 
