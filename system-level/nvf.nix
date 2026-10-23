@@ -200,12 +200,7 @@
       extraPlugins = {
         vellum = {
           package = pkgs.runCommand "vellum.nvim" {} ''
-            cp -r ${pkgs.fetchFromGitHub {
-              owner = "blackhat-7";
-              repo = "vellum.nvim";
-              rev = "main";
-              sha256 = "sha256-LZOKPiy9tpCEe84ZrbKKfdhBjqrTSsmSeVAjBbrqMFM=";
-            }} $out
+            cp -r ${inputs.vellum} $out
             chmod -R +w $out
             rm -f $out/build.lua
           '';

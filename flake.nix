@@ -27,10 +27,20 @@
       url = "github:NousResearch/hermes-agent/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nixdatifier = {
+      url = "github:Muddyblack/nixdatifier";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    vellum = {
+      url = "github:blackhat-7/vellum.nvim";
+      flake = false;
+    };
   };
 
   outputs =
-    inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, disko, nvf, hermes-agent, ... }:
+    inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, disko, nvf, hermes-agent, nixdatifier, vellum, ... }:
     let
       system = "x86_64-linux";
 

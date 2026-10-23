@@ -1,26 +1,152 @@
 # kitty.nix — Home Manager kitty terminal configuration
+# Includes kitty-scrollback.nvim integration and Catppuccin themes.
 { config, lib, pkgs, ... }:
 
+let
+  # Catppuccin-Mocha theme (dark)
+  darkTheme = ''
+    # vim:ft=kitty
+    ## name:     Catppuccin-Mocha
+    ## author:   Pocco81 (https://github.com/Pocco81)
+    ## license:  MIT
+    ## upstream: https://github.com/catppuccin/kitty/blob/main/themes/mocha.conf
+    ## blurb:    Soothing pastel theme for the high-spirited!
+
+    foreground              #CDD6F4
+    background              #1E1E2E
+    selection_foreground    #1E1E2E
+    selection_background    #F5E0DC
+
+    cursor                  #F5E0DC
+    cursor_text_color       #1E1E2E
+
+    url_color               #F5E0DC
+
+    active_border_color     #B4BEFE
+    inactive_border_color   #6C7086
+    bell_border_color       #F9E2AF
+
+    wayland_titlebar_color system
+    macos_titlebar_color system
+
+    active_tab_foreground   #11111B
+    active_tab_background   #CBA6F7
+    inactive_tab_foreground #CDD6F4
+    inactive_tab_background #181825
+    tab_bar_background      #11111B
+
+    mark1_foreground #1E1E2E
+    mark1_background #B4BEFE
+    mark2_foreground #1E1E2E
+    mark2_background #CBA6F7
+    mark3_foreground #1E1E2E
+    mark3_background #74C7EC
+
+    color0  #45475A
+    color8  #585B70
+    color1  #F38BA8
+    color9  #F38BA8
+    color2  #A6E3A1
+    color10 #A6E3A1
+    color3  #F9E2AF
+    color11 #F9E2AF
+    color4  #89B4FA
+    color12 #89B4FA
+    color5  #F5C2E7
+    color13 #F5C2E7
+    color6  #94E2D5
+    color14 #94E2D5
+    color7  #BAC2DE
+    color15 #A6ADC8
+  '';
+
+  # Catppuccin-Latte theme (light)
+  lightTheme = ''
+    # vim:ft=kitty
+    ## name:     Catppuccin-Latte
+    ## author:   Pocco81 (https://github.com/Pocco81)
+    ## license:  MIT
+    ## upstream: https://github.com/catppuccin/kitty/blob/main/themes/latte.conf
+
+    foreground              #4C4F69
+    background              #EFF1F5
+    selection_foreground    #EFF1F5
+    selection_background    #DC8A78
+
+    cursor                  #DC8A78
+    cursor_text_color       #EFF1F5
+
+    url_color               #DC8A78
+
+    active_border_color     #7287FD
+    inactive_border_color   #9CA0B0
+    bell_border_color       #DF8E1D
+
+    wayland_titlebar_color system
+    macos_titlebar_color system
+
+    active_tab_foreground   #EFF1F5
+    active_tab_background   #8839EF
+    inactive_tab_foreground #4C4F69
+    inactive_tab_background #9CA0B0
+    tab_bar_background      #BCC0CC
+
+    mark1_foreground #EFF1F5
+    mark1_background #7287fD
+    mark2_foreground #EFF1F5
+    mark2_background #8839EF
+    mark3_foreground #EFF1F5
+    mark3_background #209FB5
+
+    color0  #5C5F77
+    color8  #6C6F85
+    color1  #D20F39
+    color9  #D20F39
+    color2  #40A02B
+    color10 #40A02B
+    color3  #DF8E1D
+    color11 #DF8E1D
+    color4  #1E66F5
+    color12 #1E66F5
+    color5  #8839EF
+    color13 #8839EF
+    color6  #179299
+    color14 #179299
+    color7  #ACB0Be
+    color15 #BCC0CC
+  '';
+
+  # kitty-scrollback.nvim Python kitten
+  kittyScrollbackNvimPy = builtins.readFile ./kitty_scrollback_nvim.py;
+in
 {
   programs.kitty = {
     enable = true;
 
     # Core settings that HM manages natively
     settings = {
+      # ── Shell integration ──
       shell_integration = "enabled";
       allow_remote_control = "yes";
       listen_on = "unix:/tmp/kitty";
+
+      # ── Performance ──
       repaint_delay = "10";
       input_delay = "3";
       sync_to_monitor = "yes";
+
+      # ── Cursor ──
       cursor_trail = "3";
       cursor_trail_decay = "0.1 0.4";
+
+      # ── Window appearance ──
       window_border_width = "1pt";
       draw_minimal_borders = "yes";
-      hide_window_decorations = "no";
-      wayland_titlebar_color = "background";
+      hide_window_decorations = "yes";
       active_border_color = "#00ff00";
       inactive_border_color = "#282828";
+
+      # ── Window sizing ──
       remember_window_size = "no";
       initial_window_width = "800";
       initial_window_height = "500";
@@ -29,21 +155,31 @@
       single_window_margin_width = "0";
       window_padding_width = "2";
       inactive_text_alpha = "0.7";
+
+      # ── Layouts ──
       enabled_layouts = "splits,stack,tall,fat,grid,horizontal,vertical";
+
+      # ── Transparency ──
       background_opacity = "0.95";
       dim_opacity = "0.90";
       background_blur = "1";
+
+      # ── Fonts ──
       font_family = "JetBrainsMono Nerd Font Mono Thin";
       bold_font = "auto";
       italic_font = "auto";
       bold_italic_font = "auto";
       font_size = "13.0";
       disable_ligatures = "never";
+
+      # ── URL handling ──
       url_style = "curly";
       open_url_with = "default";
       url_prefixes = "file ftp ftps gemini git gopher http https irc ircs kitty mailto news sftp ssh";
       detect_urls = "yes";
       allow_hyperlinks = "yes";
+
+      # ── Tab bar ──
       tab_bar_edge = "top";
       tab_bar_margin_width = "1.0";
       tab_bar_margin_height = "1.0 0.5";
@@ -54,10 +190,17 @@
       tab_fade = "0.25 0.5 0.75 1";
       active_tab_font_style = "bold-italic";
       inactive_tab_font_style = "normal";
+
+      # ── Bell ──
       enable_audio_bell = "no";
     };
 
     extraConfig = ''
+      # ═══════════════════════════════════════════════════════════════════════════
+      # THEME
+      # ═══════════════════════════════════════════════════════════════════════════
+      include dark-theme.auto.conf
+
       # ═══════════════════════════════════════════════════════════════════════════
       # KEYBINDINGS
       # ═══════════════════════════════════════════════════════════════════════════
@@ -171,15 +314,26 @@
       # Broadcast
       map ctrl+shift+b kitten broadcast
 
-      # Native nvim scrollback pager (no kitty-scrollback-nvim plugin)
-      scrollback_pager nvim --cmd 'set eventignore=FileType' +'nnoremap q ZQ' +'call nvim_open_term(0, {})' +'set nomodified nolist' +'$' -
+      # ═══════════════════════════════════════════════════════════════════════════
+      # KITTY-SCROLLBACK.NVIM INTEGRATION
+      # ═══════════════════════════════════════════════════════════════════════════
+      action_alias kitty_scrollback_nvim kitten ~/.config/kitty/kitty_scrollback_nvim.py
 
-      # Config reload / debug
+      map ctrl+shift+h kitty_scrollback_nvim
+      map ctrl+shift+g kitty_scrollback_nvim --config ksb_builtin_last_cmd_output
+
+      mouse_map ctrl+shift+right press ungrabbed combine : mouse_select_command_output : kitty_scrollback_nvim --config ksb_builtin_last_visited_cmd_output
+
+      # ═══════════════════════════════════════════════════════════════════════════
+      # CONFIG RELOAD / DEBUG
+      # ═══════════════════════════════════════════════════════════════════════════
       map ctrl+alt+r               load_config_file
       map ctrl+shift+alt+comma     edit_config_file
       map ctrl+shift+alt+d       debug_config
 
-      # Mouse
+      # ═══════════════════════════════════════════════════════════════════════════
+      # MOUSE
+      # ═══════════════════════════════════════════════════════════════════════════
       mouse_map left click ungrabbed mouse_click_url_or_select
       mouse_map left doublepress ungrabbed mouse_selection word
       mouse_map left triplepress ungrabbed mouse_selection line
@@ -191,7 +345,9 @@
       mouse_map ctrl+shift+left press grabbed discard_event
       mouse_map ctrl+shift+left drag grabbed mouse_move_window
 
-      # Clipboard
+      # ═══════════════════════════════════════════════════════════════════════════
+      # CLIPBOARD
+      # ═══════════════════════════════════════════════════════════════════════════
       map ctrl+shift+c copy_to_clipboard
       map ctrl+shift+v paste_from_clipboard
       map shift+insert paste_from_clipboard
@@ -199,7 +355,9 @@
       map ctrl+shift+alt+c copy_to_buffer a
       map ctrl+shift+alt+v paste_from_buffer a
 
-      # Scrolling
+      # ═══════════════════════════════════════════════════════════════════════════
+      # SCROLLING
+      # ═══════════════════════════════════════════════════════════════════════════
       map ctrl+shift+page_up   scroll_line_up
       map ctrl+shift+page_down scroll_line_down
       map ctrl+shift+home      scroll_home
@@ -208,11 +366,19 @@
       map ctrl+alt+home  scroll_to_prompt -1
       map ctrl+alt+end   scroll_to_prompt 1
 
-      # Misc
+      # ═══════════════════════════════════════════════════════════════════════════
+      # MISC
+      # ═══════════════════════════════════════════════════════════════════════════
       map ctrl+shift+escape kitty_shell window
       map ctrl+shift+alt+i kitten unicode_input
       map ctrl+shift+o open_selected_path
       map ctrl+shift+backspace send_signal SIGINT
     '';
   };
+
+  # Place theme files and kitten in ~/.config/kitty/
+  xdg.configFile."kitty/dark-theme.auto.conf".text = darkTheme;
+  xdg.configFile."kitty/light-theme.auto.conf".text = lightTheme;
+  xdg.configFile."kitty/no-preference-theme.auto.conf".text = lightTheme;
+  xdg.configFile."kitty/kitty_scrollback_nvim.py".text = kittyScrollbackNvimPy;
 }

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 {
   imports = [
@@ -43,6 +43,7 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
+    sharedModules = [ inputs.nixdatifier.homeManagerModules.default ];
     users.stefan-hacks = import ../../user-level/home-manager/stefan-hacks;
   };
 }
