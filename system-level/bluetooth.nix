@@ -2,13 +2,15 @@
 # Addresses post-suspend/hibernate HID reconnection failures (e.g. Logitech MX Master 3S).
 # The Bluetooth controller resumes but BlueZ does not re-trigger HID enumeration.
 # Fix: restart bluetooth.service after resume + kernel-side HID handling.
-{ config, lib, pkgs, ... }:
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   # MX Master 3S MAC address — used by the reconnect hook after resume.
   mxMasterMac = "D4:10:D5:87:B1:6E";
-in
-{
+in {
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
@@ -25,12 +27,12 @@ in
 
   # Ensure the Logitech HID++ driver is loaded early for BT HID devices
   # (MX Master 3S, MX Keys, etc.).
-  boot.kernelModules = [ "hid_logitech_hidpp" ];
+  boot.kernelModules = ["hid_logitech_hidpp"];
 
   # Load btusb in initrd so the Bluetooth controller is initialised early
   # after hibernate (S4), where the kernel must re-enumerate USB devices
   # before userspace is available.
-  boot.initrd.kernelModules = [ "btusb" ];
+  boot.initrd.kernelModules = ["btusb"];
 
   # Disable USB autosuspend for the MediaTek Bluetooth controller (13d3:3621).
   # This controller fails to resume properly when the USB root hub suspends it
@@ -49,8 +51,8 @@ in
   # ═══════════════════════════════════════════════════════════════════════════
   systemd.services.bluetooth-resume = {
     description = "Restart Bluetooth after suspend/hibernate";
-    after = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" "suspend-then-hibernate.target" ];
-    wantedBy = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" "suspend-then-hibernate.target" ];
+    after = ["suspend.target" "hibernate.target" "hybrid-sleep.target" "suspend-then-hibernate.target"];
+    wantedBy = ["suspend.target" "hibernate.target" "hybrid-sleep.target" "suspend-then-hibernate.target"];
     serviceConfig = {
       Type = "oneshot";
       # Give the USB controller time to finish re-initialising before
