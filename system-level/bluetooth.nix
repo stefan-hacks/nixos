@@ -4,24 +4,21 @@
 # Fix: restart bluetooth.service after resume + kernel-side HID handling.
 { config, lib, pkgs, ... }:
 
+let
+  # MX Master 3S MAC address — used by the reconnect hook after resume.
+  mxMasterMac = "D4:10:D5:87:B1:6E";
+in
 {
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
     settings = {
       General = {
-        AutoEnable = true;
         # Experimental mode improves BLE HID support (required by MX Master 3S).
         Experimental = true;
       };
       Policy = {
         AutoEnable = true;
-      };
-      Input = {
-        # Let the kernel manage HID devices instead of BlueZ userspace.
-        # Fixes mice/keyboards that vanish after suspend even though the
-        # Bluetooth link reports "Connected".
-        UserspaceHID = false;
       };
     };
   };
@@ -43,21 +40,40 @@
     ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="13d3", ATTR{idProduct}=="3621", ATTR{power/control}="on"
   '';
 
-  # Replace powerManagement.resumeCommands with a proper systemd service
-  # that runs after both suspend (S3) and hibernate (S4) resume.
-  # We stop bluetooth, wait for the USB controller to re-appear, then restart.
+  # ═══════════════════════════════════════════════════════════════════════════
+  # Post-resume: restart bluetooth.service after suspend/hibernate.
+  # The controller loses power on resume and re-runs firmware setup,
+  # but bluetoothd never notices. Restarting the daemon re-syncs state.
+  # If restart alone doesn't reconnect the mouse, we fall back to an
+  # explicit bluetoothctl connect after a short delay.
+  # ═══════════════════════════════════════════════════════════════════════════
   systemd.services.bluetooth-resume = {
     description = "Restart Bluetooth after suspend/hibernate";
-    after = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" ];
-    wantedBy = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" ];
+    after = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" "suspend-then-hibernate.target" ];
+    wantedBy = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" "suspend-then-hibernate.target" ];
     serviceConfig = {
       Type = "oneshot";
-      ExecStartPre = "${pkgs.coreutils}/bin/sleep 2";
-      ExecStart = [
-        "${pkgs.systemd}/bin/systemctl stop bluetooth"
-        "${pkgs.coreutils}/bin/sleep 1"
-        "${pkgs.systemd}/bin/systemctl start bluetooth"
-      ];
+      # Give the USB controller time to finish re-initialising before
+      # touching bluetoothd. 3s is the sweet spot for the MediaTek chip.
+      ExecStartPre = "${pkgs.coreutils}/bin/sleep 3";
+      ExecStart = "${pkgs.systemd}/bin/systemctl restart bluetooth.service";
     };
   };
+
+  # Optional fallback: explicitly reconnect the mouse if the restart
+  # doesn't auto-reconnect it. This runs 5 seconds after the restart.
+  # To test whether this is needed, run manually after a failed resume:
+  #   bluetoothctl connect D4:10:D5:87:B1:6E
+  # If that works instantly, uncomment the block below.
+  #
+  # systemd.services.bluetooth-reconnect-mxmaster = {
+  #   description = "Reconnect MX Master 3S after resume";
+  #   after = [ "bluetooth-resume.service" ];
+  #   wantedBy = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" "suspend-then-hibernate.target" ];
+  #   serviceConfig = {
+  #     Type = "oneshot";
+  #     ExecStartPre = "${pkgs.coreutils}/bin/sleep 5";
+  #     ExecStart = "${pkgs.bluez}/bin/bluetoothctl connect ${mxMasterMac}";
+  #   };
+  # };
 }
