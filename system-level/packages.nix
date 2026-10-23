@@ -58,7 +58,6 @@
     lolcat
     grc
     toolong
-    nerdlog-unstable
 
     ###########################################################################
     # Build tools
