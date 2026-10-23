@@ -321,6 +321,22 @@
 
       # ── Extra plugins (not bundled with nvf) ──
       extraPlugins = {
+        mega-logging = {
+          package = pkgs.runCommand "mega.logging" {} ''
+            cp -r ${inputs.mega-logging} $out
+            chmod -R +w $out
+          '';
+          setup = "";
+        };
+
+        mega-cmdparse = {
+          package = pkgs.runCommand "mega.cmdparse" {} ''
+            cp -r ${inputs.mega-cmdparse} $out
+            chmod -R +w $out
+          '';
+          setup = "";
+        };
+
         vellum = {
           package = pkgs.runCommand "vellum.nvim" {} ''
             cp -r ${inputs.vellum} $out

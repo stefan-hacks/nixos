@@ -33,6 +33,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-graph = {
+      url = "github:AlexAntonik/nix-graph";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     vellum = {
       url = "github:blackhat-7/vellum.nvim";
       flake = false;
@@ -40,6 +45,16 @@
 
     kitty-scrollback = {
       url = "github:mikesmithgh/kitty-scrollback.nvim/v8.0.0";
+      flake = false;
+    };
+
+    mega-cmdparse = {
+      url = "github:ColinKennedy/mega.cmdparse";
+      flake = false;
+    };
+
+    mega-logging = {
+      url = "github:ColinKennedy/mega.logging";
       flake = false;
     };
   };
@@ -53,8 +68,11 @@
     nvf,
     hermes-agent,
     nixdatifier,
+    nix-graph,
     vellum,
     kitty-scrollback,
+    mega-cmdparse,
+    mega-logging,
     ...
   }: let
     system = "x86_64-linux";

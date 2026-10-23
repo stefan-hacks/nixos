@@ -5,6 +5,9 @@ export NIXCFG="${NIXCFG:-$HOME/.config/nixos}"
 alias sudo='sudo '
 alias watch='watch '
 
+# Source ble.sh early (must be before other interactive init)
+[[ $- == *i* ]] && source -- "$(blesh-share)"/ble.sh --attach=none
+
 # Source NixOS environment variables (FZF_DEFAULT_OPTS, etc.)
 [ -f /etc/set-environment ] && source /etc/set-environment
 
@@ -48,10 +51,8 @@ if command -v lolcat > /dev/null 2>&1; then
   echo "w3lc0m3 h4ck3r - let the games begin! - m4ast3r y0ur cr4ft" | lolcat
 fi
 
-# Attach ble.sh if loaded
-if [[ ${BLE_VERSION-} ]]; then
-  ble-attach
-fi
-
 # Source functions from _bash_aliases
 [ -f ~/.bash_functions ] && source ~/.bash_functions
+
+# Attach ble.sh LAST after everything else
+[[ ! ${BLE_VERSION-} ]] || ble-attach

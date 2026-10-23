@@ -4,6 +4,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }: {
   environment.systemPackages = with pkgs; [
@@ -179,6 +180,7 @@
     ###########################################################################
     nh
     nix-output-monitor
+    inputs.nix-graph.packages.${pkgs.stdenv.hostPlatform.system}.default
     nix-index
     nix-tree
     nix-du

@@ -71,11 +71,11 @@
         "uv2nix": "uv2nix"
       },
       "locked": {
-        "lastModified": 1792741524,
-        "narHash": "sha256-hjS5Ue+q5E52MhjMm4ks0SyY9JHnUtDsewboHlbvKVw=",
+        "lastModified": 1792746793,
+        "narHash": "sha256-C+1sJ79y4/MPxQro/qxOtRgyWwS4++1tI042+0eRJTw=",
         "owner": "NousResearch",
         "repo": "hermes-agent",
-        "rev": "df722c88648ace75510abe6e6cfceb6dcc77da69",
+        "rev": "e5710273103fbc4c749217977769f0c3e799be9c",
         "type": "github"
       },
       "original": {
@@ -144,6 +144,38 @@
         "type": "github"
       }
     },
+    "mega-cmdparse": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1764372292,
+        "narHash": "sha256-RgRsHt1O6UQ/90JeAkHvdpgfjF+I25zg/oGV0cK7t6U=",
+        "owner": "ColinKennedy",
+        "repo": "mega.cmdparse",
+        "rev": "47ea5b1b23059fbb79a8e262002f32e7cd8aed90",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ColinKennedy",
+        "repo": "mega.cmdparse",
+        "type": "github"
+      }
+    },
+    "mega-logging": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1738921048,
+        "narHash": "sha256-hV7uJyu0XszGLOvcRcDNDE9P6d8GTxBX+la1lQVxx2s=",
+        "owner": "ColinKennedy",
+        "repo": "mega.logging",
+        "rev": "194ad8c300186e73c3eb1ebeb3ede42eb219be3b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ColinKennedy",
+        "repo": "mega.logging",
+        "type": "github"
+      }
+    },
     "mnw": {
       "locked": {
         "lastModified": 1784154424,
@@ -156,6 +188,26 @@
       "original": {
         "owner": "Gerg-L",
         "repo": "mnw",
+        "type": "github"
+      }
+    },
+    "nix-graph": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791221501,
+        "narHash": "sha256-nst0pArfRbH5ZJ1cN5l8Obw4vEtibhYpzglmudnJpak=",
+        "owner": "AlexAntonik",
+        "repo": "nix-graph",
+        "rev": "8c68c58a7aeaaea102b8627d9098aa051257f3d9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "AlexAntonik",
+        "repo": "nix-graph",
         "type": "github"
       }
     },
@@ -311,6 +363,9 @@
         "hermes-agent": "hermes-agent",
         "home-manager": "home-manager_2",
         "kitty-scrollback": "kitty-scrollback",
+        "mega-cmdparse": "mega-cmdparse",
+        "mega-logging": "mega-logging",
+        "nix-graph": "nix-graph",
         "nixdatifier": "nixdatifier",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",

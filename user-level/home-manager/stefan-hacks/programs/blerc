@@ -3,4 +3,3 @@ bleopt prompt_ps1_final='\[$(tput setaf 6)\]\w \[$(tput sgr0)\]\$ '
 bleopt complete_auto_complete=1
 bleopt complete_menu_complete=1
 bleopt complete_ambiguous=1
-bleopt history_loader=ble/history:bash-default
