@@ -7,7 +7,8 @@ let
   # Single wallpaper used for the GDM login screen
   # ═══════════════════════════════════════════════════════════════════════════
   # The image is copied to the Nix store so GDM can access it.
-  wallpaperImage = /home/stefan-hacks/.config/nixos/assets/wallpapers/nixos_wallpapers/gdm_blur.png;
+  # NOTE: Uses relative path so it works in pure flake evaluation mode.
+  wallpaperImage = ../assets/wallpapers/nixos_wallpapers/gdm_blur.png;
 
   wallpaper = pkgs.runCommand "nixos-wallpaper" {} ''
     mkdir -p $out/share/wallpapers

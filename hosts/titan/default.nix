@@ -38,4 +38,11 @@
   };
 
   system.stateVersion = "26.05";
+
+  # Home Manager integration
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users.stefan-hacks = import ../../user-level/home-manager/stefan-hacks;
+  };
 }

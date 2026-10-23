@@ -1,16 +1,10 @@
 # nvf — Modular Neovim configuration framework for NixOS.
-# Installed without flakes via builtins.fetchTarball + flake-compat.
 # Docs: https://nvf.notashelf.dev/
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
-let
-  nvf = import (builtins.fetchTarball {
-    url = "https://github.com/notashelf/nvf/archive/main.tar.gz";
-  });
-in
 {
   imports = [
-    nvf.nixosModules.nvf
+    inputs.nvf.nixosModules.nvf
   ];
 
   programs.nvf = {
