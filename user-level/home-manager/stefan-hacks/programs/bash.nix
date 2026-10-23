@@ -339,12 +339,12 @@
     # ── Shell functions and init code ────────────────────────────────────────────
     bashrcExtra = ''
       # Source ble.sh early (before other integrations)
-      [[ $- == *i* ]] \u0026\u0026 source -- "$(blesh-share)"/ble.sh --attach=none
+      [[ $- == *i* ]] && source -- "$(blesh-share)"/ble.sh --attach=none
     '';
 
     initExtra = ''
       # Source NixOS environment variables (FZF_DEFAULT_OPTS, etc.)
-      [ -f /etc/set-environment ] \u0026\u0026 source /etc/set-environment
+      [ -f /etc/set-environment ] && source /etc/set-environment
 
       # Enable vi mode for bash
       set -o vi
