@@ -1,0 +1,187 @@
+_have() { command -v "$1" >/dev/null 2>&1; }
+
+mkfile() { truncate -s "${1:?usage: mkfile <size> [name]}" "${2:-./${1}.dat}"; }
+
+cd() {
+  if [[ $1 =~ ^-[0-9]+$ ]]; then
+    local n=${1#-} up="" i
+    for ((i = 0; i < n; i++)); do up+="../"; done
+    builtin cd "$up" || return
+  else
+    builtin cd "$@" || return
+  fi
+}
+
+fcd() {
+  local dir
+  if _have fd; then
+    dir=$(fd --type d --hidden --exclude .git . "${1:-.}" | fzf --reverse --preview 'ls -A {}')
+  else
+    dir=$(find "${1:-.}" -type d -not -path '*/.git/*' 2>/dev/null | fzf --reverse --preview 'ls -A {}')
+  fi
+  [[ -n $dir ]] && cd "$dir"
+}
+
+cdf() {
+  local f
+  f=$(fzf --reverse) && cd "$(dirname "$f")"
+}
+
+if _have yazi; then
+  y() {
+    local tmp cwd
+    tmp=$(mktemp -t yazi-cwd.XXXXXX)
+    yazi "$@" --cwd-file="$tmp"
+    IFS= read -r -d '' cwd <"$tmp"
+    [[ -n $cwd && $cwd != "$PWD" ]] && builtin cd -- "$cwd"
+    rm -f -- "$tmp"
+  }
+fi
+
+if _have eza; then
+  alias ls='eza --icons --git --group-directories-first'
+  alias ll='eza -l --icons --git --header --group-directories-first'
+  alias llog='eza -l --icons --git --header -og --group-directories-first'
+  alias lsa='eza -a --icons --git --group-directories-first'
+  alias lla='eza -la --icons --git --header --group-directories-first'
+  alias llaog='eza -la --icons --git --header -og --group-directories-first'
+  alias lS='eza -la --icons --git --header --sort=size --reverse'      # biggest first
+  alias lm='eza -la --icons --git --header --sort=modified --reverse'  # newest first
+  alias lt='eza --tree --level=2 --icons'
+  alias lta='eza -a --tree --level=2 --icons'
+  alias lt3='eza --tree --level=3 --icons'
+  alias lgi='eza --tree --icons --git-ignore'                          # tree, respecting .gitignore
+else
+  alias ls='ls --color=auto --group-directories-first'
+  alias ll='ls -lh'
+  alias lla='ls -lAh'
+  alias lsa='ls -A'
+fi
+
+_nrebuild() {
+  local action=$1 host=$HOSTNAME
+  shift
+  if [[ -n ${1:-} && $1 != -* ]]; then host=$1; shift; fi
+  case $action in
+    build | dry-build | build-vm) nixos-rebuild "$action" --flake "$NIXCFG#$host" "$@" ;;
+    *) sudo nixos-rebuild "$action" --flake "$NIXCFG#$host" "$@" ;;
+  esac
+}
+
+nsw() { _nrebuild switch "$@"; }
+
+nbd() { _nrebuild build "$@"; }
+
+nts() { _nrebuild test "$@"; }
+
+ndr() { _nrebuild dry-build "$@"; }
+
+nbt() { _nrebuild boot "$@"; }
+
+nswn() {
+  local host=${1:-$HOSTNAME}
+  sudo nixos-rebuild switch --flake "$NIXCFG#$host" --log-format internal-json -v |& nom --json
+}
+
+ndeploy() {
+  [[ $# -ge 2 ]] || { echo "usage: ndeploy <flake-host> <user@address> [switch|boot|test]" >&2; return 1; }
+  nixos-rebuild "${3:-switch}" --flake "$NIXCFG#$1" --target-host "$2" --sudo
+}
+
+nupgrade() {
+  ( cd "$NIXCFG" && nix flake update ) || return
+  nsw "$@" || return
+  sudo nix-collect-garbage --delete-older-than 7d && nix-store --optimise
+  _have tldr && tldr --update >/dev/null 2>&1
+  return 0
+}
+
+nedit() { ( cd "$NIXCFG" && ${EDITOR:-vim} "${@:-.}" ); }
+
+ns() {
+  local args=() p
+  for p in "$@"; do
+    case $p in
+      -* | *#* | */*) args+=("$p") ;;
+      *) args+=("nixpkgs#$p") ;;
+    esac
+  done
+  nix shell "${args[@]}"
+}
+
+nrepl-host() { nix repl "$NIXCFG#nixosConfigurations.${1:-$HOSTNAME}"; }
+
+nopt() { nix eval "$NIXCFG#nixosConfigurations.${2:-$HOSTNAME}.config.$1"; }
+
+ndiff() {
+  local a=${1:-/run/booted-system} b=${2:-/run/current-system}
+  if _have nvd; then nvd diff "$a" "$b"; else nix store diff-closures "$a" "$b"; fi
+}
+
+nin() { nix profile install "nixpkgs#$1"; }
+
+hms() { home-manager switch --flake "$NIXCFG#${1:-$USER}"; }
+
+gac()   { git add -A && git commit -m "${*:-update}"; }
+
+gitup() { git add -A && git commit -m "${*:-update}" && git push; }
+
+gwip()  { git add -A && git commit -m "wip"; }
+
+gprune() {
+  git fetch --prune &&
+    git branch --merged | grep -Ev '^\*|^\s*(main|master|develop)$' | xargs -r git branch -d
+}
+
+gclone() { git clone "$1" && cd "$(basename "${1%.git}")"; }
+
+fe() {
+  local -a files
+  mapfile -t files < <(fzf -m --reverse --preview 'bat --color=always --line-range :200 {} 2>/dev/null || cat {}')
+  ((${#files[@]})) && "${EDITOR:-vim}" "${files[@]}"
+}
+
+fkill() {
+  local pids
+  pids=$(ps -eo pid,user,%cpu,%mem,comm --sort=-%cpu | sed 1d | fzf -m --reverse | awk '{print $1}')
+  # shellcheck disable=SC2086
+  [[ -n $pids ]] && kill -"${1:-15}" $pids
+}
+
+als() { alias | grep -i -- "${1:?usage: als <pattern>}"; }
+
+sysg() { sysctl -a 2>/dev/null | grep -i -- "${1:?usage: sysg <pattern>}"; }
+
+portcheck() { nc -zv "${1:?usage: portcheck <host> <port>}" "${2:?}"; }
+
+dsh()    { docker exec -it "${1:?usage: dsh <container> [shell]}" "${2:-sh}"; }
+
+dip()    { docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}} {{end}}' "$1"; }
+
+pstop() { podman ps -q | xargs -r podman stop; }
+
+kns() { kubectl config set-context --current --namespace="${1:?usage: kns <namespace>}"; }
+
+extract() {
+  local f
+  for f in "$@"; do
+    [[ -f $f ]] || { echo "extract: '$f' is not a file" >&2; continue; }
+    case $f in
+      *.tar.gz | *.tgz)   tar -xzvf "$f" ;;
+      *.tar.bz2 | *.tbz2) tar -xjvf "$f" ;;
+      *.tar.xz | *.txz)   tar -xJvf "$f" ;;
+      *.tar.zst)          tar --zstd -xvf "$f" ;;
+      *.tar)              tar -xvf "$f" ;;
+      *.zip)              unzip "$f" ;;
+      *.gz)               gunzip "$f" ;;
+      *.bz2)              bunzip2 "$f" ;;
+      *.xz)               unxz "$f" ;;
+      *.zst)              unzstd "$f" ;;
+      *.7z)               7z x "$f" ;;
+      *.rar)              unrar x "$f" ;;
+      *)                  echo "extract: unknown format '$f'" >&2 ;;
+    esac
+  done
+}
+
+cht() { curl -s "cheat.sh/${1:?usage: cht <topic>}"; }

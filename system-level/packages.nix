@@ -43,6 +43,7 @@
     starship
     zoxide
     fzf
+    termscp
     television
     direnv
     eza
@@ -76,6 +77,7 @@
     vscode-langservers-extracted
     clang-tools
     gopls
+    ansible
     ansible-language-server
 
     ###########################################################################
@@ -292,6 +294,8 @@
     # System Tools / Misc
     ###########################################################################
     lazydocker
+    terraform
+    opentofu
     dog
     xh
     wtfis

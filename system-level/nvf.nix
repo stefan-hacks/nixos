@@ -47,10 +47,19 @@
       statusline.lualine = {
         enable = true;
         setupOpts.options.theme = "catppuccin";
+        integrations.breadcrumbs = {
+          vanilla.enable = false;
+          nvim-navic.enable = true;
+          navbuddy.enable = true;
+          lspsaga.enable = false;
+        };
       };
 
-      # ── Autocompletion ──
-      autocomplete.nvim-cmp.enable = true;
+      # ── Autocompletion (blink-cmp for maximal) ──
+      autocomplete = {
+        nvim-cmp.enable = false;
+        blink-cmp.enable = true;
+      };
       snippets.luasnip.enable = true;
 
       # ── Autopairs ──
@@ -86,11 +95,14 @@
       lsp = {
         enable = true;
         formatOnSave = true;
-        lspkind.enable = true;
+        lspkind.enable = false;
         lightbulb.enable = true;
         lspsaga.enable = false;
         trouble.enable = true;
-        lspSignature.enable = true;
+        lspSignature.enable = false;
+        otter-nvim.enable = true;
+        nvim-docs-view.enable = true;
+        presets.harper.enable = true;
       };
 
       # ── Debugger ──
@@ -99,14 +111,17 @@
         ui.enable = true;
       };
 
-      # ── Languages ──
+      # ── Languages (maximal bundled configuration) ──
       languages = {
         enableFormat = true;
         enableTreesitter = true;
         enableExtraDiagnostics = true;
 
+        # Core languages (enabled in default + maximal)
         nix.enable = true;
         markdown.enable = true;
+
+        # Languages enabled in maximal configuration
         bash.enable = true;
         clang.enable = true;
         cmake.enable = true;
@@ -115,10 +130,14 @@
         html.enable = true;
         json.enable = true;
         sql.enable = true;
+        java.enable = true;
+        kotlin.enable = true;
         typescript.enable = true;
         go.enable = true;
         lua.enable = true;
+        zig.enable = true;
         python.enable = true;
+        typst.enable = true;
         rust = {
           enable = true;
           extensions.rustaceanvim.enable = false;
@@ -126,28 +145,80 @@
         };
         toml.enable = true;
         xml.enable = true;
-        yaml.enable = true;
+        tex.enable = true;
         docker.enable = true;
         env.enable = true;
-        zig.enable = true;
+
+        # Less common languages (disabled by default in maximal)
+        arduino.enable = false;
+        assembly.enable = false;
+        astro.enable = false;
+        awk.enable = false;
+        beancount.enable = false;
+        csharp.enable = false;
+        dart.enable = false;
+        elixir.enable = false;
+        fish.enable = false;
+        fluent.enable = false;
+        fsharp.enable = false;
+        gettext.enable = false;
+        gleam.enable = false;
+        glsl.enable = false;
+        haskell.enable = false;
+        hcl.enable = false;
+        jinja.enable = false;
+        jq.enable = false;
+        julia.enable = false;
+        just.enable = false;
+        liquid.enable = false;
+        lisp.enable = false;
+        make.enable = false;
+        nim.enable = false;
+        nu.enable = false;
+        ocaml.enable = false;
+        openscad.enable = false;
+        pug.enable = false;
+        qml.enable = false;
+        r.enable = false;
+        ruby.enable = false;
+        scala.enable = false;
+        standard-ml.enable = false;
+        svelte.enable = false;
+        tera.enable = false;
+        tsx.enable = false;
+        twig.enable = false;
+        vala.enable = false;
+        vue.enable = false;
+        http.enable = false;
+        powershell.enable = false;
+        protobuf.enable = false;
+        zsh.enable = false;
       };
 
       # ── Visuals ──
       visuals = {
         nvim-scrollbar.enable = true;
+        neoscroll-nvim.enable = false;
+        twilight-nvim.enable = false;
+        satellite-nvim.enable = false;
         nvim-web-devicons.enable = true;
         nvim-cursorline.enable = true;
         cinnamon-nvim.enable = true;
         fidget-nvim.enable = true;
         highlight-undo.enable = true;
+        blink-indent.enable = true;
         indent-blankline.enable = true;
+        cellular-automaton.enable = false;
       };
 
       # ── Minimap ──
       minimap.minimap-vim.enable = true;
 
       # ── Dashboard ──
-      dashboard.alpha.enable = true;
+      dashboard = {
+        dashboard-nvim.enable = false;
+        alpha.enable = true;
+      };
 
       # ── Notify ──
       notify.nvim-notify.enable = true;
@@ -163,34 +234,82 @@
 
       # ── Utility ──
       utility = {
+        ccc.enable = false;
+        smart-paste-nvim.enable = false;
+        guess-indent-nvim.enable = false;
+        auto-indent-nvim.enable = false;
+        vim-wakatime.enable = false;
         diffview-nvim.enable = true;
+        yanky-nvim.enable = false;
+        qmk-nvim.enable = false;
+        icon-picker.enable = true;
         surround.enable = true;
-        undotree.enable = true;
-        smart-splits.enable = true;
+        leetcode-nvim.enable = true;
         multicursors.enable = true;
+        smart-splits.enable = true;
+        undotree.enable = true;
+        nvim-biscuits.enable = true;
+        grug-far-nvim.enable = true;
+
         motion = {
           hop.enable = true;
           leap.enable = true;
+          precognition.enable = true;
+        };
+        images = {
+          image-nvim.enable = false;
+          img-clip.enable = true;
         };
       };
 
       # ── Notes ──
-      notes.todo-comments.enable = true;
+      notes = {
+        neorg.enable = false;
+        orgmode.enable = false;
+        todo-comments.enable = true;
+      };
 
       # ── Comments ──
       comments.comment-nvim.enable = true;
 
+      # ── Assistant ──
+      assistant = {
+        chatgpt.enable = false;
+        copilot = {
+          enable = false;
+          cmp.enable = true;
+        };
+        codecompanion-nvim.enable = false;
+        avante-nvim.enable = true;
+      };
+
+      # ── Session ──
+      session.nvim-session-manager.enable = false;
+
+      # ── Gestures ──
+      gestures.gesture-nvim.enable = false;
+
+      # ── Presence ──
+      presence = {
+        neocord.enable = false;
+        cord-nvim.enable = false;
+      };
+
       # ── UI enhancements ──
       ui = {
         borders.enable = true;
+        dropbar-nvim.enable = false;
         noice.enable = true;
         colorizer.enable = true;
+        modes-nvim.enable = false;
         illuminate.enable = true;
         fastaction.enable = true;
         smartcolumn = {
           enable = true;
           setupOpts.custom_colorcolumn = {
             nix = "110";
+            ruby = "120";
+            java = "130";
             go = ["90" "130"];
           };
         };
