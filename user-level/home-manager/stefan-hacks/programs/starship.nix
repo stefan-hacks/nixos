@@ -184,7 +184,6 @@
       memory_usage.symbol = "󰍛 ";
       meson.symbol = "󰔷 ";
       nim.symbol = " ";
-      nixos.symbol = " ";
       ocaml.symbol = " ";
       opa.symbol = " ";
       openstack.symbol = " ";
