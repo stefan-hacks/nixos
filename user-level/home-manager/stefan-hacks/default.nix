@@ -12,6 +12,7 @@
     ./programs/zellij.nix
     ./programs/foot.nix
     ./programs/fastfetch.nix
+    ./gnome
   ];
 
   home.username = "stefan-hacks";

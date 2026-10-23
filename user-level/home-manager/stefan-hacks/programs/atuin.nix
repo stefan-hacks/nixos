@@ -5,5 +5,8 @@
   programs.atuin = {
     enable = true;
     enableBashIntegration = true;
+    settings = {
+      # Add your atuin settings here
+    };
   };
 }
