@@ -43,6 +43,7 @@
     starship
     zoxide
     fzf
+    television
     direnv
     eza
     bat
