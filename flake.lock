@@ -1,26 +1,5 @@
 {
   "nodes": {
-    "disko": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1792526520,
-        "narHash": "sha256-3hSJlv8mUVnZPMWK2+CM7a9O+nR6Z4mCh27NfLCmTPc=",
-        "owner": "nix-community",
-        "repo": "disko",
-        "rev": "cedd626e11b635470fa6f9fdb8ad79b0075dd7f9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "ref": "master",
-        "repo": "disko",
-        "type": "github"
-      }
-    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -141,38 +120,6 @@
         "owner": "mikesmithgh",
         "ref": "v8.0.0",
         "repo": "kitty-scrollback.nvim",
-        "type": "github"
-      }
-    },
-    "mega-cmdparse": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1764372292,
-        "narHash": "sha256-RgRsHt1O6UQ/90JeAkHvdpgfjF+I25zg/oGV0cK7t6U=",
-        "owner": "ColinKennedy",
-        "repo": "mega.cmdparse",
-        "rev": "47ea5b1b23059fbb79a8e262002f32e7cd8aed90",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ColinKennedy",
-        "repo": "mega.cmdparse",
-        "type": "github"
-      }
-    },
-    "mega-logging": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1738921048,
-        "narHash": "sha256-hV7uJyu0XszGLOvcRcDNDE9P6d8GTxBX+la1lQVxx2s=",
-        "owner": "ColinKennedy",
-        "repo": "mega.logging",
-        "rev": "194ad8c300186e73c3eb1ebeb3ede42eb219be3b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ColinKennedy",
-        "repo": "mega.logging",
         "type": "github"
       }
     },
@@ -359,12 +306,9 @@
     },
     "root": {
       "inputs": {
-        "disko": "disko",
         "hermes-agent": "hermes-agent",
         "home-manager": "home-manager_2",
         "kitty-scrollback": "kitty-scrollback",
-        "mega-cmdparse": "mega-cmdparse",
-        "mega-logging": "mega-logging",
         "nix-graph": "nix-graph",
         "nixdatifier": "nixdatifier",
         "nixpkgs": "nixpkgs",
