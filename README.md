@@ -1,6 +1,8 @@
 # ❄️ NixOS Fleet Configuration
 
-> Flake-based NixOS with Home Manager. Multi-host, multi-layer modular system for **titan**, **ghost**, **minimal**, and **server** — managed entirely through Nix expressions.
+> Flake-based NixOS with Home Manager. Multi-host, multi-layer modular system
+> for **titan**, **ghost**, **minimal**, and **server** — managed entirely
+> through Nix expressions.
 
 ---
 
@@ -11,7 +13,7 @@
 │  flake.nix                                                          │
 │  ├── inputs: nixpkgs (26.05), home-manager (release-26.05),        │
 │  │          disko, nvf, hermes-agent, nixdatifier, nix-graph,       │
-│  │          vellum, kitty-scrollback, mega-cmdparse, mega-logging  │
+│  │          vellum, kitty-scrollback
 │  └── outputs: nixosConfigurations.{titan,ghost,minimal,server}       │
 │                                                                     │
 │  HOST (hosts/<host>/default.nix)                                    │
@@ -34,7 +36,9 @@
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-**Design principle:** `system.nix` is the shared OS entry point. Home Manager handles all per-user dotfiles and program configuration. Host files are thin wrappers.
+**Design principle:** `system.nix` is the shared OS entry point. Home Manager
+handles all per-user dotfiles and program configuration. Host files are thin
+wrappers.
 
 ---
 
@@ -52,7 +56,8 @@ nixos-rebuild build --flake .#titan
 sudo nixos-rebuild switch --flake .#titan
 ```
 
-> **Tip:** Always `build` first, `switch` second. If the build fails, your running system stays untouched.
+> **Tip:** Always `build` first, `switch` second. If the build fails, your
+> running system stays untouched.
 
 ### Update and rebuild
 
@@ -148,28 +153,30 @@ nix flake check
 
 ## Flake Inputs
 
-| Input | URL | Branch/Tag | Purpose |
-|-------|-----|------------|---------|
-| `nixpkgs` | `github:NixOS/nixpkgs/nixos-26.05` | stable | **Primary package set** |
-| `nixpkgs-unstable` | `github:NixOS/nixpkgs/nixos-unstable` | unstable | **Only** for `joplin-desktop` overlay |
-| `home-manager` | `github:nix-community/home-manager/release-26.05` | stable | Per-user dotfiles + programs |
-| `disko` | `github:nix-community/disko/master` | master | Declarative disk partitioning |
-| `nvf` | `github:notashelf/nvf/main` | main | Neovim configuration framework |
-| `hermes-agent` | `github:NousResearch/hermes-agent/main` | main | Hermes desktop packages |
-| `nixdatifier` | `github:Muddyblack/nixdatifier` | master | NixOS desktop widget + TUI |
-| `nix-graph` | `github:AlexAntonik/nix-graph` | default | Interactive Nix dependency graph TUI |
-| `vellum` | `github:blackhat-7/vellum.nvim` | — | nvf extraPlugin (flake = false) |
-| `kitty-scrollback` | `github:mikesmithgh/kitty-scrollback.nvim/v8.0.0` | v8.0.0 | nvf extraPlugin (flake = false) |
-| `mega-cmdparse` | `github:ColinKennedy/mega.cmdparse` | — | nvf extraPlugin (avante dep) |
-| `mega-logging` | `github:ColinKennedy/mega.logging` | — | nvf extraPlugin (avante dep) |
+| Input              | URL                                               | Branch/Tag | Purpose                               |
+| ------------------ | ------------------------------------------------- | ---------- | ------------------------------------- |
+| `nixpkgs`          | `github:NixOS/nixpkgs/nixos-26.05`                | stable     | **Primary package set**               |
+| `nixpkgs-unstable` | `github:NixOS/nixpkgs/nixos-unstable`             | unstable   | **Only** for `joplin-desktop` overlay |
+| `home-manager`     | `github:nix-community/home-manager/release-26.05` | stable     | Per-user dotfiles + programs          |
+| `disko`            | `github:nix-community/disko/master`               | master     | Declarative disk partitioning         |
+| `nvf`              | `github:notashelf/nvf/main`                       | main       | Neovim configuration framework        |
+| `hermes-agent`     | `github:NousResearch/hermes-agent/main`           | main       | Hermes desktop packages               |
+| `nixdatifier`      | `github:Muddyblack/nixdatifier`                   | master     | NixOS desktop widget + TUI            |
+| `nix-graph`        | `github:AlexAntonik/nix-graph`                    | default    | Interactive Nix dependency graph TUI  |
+| `vellum`           | `github:blackhat-7/vellum.nvim`                   | —          | nvf extraPlugin (flake = false)       |
+| `kitty-scrollback` | `github:mikesmithgh/kitty-scrollback.nvim/v8.0.0` | v8.0.0     | nvf extraPlugin (flake = false)       |
 
-> **Stable-first policy:** All inputs use nixos-26.05 / release-26.05 where available. Unstable is only used when a package is unavailable in stable (currently: `joplin-desktop`).
+> **Stable-first policy:** All inputs use nixos-26.05 / release-26.05 where
+> available. Unstable is only used when a package is unavailable in stable
+> (currently: `joplin-desktop`).
 
 ---
 
 ## Installing from NixOS ISO (with Disko)
 
-Disko is used **once** during initial install. After that, `hardware-configuration.nix` contains filesystem declarations and disko imports are commented out.
+Disko is used **once** during initial install. After that,
+`hardware-configuration.nix` contains filesystem declarations and disko imports
+are commented out.
 
 ### 1. Boot the NixOS installer and identify your disk
 
@@ -182,12 +189,12 @@ lsblk
 
 Open `hosts/<host>/disko-config.nix` and set the `device` to your real disk.
 
-| Host | Template | Layout |
-|------|----------|--------|
-| **titan** | `hosts/titan/disko-config.nix` | LUKS + LVM (`cryptroot` UUID `8a350d7a-ce96-4ba6-938c-61b2739239f6`) |
-| **ghost** | `hosts/ghost/disko-config.nix` | Same LUKS+LVM (shares cryptroot UUID with titan) |
-| **minimal** | `hosts/minimal/disko-config.nix` | Simple ext4, no LUKS |
-| **server** | `hosts/server/disko-config.nix` | Simple ext4, no LUKS |
+| Host        | Template                         | Layout                                                               |
+| ----------- | -------------------------------- | -------------------------------------------------------------------- |
+| **titan**   | `hosts/titan/disko-config.nix`   | LUKS + LVM (`cryptroot` UUID `8a350d7a-ce96-4ba6-938c-61b2739239f6`) |
+| **ghost**   | `hosts/ghost/disko-config.nix`   | Same LUKS+LVM (shares cryptroot UUID with titan)                     |
+| **minimal** | `hosts/minimal/disko-config.nix` | Simple ext4, no LUKS                                                 |
+| **server**  | `hosts/server/disko-config.nix`  | Simple ext4, no LUKS                                                 |
 
 ### 3. Uncomment the disko imports in the host's `default.nix`
 
@@ -229,7 +236,8 @@ sudo nixos-install --flake /mnt/etc/nixos#<host>
 
 ### 7. Post-install cleanup
 
-After rebooting, **re-comment** the disko import lines in the host's `default.nix`. From now on, rebuild with flakes:
+After rebooting, **re-comment** the disko import lines in the host's
+`default.nix`. From now on, rebuild with flakes:
 
 ```bash
 sudo nixos-rebuild switch --flake .#<host>
@@ -241,15 +249,16 @@ sudo nixos-rebuild switch --flake .#<host>
 
 ### Three Layers
 
-| Layer | File(s) | What lives here |
-|-------|---------|-----------------|
-| **Host** | `hosts/<host>/default.nix`, `hardware-configuration.nix` | Hardware, LUKS, GPU drivers, hostname, per-host imports |
-| **System** | `system.nix` + `system-level/*.nix` | OS-wide settings: boot, desktop, audio, network, packages, services, security |
-| **User** | `user-level/home-manager/stefan-hacks/**/*.nix` | Dotfiles, program configs, shell aliases, GNOME dconf |
+| Layer      | File(s)                                                  | What lives here                                                               |
+| ---------- | -------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| **Host**   | `hosts/<host>/default.nix`, `hardware-configuration.nix` | Hardware, LUKS, GPU drivers, hostname, per-host imports                       |
+| **System** | `system.nix` + `system-level/*.nix`                      | OS-wide settings: boot, desktop, audio, network, packages, services, security |
+| **User**   | `user-level/home-manager/stefan-hacks/**/*.nix`          | Dotfiles, program configs, shell aliases, GNOME dconf                         |
 
 ### Home Manager Integration
 
-Each host's `default.nix` imports `home-manager.nixosModules.home-manager` and wires:
+Each host's `default.nix` imports `home-manager.nixosModules.home-manager` and
+wires:
 
 ```nix
 home-manager = {
@@ -260,14 +269,18 @@ home-manager = {
 };
 ```
 
-This means **all user config is declarative** — no manual `~/.bashrc` edits. Changes are activated on rebuild via `home-manager-stefan-hacks.service`.
+This means **all user config is declarative** — no manual `~/.bashrc` edits.
+Changes are activated on rebuild via `home-manager-stefan-hacks.service`.
 
 ### Bash Aliases (289 aliases)
 
-The `bash.nix` module sources `bash_functions.txt` and provides 289 shell aliases covering:
+The `bash.nix` module sources `bash_functions.txt` and provides 289 shell
+aliases covering:
 
-- **Nix/NixOS** — `nsw`, `nbd`, `nfu`, `nfc`, `nfmt`, `ndiff`, `ngc`, `nroots`, `nrepair`
-- **Git** — `g`, `gs`, `ga`, `gco`, `gcb`, `gl`, `gd`, `gundo`, `gitup`, `gwip`, `gprune`
+- **Nix/NixOS** — `nsw`, `nbd`, `nfu`, `nfc`, `nfmt`, `ndiff`, `ngc`, `nroots`,
+  `nrepair`
+- **Git** — `g`, `gs`, `ga`, `gco`, `gcb`, `gl`, `gd`, `gundo`, `gitup`, `gwip`,
+  `gprune`
 - **Docker/Podman** — `dps`, `dex`, `dlogs`, `dc`, `dcu`, `dcd`, `pps`, `pex`
 - **Kubernetes** — `k`, `kgp`, `kgn`, `kd`, `kl`, `kaf`, `kctx`, `kns`
 - **Systemd** — `sctl`, `scts`, `sctr`, `jrn`, `jrnb`, `jrnf`, `sblame`
@@ -282,16 +295,21 @@ See `user-level/home-manager/stefan-hacks/programs/bash.nix` for the full list.
 The `nvf.nix` module enables the **maximal bundled configuration**:
 
 - **Autocomplete:** `blink-cmp` (rust fuzzy matcher)
-- **LSP:** rust-analyzer, nixd, bashls, jsonls, yamlls, taplo, clangd, gopls, pylsp, lua_ls, tsserver, java-language-server, kotlin-language-server, texlab, dockerls, sqlls
-- **Languages:** nix, bash, rust, go, python, typescript, java, kotlin, zig, lua, typst, tex, json, toml, yaml, xml, docker, html, css, scss, cmake, sql, markdown
+- **LSP:** rust-analyzer, nixd, bashls, jsonls, yamlls, taplo, clangd, gopls,
+  pylsp, lua_ls, tsserver, java-language-server, kotlin-language-server, texlab,
+  dockerls, sqlls
+- **Languages:** nix, bash, rust, go, python, typescript, java, kotlin, zig,
+  lua, typst, tex, json, toml, yaml, xml, docker, html, css, scss, cmake, sql,
+  markdown
 - **Extra plugins:** vellum.nvim, kitty-scrollback.nvim
-- **Avante.nvim** dependencies: mega.cmdparse, mega.logging (added as extraPlugins)
 - **Git:** gitsigns, neogit
-- **UI:** alpha dashboard, noice, colorizer, illuminate, fidget, indent-blankline
+- **UI:** alpha dashboard, noice, colorizer, illuminate, fidget,
+  indent-blankline
 - **Motion:** hop, leap, precognition
 - **Terminal:** toggleterm + lazygit
 
-> **Note:** Building nvf maximal downloads many language servers. The first build may take a while. The `nvf` cachix cache is recommended.
+> **Note:** Building nvf maximal downloads many language servers. The first
+> build may take a while. The `nvf` cachix cache is recommended.
 
 ---
 
@@ -358,7 +376,8 @@ The `nvf.nix` module enables the **maximal bundled configuration**:
 
 ### Add a New User
 
-Create `user-level/home-manager/<username>/default.nix` following the same structure as `stefan-hacks/`. Then add to the host's `default.nix`:
+Create `user-level/home-manager/<username>/default.nix` following the same
+structure as `stefan-hacks/`. Then add to the host's `default.nix`:
 
 ```nix
 home-manager.users."<username>" = import ../../user-level/home-manager/<username>;
@@ -366,9 +385,11 @@ home-manager.users."<username>" = import ../../user-level/home-manager/<username
 
 ### Add or Remove Packages
 
-Edit `system-level/packages.nix` and add/remove from `environment.systemPackages`.
+Edit `system-level/packages.nix` and add/remove from
+`environment.systemPackages`.
 
 Build, then switch:
+
 ```bash
 nixos-rebuild build --flake .#titan
 sudo nixos-rebuild switch --flake .#titan
@@ -394,12 +415,12 @@ environment.systemPackages = with pkgs.gnomeExtensions; [
 
 ## Host Reference
 
-| Host | Hardware | Special Config |
-|------|----------|----------------|
-| **titan** | AMD GPU, AZW SER mini-PC, LUKS encrypted root | `amdgpu` kernel module, k10temp only (no `it87` fan — EC firmware limitation), shared LUKS UUID with ghost |
-| **ghost** | Intel/AMD, LUKS encrypted root | Shared LUKS UUID with titan (`8a350d7a-ce96-4ba6-938c-61b2739239f6`) |
-| **minimal** | Minimal/generic | No GPU drivers, no desktop extras |
-| **server** | Headless | No desktop, minimal packages |
+| Host        | Hardware                                      | Special Config                                                                                             |
+| ----------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| **titan**   | AMD GPU, AZW SER mini-PC, LUKS encrypted root | `amdgpu` kernel module, k10temp only (no `it87` fan — EC firmware limitation), shared LUKS UUID with ghost |
+| **ghost**   | Intel/AMD, LUKS encrypted root                | Shared LUKS UUID with titan (`8a350d7a-ce96-4ba6-938c-61b2739239f6`)                                       |
+| **minimal** | Minimal/generic                               | No GPU drivers, no desktop extras                                                                          |
+| **server**  | Headless                                      | No desktop, minimal packages                                                                               |
 
 ---
 
@@ -423,15 +444,15 @@ Included in `system-level/packages.nix`:
 
 ## Key Design Decisions
 
-| Decision | Rationale |
-|----------|-----------|
-| **Flakes** | Reproducible inputs with lockfile. All hosts share one `flake.nix`. |
-| **Home Manager** | Declarative per-user config (dotfiles, programs, GNOME dconf). Clean separation from system-level modules. |
-| **Stable-first** | `nixpkgs` and `home-manager` both track 26.05 stable. `nixpkgs-unstable` is only used selectively for `joplin-desktop`. |
-| **Single `system.nix` entry point** | One file imports all shared system modules. Adding a module is one line — it applies fleet-wide. |
-| **nix-my-gnome for dconf** | GNOME settings are generated from a live dconf dump, not hand-edited. Reproducible and version-controlled. |
-| **nvf maximal** | Full language support + IDE-like features (LSP, debugging, completions, git integration) out of the box. |
-| **Convention-based bash aliases** | `Downloads/_bash_aliases` is the canonical source. Aliases are extracted and embedded into `bash.nix` automatically. |
+| Decision                            | Rationale                                                                                                               |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| **Flakes**                          | Reproducible inputs with lockfile. All hosts share one `flake.nix`.                                                     |
+| **Home Manager**                    | Declarative per-user config (dotfiles, programs, GNOME dconf). Clean separation from system-level modules.              |
+| **Stable-first**                    | `nixpkgs` and `home-manager` both track 26.05 stable. `nixpkgs-unstable` is only used selectively for `joplin-desktop`. |
+| **Single `system.nix` entry point** | One file imports all shared system modules. Adding a module is one line — it applies fleet-wide.                        |
+| **nix-my-gnome for dconf**          | GNOME settings are generated from a live dconf dump, not hand-edited. Reproducible and version-controlled.              |
+| **nvf maximal**                     | Full language support + IDE-like features (LSP, debugging, completions, git integration) out of the box.                |
+| **Convention-based bash aliases**   | `Downloads/_bash_aliases` is the canonical source. Aliases are extracted and embedded into `bash.nix` automatically.    |
 
 ---
 
