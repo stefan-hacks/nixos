@@ -17,7 +17,7 @@
     # Pull models automatically on activation (optional).
     # The model must exist in the Ollama library (https://ollama.com/library).
     # Example: loadModels = [ "llama3.2" ];
-    # loadModels = [ "kimi-2.6:cloud" ];  # disabled — tag not found in registry
+    loadModels = ["qwen3.5:0.8b"]; # disabled — tag not found in registry
 
     # Uncomment if you have a GPU and want Ollama to use it.
     # acceleration = "cuda"; # or "rocm"
