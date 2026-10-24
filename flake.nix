@@ -23,11 +23,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    hermes-agent = {
-      url = "github:NousResearch/hermes-agent/main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     nixdatifier = {
       url = "github:Muddyblack/nixdatifier";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -56,7 +51,6 @@
     home-manager,
     # disko,
     nvf,
-    hermes-agent,
     nixdatifier,
     nix-graph,
     vellum,

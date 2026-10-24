@@ -12,7 +12,7 @@
 ┌─────────────────────────────────────────────────────────────────────┐
 │  flake.nix                                                          │
 │  ├── inputs: nixpkgs (26.05), home-manager (release-26.05),        │
-│  │          disko, nvf, hermes-agent, nixdatifier, nix-graph,       │
+│  │          disko, nvf, nixdatifier, nix-graph,       │
 │  │          vellum, kitty-scrollback
 │  └── outputs: nixosConfigurations.{titan,ghost,minimal,server}       │
 │                                                                     │
@@ -120,8 +120,6 @@ nix flake check
 │   ├── virtualization.nix          # QEMU/KVM, virt-manager
 │   ├── packages.nix                # System-wide packages (the big list)
 │   ├── nvf.nix                     # nvf maximal Neovim config
-│   ├── hermes.nix                  # Hermes agent packages
-│   └── ollama.nix                  # Ollama (optional)
 │
 └── user-level/home-manager/stefan-hacks/   # HM user config
     ├── default.nix                 # HM entry point
@@ -160,7 +158,6 @@ nix flake check
 | `home-manager`     | `github:nix-community/home-manager/release-26.05` | stable     | Per-user dotfiles + programs          |
 | `disko`            | `github:nix-community/disko/master`               | master     | Declarative disk partitioning         |
 | `nvf`              | `github:notashelf/nvf/main`                       | main       | Neovim configuration framework        |
-| `hermes-agent`     | `github:NousResearch/hermes-agent/main`           | main       | Hermes desktop packages               |
 | `nixdatifier`      | `github:Muddyblack/nixdatifier`                   | master     | NixOS desktop widget + TUI            |
 | `nix-graph`        | `github:AlexAntonik/nix-graph`                    | default    | Interactive Nix dependency graph TUI  |
 | `vellum`           | `github:blackhat-7/vellum.nvim`                   | —          | nvf extraPlugin (flake = false)       |
