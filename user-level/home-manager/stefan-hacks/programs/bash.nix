@@ -184,10 +184,6 @@
       "nconf" = "nix show-config";
       "ncur" = "readlink -f /run/current-system";
       "ndead" = "deadnix";
-      "ndrg" = "ndr ghost";
-      "ndrm" = "ndr minimal";
-      "ndrs" = "ndr server";
-      "ndrt" = "ndr titan";
       "ndv" = "nix develop";
       "netstat" = "colourify netstat";
       "nfc" = "nix flake check";
@@ -196,6 +192,7 @@
       "nfm" = "nix flake metadata";
       "nfmt" = "nix fmt";
       "nfs" = "nix flake show";
+      "nfu" = "nix flake update";
       "nftl" = "sudo nft list ruleset";
       "ngc7" = "sudo nix-collect-garbage --delete-older-than 7d";
       "nginx-logs" = "sudo journalctl -u nginx -f";
@@ -216,13 +213,12 @@
       "nrepl" = "nix repl";
       "nrepl-pkgs" = "nix repl nixpkgs";
       "nrm" = "nix profile remove";
-      "nrsg" = "nsw ghost";
-      "nrsm" = "nsw minimal";
-      "nrss" = "nsw server";
-      "nrst" = "nsw titan";
+      "nrst" = "sudo nixos-rebuild switch --flake .#titan";
+      "nrsm" = "sudo nixos-rebuild switch --flake .#minimal";
+      "nrss" = "sudo nixos-rebuild switch --flake .#server";
+      "nrsg" = "sudo nixos-rebuild switch --flake .#ghost";
       "nsr" = "nix search nixpkgs";
       "ntree" = "nix-tree";
-      "nup" = "nupgrade";
       "nv" = "nvim";
       "nver" = "nixos-version";
       "nwhy" = "nix why-depends";
