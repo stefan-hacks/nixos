@@ -310,6 +310,7 @@
     exiftool
     guvcview
     impression
+    llama-cpp
     qbittorrent
 
     ###########################################################################
