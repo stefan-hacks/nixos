@@ -26,7 +26,7 @@
     ./system-level/packages.nix
     ./system-level/nvf.nix
     ./system-level/ollama.nix
-    ./system-level/hermes.nix
+    # ./system-level/hermes.nix
     ./system-level/theming.nix
   ];
 
