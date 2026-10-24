@@ -13,10 +13,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    disko = {
-      url = "github:nix-community/disko/master";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # disko = {
+    #   url = "github:nix-community/disko/master";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
     nvf = {
       url = "github:notashelf/nvf/main";
@@ -47,16 +47,6 @@
       url = "github:mikesmithgh/kitty-scrollback.nvim/v8.0.0";
       flake = false;
     };
-
-    mega-cmdparse = {
-      url = "github:ColinKennedy/mega.cmdparse";
-      flake = false;
-    };
-
-    mega-logging = {
-      url = "github:ColinKennedy/mega.logging";
-      flake = false;
-    };
   };
 
   outputs = inputs @ {
@@ -64,15 +54,13 @@
     nixpkgs,
     nixpkgs-unstable,
     home-manager,
-    disko,
+    # disko,
     nvf,
     hermes-agent,
     nixdatifier,
     nix-graph,
     vellum,
     kitty-scrollback,
-    mega-cmdparse,
-    mega-logging,
     ...
   }: let
     system = "x86_64-linux";
