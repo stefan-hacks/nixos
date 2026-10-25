@@ -28,21 +28,6 @@
   # Let Home Manager install and manage itself
   programs.home-manager.enable = true;
 
-  # Back up existing dotfiles before HM clobbers them (first switch only)
-  home.activation.backupOldConfigs = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
-    backupDir="/home/stefan-hacks/.local/share/hm-backups/$(date +%Y%m%d-%H%M%S)"
-    mkdir -p "$backupDir"
-    for f in "/home/stefan-hacks/.bashrc" \
-             "/home/stefan-hacks/.blerc" \
-             "/home/stefan-hacks/.config/helix/config.toml" \
-             "/home/stefan-hacks/.config/kitty/kitty.conf"; do
-      if [ -e "$f" ]; then
-        dest="$backupDir/$(echo "$f" | tr '/' '_')"
-        run cp -aL "$f" "$dest" 2>/dev/null || true
-      fi
-    done
-  '';
-
   # ── Nixdatifier ──
   programs.nixdatifier = {
     enable = true;

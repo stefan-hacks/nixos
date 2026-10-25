@@ -3,7 +3,7 @@
   home.packages = [pkgs.blesh];
 
   home.file.".blerc".text = builtins.readFile ./blerc;
-  home.file.".bash_functions".text = builtins.readFile ./bash_functions.txt;
+  home.file.".bash_functions".text = builtins.readFile ./bash_functions.sh;
 
   programs.bash = {
     enable = true;
