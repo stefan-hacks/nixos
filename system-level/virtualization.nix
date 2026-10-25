@@ -8,16 +8,22 @@
   # libvirtd — QEMU/KVM hypervisor daemon
   virtualisation.libvirtd = {
     enable = true;
-    # On-demand daemon: starts only when virt-manager connects
-    onBoot = "ignore";
+    # "start" ensures the daemon runs at boot, allowing autostart networks to initialize properly
+    onBoot = "start";
     onShutdown = "shutdown";
-    # Default to QEMU/KVM (not Xen)
+
     qemu = {
       package = pkgs.qemu_kvm;
       runAsRoot = true;
-      # OVMF firmware is included by default in NixOS 26.05+
     };
   };
+
+  # Enable the default NAT network switch natively via NixOS networking
+  networking.bridge.enable = true;
+  # This helper ensures the user-space emulator can hook into the bridge interfaces
+  virtualisation.libvirtd.qemu.verbatimConfig = ''
+    bridge_helper = "${pkgs.qemu}/libexec/qemu-bridge-helper"
+  '';
 
   # virt-manager GUI
   programs.virt-manager.enable = true;
