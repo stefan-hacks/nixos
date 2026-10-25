@@ -1,8 +1,5 @@
 # Home Manager entry point for stefan-hacks
-{
-  config,
-  ...
-}: {
+{config, ...}: {
   imports = [
     ./programs/bash.nix
     ./programs/git.nix
@@ -10,8 +7,6 @@
     ./programs/starship.nix
     ./programs/atuin.nix
     ./programs/helix.nix
-    # ./programs/zellij.nix
-    ./programs/foot.nix
     ./programs/fastfetch.nix
     ./gnome
   ];

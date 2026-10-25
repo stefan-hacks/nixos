@@ -1,303 +1,431 @@
-{pkgs, ...}: {
-  # Ble.sh — syntax-aware line editor for Bash
-  home.packages = [pkgs.blesh];
+# Home Manager module: Bash for infrastructure / sysadmin / Nix work
+#
+#   - ble.sh line editor (config inlined below, no ./blerc)
+#   - grc colouring via `colourify`, eza for ls, starship + zoxide + atuin + fzf
+#   - Nix, systemd, git and container aliases; helper functions at the bottom
+#
+# ~/.bashrc order: bashrcExtra (ble.sh) -> aliases -> initExtra (env, tools,
+# functions) -> ble-attach last.
+{
+  lib,
+  pkgs,
+  ...
+}: let
+  # `colourify <cmd>` runs a command through grc. Aliases that need quoting
+  # tricks or logic are functions further down instead.
+  colourised =
+    lib.genAttrs [
+      "blkid"
+      "dig"
+      "fdisk"
+      "findmnt"
+      "ifconfig"
+      "lsof"
+      "mount"
+      "mtr"
+      "netstat"
+      "ping"
+      "ss"
+      "traceroute"
+      "whois"
+    ] (cmd: "colourify ${cmd}")
+    // {
+      colourify = "grc -es --colour=auto";
+      df = "colourify df -hT --exclude-type=tmpfs --exclude-type=devtmpfs";
+      free = "colourify free -h";
+      lsblk = "colourify lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,UUID";
+      lspci = "colourify lspci -v";
+    };
 
-  home.file.".blerc".text = builtins.readFile ./blerc;
-  home.file.".bash_functions".text = builtins.readFile ./bash_functions.sh;
+  shell = {
+    sudo = "sudo "; # trailing space: aliases (colourify, ...) expand after sudo
+    watch = "watch ";
+    c = "clear";
+    e = "exit";
+    v = "vim";
+    b = "btop";
+    h = "history";
+    j = "jobs -l";
+    ".." = "cd ..";
+    "..." = "cd ../..";
+    "...." = "cd ../../..";
+    cdc = "cd ~/.config";
+    grep = "grep --color=auto";
+    diff = "diff --color=auto";
+    rgi = "rg -i";
+    sv = "sudoedit";
+    showpath = "echo \"$PATH\" | tr : '\\n' | nl";
+    biggest = "du -ah . | sort -rh | head -20";
+    lS = "eza -la --sort=size --reverse"; # biggest first
+    lm = "eza -la --sort=modified --reverse"; # newest first
+    lgi = "eza --tree --git-ignore"; # tree, respecting .gitignore
+  };
 
+  system = {
+    cpuinfo = "lscpu";
+    temp = "sensors";
+    topcpu = "ps -eo pid,user,%cpu,%mem,etime,comm --sort=-%cpu | head -15";
+    topmem = "ps -eo pid,user,%mem,rss,etime,comm --sort=-%mem | head -15";
+    grps = "groups | xargs -n1 | sort";
+    lstl = "last -n 20";
+    flog = "sudo lastb -n 20";
+    sysg = "sysctl -a 2>/dev/null | grep -i --";
+    genpass = "openssl rand -base64 32";
+    genhex = "openssl rand -hex 32";
+    isodate = "date -u +%Y-%m-%dT%H:%M:%SZ";
+    stamp = "date +%Y%m%dT%H%M%S";
+  };
+
+  systemd = {
+    fail = "systemctl --failed";
+    timers = "systemctl list-timers";
+    scrit = "systemd-analyze critical-chain";
+    sblame = "systemd-analyze blame | head -20";
+    sctl = "sudo systemctl";
+    sctu = "systemctl --user";
+    scts = "sudo systemctl status";
+    sctt = "sudo systemctl start";
+    sctsp = "sudo systemctl stop";
+    sctr = "sudo systemctl restart";
+    scte = "sudo systemctl enable";
+    sctsd = "sudo systemctl disable";
+    sctlr = "sudo systemctl daemon-reload";
+    sctls = "systemctl list-units --type=service --state=running";
+    jrn = "sudo journalctl -xe";
+    jrnb = "sudo journalctl -b";
+    jrnu = "journalctl --user";
+    jrnp = "sudo journalctl -b -p err";
+  };
+
+  network = {
+    ports = "sudo ss -tulpn";
+    lsock = "sudo lsof -i -P -n";
+    ipr = "ip route show";
+    ip6 = "ip -6 -c a";
+    iptl = "sudo iptables -L -n -v --line-numbers";
+    nftl = "sudo nft list ruleset";
+    pingg = "ping -c5";
+    rdns = "dig +short -x";
+    flushDNS = "sudo resolvectl flush-caches";
+    showDNS = "resolvectl status";
+    myip = "curl -s ifconfig.me";
+    curl-headers = "curl -sI";
+    curl-time = "curl -s -o /dev/null -w 'dns %{time_namelookup}s  connect %{time_connect}s  tls %{time_appconnect}s  total %{time_total}s\\n'";
+    sslc = "openssl x509 -text -noout -in";
+    sslr = "openssl s_client -connect";
+    kgen = "ssh-keygen -t ed25519 -C \"$USER@$HOSTNAME\"";
+    kscp = "ssh-copy-id";
+    sadd = "ssh-add";
+    sl = "ssh-add -l";
+  };
+
+  nix = {
+    ncd = "cd \"$NIXCFG\"";
+    nb = "nix build";
+    nbp = "nix build --no-link --print-out-paths";
+    ndv = "nix develop";
+    nrepl = "nix repl";
+    nrepl-pkgs = "nix repl nixpkgs";
+    nsr = "nix search nixpkgs";
+    nlog = "nix log";
+    nwhy = "nix why-depends";
+    ntree = "nix-tree";
+    nconf = "nix show-config";
+    nver = "nixos-version";
+    ncur = "readlink -f /run/current-system";
+    nrepair = "sudo nix-store --verify --check-contents --repair";
+    nfc = "nix flake check";
+    nfl = "nix flake lock";
+    nfm = "nix flake metadata";
+    nfs = "nix flake show";
+    nfu = "nix flake update";
+    nfmt = "nix fmt";
+    nlint = "statix check";
+    nfix = "statix fix";
+    ndead = "deadnix";
+    nls = "nix profile list";
+    nreg = "nix registry list";
+    update = "nupgrade";
+    hmg = "home-manager generations";
+
+    # hosts (use the nsw function, so they work from any directory)
+    nrb = "sudo nixos-rebuild switch --rollback";
+    nrst = "nsw titan";
+    nrsm = "nsw minimal";
+    nrss = "nsw server";
+    nrsg = "nsw ghost";
+
+    # generations and garbage collection
+    ngs = "sudo nix-env --list-generations --profile /nix/var/nix/profiles/system";
+    clng = "sudo nix-env --delete-generations old --profile /nix/var/nix/profiles/system";
+    ngc7 = "sudo nix-collect-garbage --delete-older-than 7d";
+    cln30 = "sudo nix-collect-garbage --delete-older-than 30d";
+  };
+
+  git = {
+    g = "git";
+    ga = "git add";
+    gaa = "git add -A";
+    gap = "git add -p";
+    gb = "git branch -a";
+    gc = "git commit -m";
+    gca = "git commit --amend";
+    gcan = "git commit --amend --no-edit";
+    gco = "git checkout";
+    gcb = "git checkout -b";
+    gsw = "git switch";
+    gswc = "git switch -c";
+    gcp = "git cherry-pick";
+    gd = "git diff";
+    gds = "git diff --staged";
+    gf = "git fetch --all --prune";
+    gl = "git log --oneline --graph --decorate --all";
+    gm = "git merge";
+    gp = "git push";
+    gpl = "git pull";
+    gr = "git rebase";
+    gri = "git rebase -i";
+    grs = "git restore";
+    grss = "git restore --staged";
+    gs = "git status -sb";
+    gst = "git stash";
+    gstp = "git stash pop";
+    gwt = "git worktree";
+    lg = "lazygit";
+  };
+
+  infra = {
+    # docker / podman
+    dc = "docker compose";
+    dcu = "docker compose up -d";
+    dcd = "docker compose down";
+    dcr = "docker compose restart";
+    dcl = "docker compose logs -f";
+    dcps = "docker compose ps";
+    dcpull = "docker compose pull";
+    dps = "docker ps -a";
+    di = "docker images";
+    dlogs = "docker logs -f";
+    dstats = "docker stats --no-stream";
+    lzd = "lazydocker";
+    pps = "podman ps -a";
+    pi = "podman images";
+    plogs = "podman logs -f";
+    pex = "podman exec -it";
+
+    # kubernetes
+    k = "kubectl";
+    kg = "kubectl get";
+    kgp = "kubectl get pods -o wide";
+    kgn = "kubectl get nodes -o wide";
+    kd = "kubectl describe";
+    kaf = "kubectl apply -f";
+    kdf = "kubectl delete -f";
+    kl = "kubectl logs -f";
+    kx = "kubectl exec -it";
+    kctx = "kubectl config use-context";
+
+    # terraform / ansible / direnv
+    tf = "terraform";
+    tfi = "terraform init";
+    tfp = "terraform plan";
+    tfa = "terraform apply";
+    tfd = "terraform destroy";
+    tfv = "terraform validate";
+    tff = "terraform fmt -recursive";
+    ap = "ansible-playbook";
+    apc = "ansible-playbook --check --diff";
+    ai = "ansible-inventory --graph";
+    alint = "ansible-lint";
+    dra = "direnv allow";
+    drr = "direnv reload";
+  };
+in {
+  home.packages = with pkgs; [
+    blesh
+    grc
+    nvd
+    nix-output-monitor
+  ];
+
+  # ---------------------------------------------------------------------------
+  # ble.sh (replaces ./blerc)
+  # ---------------------------------------------------------------------------
+  home.file.".blerc".text = ''
+    bleopt history_share=1
+    bleopt prompt_ps1_final='\[$(tput setaf 6)\]\w \[$(tput sgr0)\]\$ '
+    bleopt complete_auto_complete=1
+    bleopt complete_menu_complete=1
+    bleopt complete_ambiguous=1
+  '';
+
+  # ---------------------------------------------------------------------------
+  # Prompt, navigation, ls
+  # ---------------------------------------------------------------------------
+  programs.starship.enable = true;
+  programs.zoxide.enable = true;
+  programs.fzf.enable = true;
+
+  # Sets ls / ll / la / lt / lla (with the options below)
+  programs.eza = {
+    enable = true;
+    icons = "auto";
+    git = true;
+    extraOptions = ["--group-directories-first" "--header"];
+  };
+
+  # Bash integration is done by hand below so it loads after ble.sh
+  programs.atuin = {
+    enable = true;
+    enableBashIntegration = false;
+  };
+
+  # ---------------------------------------------------------------------------
+  # Bash
+  # ---------------------------------------------------------------------------
   programs.bash = {
     enable = true;
     enableCompletion = true;
     historyControl = ["ignoredups" "ignorespace"];
     historySize = 100000;
     historyFileSize = 200000;
-    bashrcExtra = builtins.readFile ./bash_init_extra.sh;
 
-    shellAliases = {
-      "000" = "chmod 000";
-      "640" = "chmod 640";
-      "644" = "chmod 644";
-      "755" = "chmod 755";
-      "775" = "chmod 775";
-      "ai" = "ansible-inventory --graph";
-      "alint" = "ansible-lint";
-      "ap" = "ansible-playbook";
-      "apc" = "ansible-playbook --check --diff";
-      "b" = "btop";
-      "b64" = "base64";
-      "b64d" = "base64 -d";
-      "bdate" = "date '+%a, %b %d %Y %T %Z'";
-      "biggest" = "du -ah . | sort -rh | head -20";
-      "bittype" = "grep -qP '^flags\\s*:.*\\blm\\b' /proc/cpuinfo && echo 64-bit || echo 32-bit";
-      "blkid" = "colourify blkid";
-      "c" = "clear";
-      "cal" = "ncal -b";
-      "cal3" = "cal -3";
-      "cdc" = "cd ~/.config";
-      "cheat" = "tldr";
-      "cjson" = "curl -s -H \"Content-Type: application/json\"";
-      "cln30" = "sudo nix-collect-garbage --delete-older-than 30d";
-      "clng" = "sudo nix-env --delete-generations old --profile /nix/var/nix/profiles/system";
-      "colourify" = "grc -es --colour=auto";
-      "configure" = "colourify ./configure";
-      "cpuinfo" = "lscpu";
-      "ctmp" = "cat /sys/class/thermal/thermal_zone*/temp 2>/dev/null | awk \"{print \\$1/1000 \\\"°C\\\"}\"";
-      "curl-follow" = "curl -sL";
-      "curl-headers" = "curl -sI";
-      "curl-time" = "curl -s -w \"DNS: %{time_namelookup}s  Connect: %{time_connect}s  TLS: %{time_appconnect}s  Total: %{time_total}s\\n\" -o /dev/null";
-      "d" = "dirs -v";
-      "da" = "date \"+%Y-%m-%d %A    %T %Z\"";
-      "daysleft" = "echo \"There are $(($(date +%j -d\"Dec 31, $(date +%Y)\")-$(date +%j))) days left in $(date +%Y).\"";
-      "dc" = "docker compose";
-      "dcb" = "docker compose build";
-      "dcd" = "docker compose down";
-      "dcl" = "docker compose logs -f";
-      "dconfd" = "dconf dump /";
-      "dcps" = "docker compose ps";
-      "dcpull" = "docker compose pull";
-      "dcr" = "docker compose restart";
-      "dcu" = "docker compose up -d";
-      "df" = "colourify df -hT --exclude-type=tmpfs --exclude-type=devtmpfs";
-      "di" = "docker images";
-      "diff" = "diff --color=auto";
-      "dig" = "colourify dig";
-      "dlogs" = "docker logs -f";
-      "dn" = "docker network ls";
-      "dps" = "docker ps -a";
-      "dra" = "direnv allow";
-      "drd" = "direnv deny";
-      "drr" = "direnv reload";
-      "drs" = "direnv status";
-      "dstats" = "docker stats --no-stream";
-      "dv" = "docker volume ls";
-      "e" = "exit";
-      "epochtime" = "date +%s";
-      "fail" = "systemctl --failed";
-      "fdisk" = "colourify fdisk";
-      "ff" = "fastfetch";
-      "findmnt" = "colourify findmnt";
-      "flog" = "sudo lastb -n 20";
-      "flushDNS" = "sudo resolvectl flush-caches";
-      "fm" = "findmnt";
-      "free" = "colourify free -h";
-      "g" = "git";
-      "ga" = "git add";
-      "gaa" = "git add -A";
-      "gap" = "git add -p";
-      "gb" = "git branch -a";
-      "gbD" = "git branch -D";
-      "gbd" = "git branch -d";
-      "gbl" = "git blame";
-      "gc" = "git commit -m";
-      "gca" = "git commit --amend";
-      "gcan" = "git commit --amend --no-edit";
-      "gcb" = "git checkout -b";
-      "gcc" = "colourify gcc";
-      "gco" = "git checkout";
-      "gcp" = "git cherry-pick";
-      "gd" = "git diff";
-      "gdn" = "git diff --name-only";
-      "gds" = "git diff --staged";
-      "genhex" = "openssl rand -hex 32";
-      "genpass" = "openssl rand -base64 32";
-      "gf" = "git fetch --all --prune";
-      "ghco" = "gh pr checkout";
-      "ghpr" = "gh pr create --fill";
-      "ghprl" = "gh pr list";
-      "ghprv" = "gh pr view --web";
-      "ghrun" = "gh run watch";
-      "ghw" = "gh repo view --web";
-      "gl" = "git log --oneline --graph --decorate --all";
-      "gll" = "git log --graph --pretty=format:\"%C(yellow)%h%Creset %C(cyan)%an%Creset %s %C(green)(%cr)%Creset%C(auto)%d\" --abbrev-commit";
-      "gm" = "git merge";
-      "gp" = "git push";
-      "gpl" = "git pull";
-      "gr" = "git rebase";
-      "gra" = "git rebase --abort";
-      "grep" = "grep --color=auto";
-      "gri" = "git rebase -i";
-      "grps" = "groups | xargs -n1 | sort";
-      "grs" = "git restore";
-      "grss" = "git restore --staged";
-      "gs" = "git status -sb";
-      "gsh" = "git show";
-      "gst" = "git stash";
-      "gstl" = "git stash list";
-      "gstp" = "git stash pop";
-      "gsw" = "git switch";
-      "gswc" = "git switch -c";
-      "gwt" = "git worktree";
-      "h" = "history";
-      "hdirs" = "ls -ld .*/ */";
-      "hmg" = "home-manager generations";
-      "ifconfig" = "colourify ifconfig";
-      "ip6" = "ip -6 -c a";
-      "ipr" = "ip route show";
-      "iptl" = "sudo iptables -L -n -v --line-numbers";
-      "isodate" = "date -u +%Y-%m-%dT%H:%M:%SZ";
-      "j" = "jobs -l";
-      "jrn" = "sudo journalctl -xe";
-      "jrnb" = "sudo journalctl -b";
-      "jrnu" = "journalctl --user";
-      "k" = "kubectl";
-      "kaf" = "kubectl apply -f";
-      "kctx" = "kubectl config use-context";
-      "kd" = "kubectl describe";
-      "kdf" = "kubectl delete -f";
-      "kg" = "kubectl get";
-      "kgen" = "ssh-keygen -t ed25519 -C \"$(whoami)@$(hostname)\"";
-      "kgn" = "kubectl get nodes -o wide";
-      "kgp" = "kubectl get pods -o wide";
-      "kgs" = "kubectl get svc";
-      "khs" = "cat ~/.ssh/known_hosts";
-      "kill9" = "kill -9";
-      "kl" = "kubectl logs -f";
-      "kls" = "ls -la ~/.ssh/";
-      "kscp" = "ssh-copy-id";
-      "kx" = "kubectl exec -it";
-      "lg" = "lazygit";
-      "lsblk" = "colourify lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,UUID";
-      "lsk" = "gsettings list-recursively | grep -i keybind | cut -d ' ' -f2,3 | grep -Ev '(@as|disabled|false|default)' | sort | nl";
-      "lskd" = "gsettings list-recursively | grep -i keybind | cut -d ' ' -f2,3 | grep -Ev '(@as|false|default)' | sort | nl";
-      "lsock" = "sudo lsof -i -P -n";
-      "lsockT" = "sudo lsof -nP | grep TCP";
-      "lsockU" = "sudo lsof -nP | grep UDP";
-      "lsof" = "colourify lsof";
-      "lspci" = "colourify lspci -v";
-      "lstl" = "last -n 20";
-      "lzd" = "lazydocker";
-      "make" = "colourify make";
-      "meminfo" = "cat /proc/meminfo";
-      "mount" = "colourify mount";
-      "mtr" = "colourify mtr";
-      "myip-plain" = "curl -s ifconfig.me";
-      "mytime" = "date +%H:%M:%S";
-      "nb" = "nix build";
-      "nbp" = "nix build --no-link --print-out-paths";
-      "ncd" = "cd \"$NIXCFG\"";
-      "ncdu" = "ncdu --color dark";
-      "nconf" = "nix show-config";
-      "ncur" = "readlink -f /run/current-system";
-      "ndead" = "deadnix";
-      "ndv" = "nix develop";
-      "netstat" = "colourify netstat";
-      "nfc" = "nix flake check";
-      "nfix" = "statix fix";
-      "nfl" = "nix flake lock";
-      "nfm" = "nix flake metadata";
-      "nfmt" = "nix fmt";
-      "nfs" = "nix flake show";
-      "nfu" = "nix flake update";
-      "nftl" = "sudo nft list ruleset";
-      "ngc7" = "sudo nix-collect-garbage --delete-older-than 7d";
-      "nginx-logs" = "sudo journalctl -u nginx -f";
-      "nginx-reload" = "sudo systemctl reload nginx";
-      "nginx-test" = "sudo nginx -t";
-      "ngs" = "sudo nix-env --list-generations --profile /nix/var/nix/profiles/system";
-      "nlint" = "statix check";
-      "nlog" = "nix log";
-      "nls" = "nix profile list";
-      "note" = "mkdir -p ~/notes && \"\${EDITOR:-nano}\" ~/notes/$(date +%Y%m%d).md";
-      "notes" = "ls -lt ~/notes/";
-      "nprefetch" = "nix store prefetch-file";
-      "nprefetch-git" = "nix-prefetch-git";
-      "nprup" = "nix profile upgrade --all";
-      "nrb" = "sudo nixos-rebuild switch --rollback";
-      "nreg" = "nix registry list";
-      "nrepair" = "sudo nix-store --verify --check-contents --repair";
-      "nrepl" = "nix repl";
-      "nrepl-pkgs" = "nix repl nixpkgs";
-      "nrm" = "nix profile remove";
-      "nrst" = "sudo nixos-rebuild switch --flake .#titan";
-      "nrsm" = "sudo nixos-rebuild switch --flake .#minimal";
-      "nrss" = "sudo nixos-rebuild switch --flake .#server";
-      "nrsg" = "sudo nixos-rebuild switch --flake .#ghost";
-      "nsr" = "nix search nixpkgs";
-      "ntree" = "nix-tree";
-      "nv" = "nvim";
-      "nver" = "nixos-version";
-      "nwhy" = "nix why-depends";
-      "openssl-dec" = "openssl enc -aes-256-ctr -pbkdf2 -d -a -in /dev/stdin -out decrypted_file.txt";
-      "openssl-enc" = "openssl enc -aes-256-ctr -pbkdf2 -e -a -in /dev/stdin -out encrypted_file.txt";
-      "pd" = "pushd";
-      "pex" = "podman exec -it";
-      "pi" = "podman images";
-      "ping" = "colourify ping";
-      "pingg" = "ping -c5";
-      "pkill-name" = "pkill -f";
-      "plogs" = "podman logs -f";
-      "pp" = "popd";
-      "ppods" = "podman pod ps";
-      "pprune" = "podman system prune -af";
-      "pps" = "podman ps -a";
-      "pserv" = "python3 -m http.server 8000";
-      "qfind" = "find . -name'              # qfind \"*.log";
-      "rdns" = "dig +short -x";
-      "rgi" = "rg -i";
-      "sadd" = "ssh-add";
-      "sagent" = "eval \"$(ssh-agent -s)\"";
-      "scrit" = "systemd-analyze critical-chain";
-      "scte" = "sudo systemctl enable";
-      "sctl" = "sudo systemctl";
-      "sctlr" = "sudo systemctl daemon-reload";
-      "sctls" = "systemctl list-units --type=service --state=running";
-      "sctr" = "sudo systemctl restart";
-      "scts" = "sudo systemctl status";
-      "sctsd" = "sudo systemctl disable";
-      "sctsp" = "sudo systemctl stop";
-      "sctt" = "sudo systemctl start";
-      "sctu" = "systemctl --user";
-      "sha256" = "sha256sum";
-      "showDNS" = "resolvectl status";
-      "show_options" = "shopt";
-      "showpath" = "echo \"$PATH\" | tr \":\" \"\\n\" | sort";
-      "sl" = "ssh-add -l";
-      "ss" = "colourify ss";
-      "ssh-remote" = "ssh -N -R";
-      "ssh-restart" = "sudo systemctl restart sshd";
-      "ssh-status" = "sudo systemctl status sshd";
-      "sslc" = "openssl x509 -text -noout -in";
-      "sslr" = "openssl s_client -connect";
-      "stamp" = "date \"+%Y%m%d%a%H%M\"";
-      "sudo" = "sudo ";
-      "sv" = "sudoedit";
-      "sysinfo" = "uname -a && echo \"NixOS $(nixos-version)\"";
-      "tar-bz2" = "tar -cjvf";
-      "tar-create" = "tar -cvf";
-      "tar-extract" = "tar -xvf";
-      "tar-xz" = "tar -cJvf";
-      "temp" = "sensors";
-      "tf" = "terraform";
-      "tfa" = "terraform apply";
-      "tfd" = "terraform destroy";
-      "tff" = "terraform fmt -recursive";
-      "tfi" = "terraform init";
-      "tfp" = "terraform plan";
-      "tfv" = "terraform validate";
-      "themes" = "kitty +kitten themes";
-      "timers" = "systemctl list-timers";
-      "timestamp" = "date \"+%Y%m%dT%H%M%S\"";
-      "today" = "date +\"%A, %B %-d, %Y\"";
-      "topcpu" = "ps -eo pid,user,%cpu,%mem,etime,comm --sort=-%cpu | head -15";
-      "topmem" = "ps -eo pid,user,%mem,rss,etime,comm --sort=-%mem | head -15";
-      "tplay" = "asciinema play";
-      "traceroute" = "colourify traceroute";
-      "tracert" = "traceroute";
-      "trec" = "asciinema rec";
-      "ttop" = "top -b -n1 | head -30";
-      "update" = "nupgrade";
-      "uuid" = "uuidgen";
-      "v" = "vim";
-      "watch" = "watch ";
-      "watch-proc" = "watch -n1 \"ps auxf\"";
-      "weather" = "curl wttr.in";
-      "weather-short" = "curl \"wttr.in/?format=3\"";
-      "weeknum" = "date +%V";
-      "whois" = "colourify whois";
-      "wtf" = "who -a";
-      "ydlc" = "yt-dlp -o \"%(uploader)s/%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s\"";
-      "ydlp" = "yt-dlp -o \"%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s\"";
-      "zip-create" = "zip -r";
-    };
+    shellAliases = lib.mergeAttrsList [
+      shell
+      colourised
+      system
+      systemd
+      network
+      nix
+      git
+      infra
+    ];
+
+    bashrcExtra = ''
+      # ble.sh must be sourced first (interactive shells only); it attaches at the very end
+      if [[ $- == *i* ]] && command -v blesh-share >/dev/null 2>&1; then
+        source -- "$(blesh-share)"/ble.sh --attach=none
+      fi
+    '';
+
+    initExtra = lib.mkMerge [
+      ''
+      export NIXCFG="''${NIXCFG:-$HOME/.config/nixos}"   # flake location, used by the n* helpers
+      export EDITOR=vim
+      set -o vi
+
+      _have() { command -v "$1" >/dev/null 2>&1; }
+
+      # ----- NixOS rebuilds: n<action> [host] [extra args]; host defaults to $HOSTNAME -----
+      _nrebuild() {
+        local action=$1 host=$HOSTNAME
+        shift
+        if [[ -n ''${1:-} && $1 != -* ]]; then host=$1; shift; fi
+        case $action in
+          build | dry-build | build-vm) nixos-rebuild "$action" --flake "$NIXCFG#$host" "$@" ;;
+          *) sudo nixos-rebuild "$action" --flake "$NIXCFG#$host" "$@" ;;
+        esac
+      }
+
+      nsw() { _nrebuild switch "$@"; }
+      nbd() { _nrebuild build "$@"; }
+      nts() { _nrebuild test "$@"; }
+      ndr() { _nrebuild dry-build "$@"; }
+      nbt() { _nrebuild boot "$@"; }
+
+      # switch with nix-output-monitor
+      nswn() {
+        sudo nixos-rebuild switch --flake "$NIXCFG#''${1:-$HOSTNAME}" --log-format internal-json -v |& nom --json
+      }
+
+      # ndeploy <flake-host> <user@address> [switch|boot|test]
+      ndeploy() {
+        [[ $# -ge 2 ]] || { echo "usage: ndeploy <flake-host> <user@address> [switch|boot|test]" >&2; return 1; }
+        nixos-rebuild "''${3:-switch}" --flake "$NIXCFG#$1" --target-host "$2" --sudo
+      }
+
+      # update inputs, switch, show what changed, collect garbage
+      nupgrade() {
+        ( cd "$NIXCFG" && nix flake update ) || return
+        nsw "$@" || return
+        ndiff
+        sudo nix-collect-garbage --delete-older-than 7d && nix-store --optimise
+      }
+
+      # package diff between two system closures (default: booted vs current)
+      ndiff() {
+        local a=''${1:-/run/booted-system} b=''${2:-/run/current-system}
+        if _have nvd; then nvd diff "$a" "$b"; else nix store diff-closures "$a" "$b"; fi
+      }
+
+      # ns foo bar  ->  nix shell nixpkgs#foo nixpkgs#bar
+      ns() {
+        local args=() p
+        for p in "$@"; do
+          case $p in
+            -* | *#* | */*) args+=("$p") ;;
+            *) args+=("nixpkgs#$p") ;;
+          esac
+        done
+        nix shell "''${args[@]}"
+      }
+
+      nopt()       { nix eval "$NIXCFG#nixosConfigurations.''${2:-$HOSTNAME}.config.$1"; }   # nopt services.openssh.enable [host]
+      nrepl-host() { nix repl "$NIXCFG#nixosConfigurations.''${1:-$HOSTNAME}"; }
+      hms()        { home-manager switch --flake "$NIXCFG#''${1:-$USER}"; }
+
+      # ----- systemd / system -----
+      jfu()       { sudo journalctl -fu "''${1:?usage: jfu <unit>}"; }
+      portcheck() { nc -zv "''${1:?usage: portcheck <host> <port>}" "''${2:?}"; }
+
+      fkill() {
+        local pids
+        pids=$(ps -eo pid,user,%cpu,%mem,comm --sort=-%cpu | sed 1d | fzf -m --reverse | awk '{print $1}')
+        # shellcheck disable=SC2086
+        [[ -n $pids ]] && kill -"''${1:-15}" $pids
+      }
+
+      extract() {
+        local f
+        for f in "$@"; do
+          [[ -f $f ]] || { echo "extract: '$f' is not a file" >&2; continue; }
+          case $f in
+            *.tar.gz | *.tgz)   tar -xzvf "$f" ;;
+            *.tar.bz2 | *.tbz2) tar -xjvf "$f" ;;
+            *.tar.xz | *.txz)   tar -xJvf "$f" ;;
+            *.tar.zst)          tar --zstd -xvf "$f" ;;
+            *.tar)              tar -xvf "$f" ;;
+            *.zip)              unzip "$f" ;;
+            *.gz)               gunzip "$f" ;;
+            *.bz2)              bunzip2 "$f" ;;
+            *.xz)               unxz "$f" ;;
+            *.zst)              unzstd "$f" ;;
+            *.7z)               7z x "$f" ;;
+            *)                  echo "extract: unknown format '$f'" >&2 ;;
+          esac
+        done
+      }
+
+      # ----- git / containers -----
+      gitup() { git add -A && git commit -m "''${*:-update}" && git push; }
+
+      # delete local branches already merged into main/master/develop
+      gprune() {
+        git fetch --prune &&
+          git branch --merged | grep -Ev '^\*|^\s*(main|master|develop)$' | xargs -r git branch -d
+      }
+
+      dsh() { docker exec -it "''${1:?usage: dsh <container> [shell]}" "''${2:-sh}"; }
+      kns() { kubectl config set-context --current --namespace="''${1:?usage: kns <namespace>}"; }
+      ''
+      (lib.mkOrder 1900 ''
+      # atuin after ble.sh so it hooks ble's history; after fzf so Ctrl-R is atuin's
+      if _have atuin; then eval "$(atuin init bash)"; fi
+      '')
+      (lib.mkOrder 2000 ''
+      # ble.sh attaches LAST, once every other prompt/key hook is registered
+      [[ ! ''${BLE_VERSION-} ]] || ble-attach
+      '')
+    ];
   };
 }
