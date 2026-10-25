@@ -241,7 +241,7 @@ in {
 
       # Window / pane management
       map alt+- launch --cwd=current --location=hsplit
-      map alt+\\ launch --cwd=current --location=vsplit
+      map alt+\ launch --cwd=current --location=vsplit
 
       map alt+h neighboring_window left
       map alt+l neighboring_window right
