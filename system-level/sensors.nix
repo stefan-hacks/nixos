@@ -1,8 +1,5 @@
 # system-level/sensors.nix — Hardware sensor support for lm_sensors and Vitals
-{
-  lib,
-  ...
-}: {
+{lib, ...}: {
   # lm_sensors and libgtop are already in packages.nix (required by Vitals).
   # This module loads the kernel drivers needed for fan/temperature/voltage
   # readings. The exact modules depend on your motherboard's Super I/O chip.
@@ -13,7 +10,7 @@
   #
   boot.kernelModules = [
     # Intel CPU temperature
-    "coretemp"
+    # "coretemp"
 
     # AMD CPU temperature (comment out coretemp if on AMD)
     # "k10temp"
