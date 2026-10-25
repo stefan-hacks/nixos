@@ -15,6 +15,8 @@
     openFirewall = true;
   };
 
+  services.mullvad-vpn.enable = true;
+
   # Fix the "Invalid group-name group='netdev'" D-Bus warning.
   # This declaratively creates the netdev group that Avahi's D-Bus config expects.
   users.groups.netdev = {};
