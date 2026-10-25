@@ -310,121 +310,121 @@ in {
 
     initExtra = lib.mkMerge [
       ''
-      export NIXCFG="''${NIXCFG:-$HOME/.config/nixos}"   # flake location, used by the n* helpers
-      export EDITOR=vim
-      set -o vi
+        export NIXCFG="''${NIXCFG:-$HOME/.config/nixos}"   # flake location, used by the n* helpers
+        export EDITOR=vim
+        set -o vi
 
-      _have() { command -v "$1" >/dev/null 2>&1; }
+        _have() { command -v "$1" >/dev/null 2>&1; }
 
-      # ----- NixOS rebuilds: n<action> [host] [extra args]; host defaults to $HOSTNAME -----
-      _nrebuild() {
-        local action=$1 host=$HOSTNAME
-        shift
-        if [[ -n ''${1:-} && $1 != -* ]]; then host=$1; shift; fi
-        case $action in
-          build | dry-build | build-vm) nixos-rebuild "$action" --flake "$NIXCFG#$host" "$@" ;;
-          *) sudo nixos-rebuild "$action" --flake "$NIXCFG#$host" "$@" ;;
-        esac
-      }
-
-      nsw() { _nrebuild switch "$@"; }
-      nbd() { _nrebuild build "$@"; }
-      nts() { _nrebuild test "$@"; }
-      ndr() { _nrebuild dry-build "$@"; }
-      nbt() { _nrebuild boot "$@"; }
-
-      # switch with nix-output-monitor
-      nswn() {
-        sudo nixos-rebuild switch --flake "$NIXCFG#''${1:-$HOSTNAME}" --log-format internal-json -v |& nom --json
-      }
-
-      # ndeploy <flake-host> <user@address> [switch|boot|test]
-      ndeploy() {
-        [[ $# -ge 2 ]] || { echo "usage: ndeploy <flake-host> <user@address> [switch|boot|test]" >&2; return 1; }
-        nixos-rebuild "''${3:-switch}" --flake "$NIXCFG#$1" --target-host "$2" --sudo
-      }
-
-      # update inputs, switch, show what changed, collect garbage
-      nupgrade() {
-        ( cd "$NIXCFG" && nix flake update ) || return
-        nsw "$@" || return
-        ndiff
-        sudo nix-collect-garbage --delete-older-than 7d && nix-store --optimise
-      }
-
-      # package diff between two system closures (default: booted vs current)
-      ndiff() {
-        local a=''${1:-/run/booted-system} b=''${2:-/run/current-system}
-        if _have nvd; then nvd diff "$a" "$b"; else nix store diff-closures "$a" "$b"; fi
-      }
-
-      # ns foo bar  ->  nix shell nixpkgs#foo nixpkgs#bar
-      ns() {
-        local args=() p
-        for p in "$@"; do
-          case $p in
-            -* | *#* | */*) args+=("$p") ;;
-            *) args+=("nixpkgs#$p") ;;
+        # ----- NixOS rebuilds: n<action> [host] [extra args]; host defaults to $HOSTNAME -----
+        _nrebuild() {
+          local action=$1 host=$HOSTNAME
+          shift
+          if [[ -n ''${1:-} && $1 != -* ]]; then host=$1; shift; fi
+          case $action in
+            build | dry-build | build-vm) nixos-rebuild "$action" --flake "$NIXCFG#$host" "$@" ;;
+            *) sudo nixos-rebuild "$action" --flake "$NIXCFG#$host" "$@" ;;
           esac
-        done
-        nix shell "''${args[@]}"
-      }
+        }
 
-      nopt()       { nix eval "$NIXCFG#nixosConfigurations.''${2:-$HOSTNAME}.config.$1"; }   # nopt services.openssh.enable [host]
-      nrepl-host() { nix repl "$NIXCFG#nixosConfigurations.''${1:-$HOSTNAME}"; }
-      hms()        { home-manager switch --flake "$NIXCFG#''${1:-$USER}"; }
+        nsw() { _nrebuild switch "$@"; }
+        nbd() { _nrebuild build "$@"; }
+        nts() { _nrebuild test "$@"; }
+        ndr() { _nrebuild dry-build "$@"; }
+        nbt() { _nrebuild boot "$@"; }
 
-      # ----- systemd / system -----
-      jfu()       { sudo journalctl -fu "''${1:?usage: jfu <unit>}"; }
-      portcheck() { nc -zv "''${1:?usage: portcheck <host> <port>}" "''${2:?}"; }
+        # switch with nix-output-monitor
+        nswn() {
+          sudo nixos-rebuild switch --flake "$NIXCFG#''${1:-$HOSTNAME}" --log-format internal-json -v |& nom --json
+        }
 
-      fkill() {
-        local pids
-        pids=$(ps -eo pid,user,%cpu,%mem,comm --sort=-%cpu | sed 1d | fzf -m --reverse | awk '{print $1}')
-        # shellcheck disable=SC2086
-        [[ -n $pids ]] && kill -"''${1:-15}" $pids
-      }
+        # ndeploy <flake-host> <user@address> [switch|boot|test]
+        ndeploy() {
+          [[ $# -ge 2 ]] || { echo "usage: ndeploy <flake-host> <user@address> [switch|boot|test]" >&2; return 1; }
+          nixos-rebuild "''${3:-switch}" --flake "$NIXCFG#$1" --target-host "$2" --sudo
+        }
 
-      extract() {
-        local f
-        for f in "$@"; do
-          [[ -f $f ]] || { echo "extract: '$f' is not a file" >&2; continue; }
-          case $f in
-            *.tar.gz | *.tgz)   tar -xzvf "$f" ;;
-            *.tar.bz2 | *.tbz2) tar -xjvf "$f" ;;
-            *.tar.xz | *.txz)   tar -xJvf "$f" ;;
-            *.tar.zst)          tar --zstd -xvf "$f" ;;
-            *.tar)              tar -xvf "$f" ;;
-            *.zip)              unzip "$f" ;;
-            *.gz)               gunzip "$f" ;;
-            *.bz2)              bunzip2 "$f" ;;
-            *.xz)               unxz "$f" ;;
-            *.zst)              unzstd "$f" ;;
-            *.7z)               7z x "$f" ;;
-            *)                  echo "extract: unknown format '$f'" >&2 ;;
-          esac
-        done
-      }
+        # update inputs, switch, show what changed, collect garbage
+        nupgrade() {
+          ( cd "$NIXCFG" && nix flake update ) || return
+          nsw "$@" || return
+          ndiff
+          sudo nix-collect-garbage --delete-older-than 7d && nix-store --optimise
+        }
 
-      # ----- git / containers -----
-      gitup() { git add -A && git commit -m "''${*:-update}" && git push; }
+        # package diff between two system closures (default: booted vs current)
+        ndiff() {
+          local a=''${1:-/run/booted-system} b=''${2:-/run/current-system}
+          if _have nvd; then nvd diff "$a" "$b"; else nix store diff-closures "$a" "$b"; fi
+        }
 
-      # delete local branches already merged into main/master/develop
-      gprune() {
-        git fetch --prune &&
-          git branch --merged | grep -Ev '^\*|^\s*(main|master|develop)$' | xargs -r git branch -d
-      }
+        # ns foo bar  ->  nix shell nixpkgs#foo nixpkgs#bar
+        ns() {
+          local args=() p
+          for p in "$@"; do
+            case $p in
+              -* | *#* | */*) args+=("$p") ;;
+              *) args+=("nixpkgs#$p") ;;
+            esac
+          done
+          nix shell "''${args[@]}"
+        }
 
-      dsh() { docker exec -it "''${1:?usage: dsh <container> [shell]}" "''${2:-sh}"; }
-      kns() { kubectl config set-context --current --namespace="''${1:?usage: kns <namespace>}"; }
+        nopt()       { nix eval "$NIXCFG#nixosConfigurations.''${2:-$HOSTNAME}.config.$1"; }   # nopt services.openssh.enable [host]
+        nrepl-host() { nix repl "$NIXCFG#nixosConfigurations.''${1:-$HOSTNAME}"; }
+        hms()        { home-manager switch --flake "$NIXCFG#''${1:-$USER}"; }
+
+        # ----- systemd / system -----
+        jfu()       { sudo journalctl -fu "''${1:?usage: jfu <unit>}"; }
+        portcheck() { nc -zv "''${1:?usage: portcheck <host> <port>}" "''${2:?}"; }
+
+        fkill() {
+          local pids
+          pids=$(ps -eo pid,user,%cpu,%mem,comm --sort=-%cpu | sed 1d | fzf -m --reverse | awk '{print $1}')
+          # shellcheck disable=SC2086
+          [[ -n $pids ]] && kill -"''${1:-15}" $pids
+        }
+
+        extract() {
+          local f
+          for f in "$@"; do
+            [[ -f $f ]] || { echo "extract: '$f' is not a file" >&2; continue; }
+            case $f in
+              *.tar.gz | *.tgz)   tar -xzvf "$f" ;;
+              *.tar.bz2 | *.tbz2) tar -xjvf "$f" ;;
+              *.tar.xz | *.txz)   tar -xJvf "$f" ;;
+              *.tar.zst)          tar --zstd -xvf "$f" ;;
+              *.tar)              tar -xvf "$f" ;;
+              *.zip)              unzip "$f" ;;
+              *.gz)               gunzip "$f" ;;
+              *.bz2)              bunzip2 "$f" ;;
+              *.xz)               unxz "$f" ;;
+              *.zst)              unzstd "$f" ;;
+              *.7z)               7z x "$f" ;;
+              *)                  echo "extract: unknown format '$f'" >&2 ;;
+            esac
+          done
+        }
+
+        # ----- git / containers -----
+        gitup() { git add -A && git commit -m "''${*:-update}" && git push; }
+
+        # delete local branches already merged into main/master/develop
+        gprune() {
+          git fetch --prune &&
+            git branch --merged | grep -Ev '^\*|^\s*(main|master|develop)$' | xargs -r git branch -d
+        }
+
+        dsh() { docker exec -it "''${1:?usage: dsh <container> [shell]}" "''${2:-sh}"; }
+        kns() { kubectl config set-context --current --namespace="''${1:?usage: kns <namespace>}"; }
       ''
       (lib.mkOrder 1900 ''
-      # atuin after ble.sh so it hooks ble's history; after fzf so Ctrl-R is atuin's
-      if _have atuin; then eval "$(atuin init bash)"; fi
+        # atuin after ble.sh so it hooks ble's history; after fzf so Ctrl-R is atuin's
+        if _have atuin; then eval "$(atuin init bash)"; fi
       '')
       (lib.mkOrder 2000 ''
-      # ble.sh attaches LAST, once every other prompt/key hook is registered
-      [[ ! ''${BLE_VERSION-} ]] || ble-attach
+        # ble.sh attaches LAST, once every other prompt/key hook is registered
+        [[ ! ''${BLE_VERSION-} ]] || ble-attach
       '')
     ];
   };
