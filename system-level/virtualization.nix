@@ -15,15 +15,13 @@
     qemu = {
       package = pkgs.qemu_kvm;
       runAsRoot = true;
+
+      # This helper ensures the user-space emulator can hook into network bridge interfaces
+      verbatimConfig = ''
+        bridge_helper = "${pkgs.qemu}/libexec/qemu-bridge-helper"
+      '';
     };
   };
-
-  # Enable the default NAT network switch natively via NixOS networking
-  networking.bridge.enable = true;
-  # This helper ensures the user-space emulator can hook into the bridge interfaces
-  virtualisation.libvirtd.qemu.verbatimConfig = ''
-    bridge_helper = "${pkgs.qemu}/libexec/qemu-bridge-helper"
-  '';
 
   # virt-manager GUI
   programs.virt-manager.enable = true;
