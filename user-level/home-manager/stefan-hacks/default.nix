@@ -1,7 +1,6 @@
 # Home Manager entry point for stefan-hacks
 {
   config,
-  lib,
   ...
 }: {
   imports = [
