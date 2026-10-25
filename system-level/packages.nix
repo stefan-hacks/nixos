@@ -84,7 +84,6 @@
     # Formatters
     ###########################################################################
     rustfmt
-    nixfmt
     shfmt
     ruff
     stylua
@@ -188,8 +187,6 @@
     nix-diff
     nix-init
     nixpkgs-fmt
-    alejandra
-    deadnix
     statix
     nixos-generators
     nix-top
