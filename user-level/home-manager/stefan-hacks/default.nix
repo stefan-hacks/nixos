@@ -11,7 +11,7 @@
     ./programs/starship.nix
     ./programs/atuin.nix
     ./programs/helix.nix
-    ./programs/zellij.nix
+    # ./programs/zellij.nix
     ./programs/foot.nix
     ./programs/fastfetch.nix
     ./gnome
