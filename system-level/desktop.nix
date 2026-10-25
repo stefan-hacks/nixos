@@ -1,7 +1,5 @@
 # Desktop environment — GNOME on X11
 {
-  config,
-  lib,
   pkgs,
   ...
 }: {

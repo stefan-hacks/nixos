@@ -1,8 +1,5 @@
 # Logging and audit configuration
 {
-  config,
-  lib,
-  pkgs,
   ...
 }: {
   services.logrotate = {

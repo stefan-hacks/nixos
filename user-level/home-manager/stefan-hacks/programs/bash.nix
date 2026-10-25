@@ -1,6 +1,5 @@
 {
   pkgs,
-  lib,
   ...
 }: {
   # Ble.sh — syntax-aware line editor for Bash

@@ -13,6 +13,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Added treefmt-nix input to manage both formatting and dead code checking
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # disko = {
     #   url = "github:nix-community/disko/master";
     #   inputs.nixpkgs.follows = "nixpkgs";
@@ -45,16 +51,10 @@
   };
 
   outputs = inputs @ {
-    self,
     nixpkgs,
-    nixpkgs-unstable,
     home-manager,
+    treefmt-nix,
     # disko,
-    nvf,
-    nixdatifier,
-    nix-graph,
-    vellum,
-    kitty-scrollback,
     ...
   }: let
     system = "x86_64-linux";
@@ -75,8 +75,20 @@
           ./hosts/${hostName}
         ];
       };
+
+    # Evaluate treefmt with Alejandra and Deadnix configured together
+    treefmtEval = treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} {
+      projectRootFile = "flake.nix";
+
+      # Enable Alejandra for pure structural formatting
+      programs.alejandra.enable = true;
+
+      # Enable Deadnix to automatically track and strip unused variables
+      programs.deadnix.enable = true;
+    };
   in {
-    formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt;
+    # Replaced the single nixfmt definition with the unified treefmt wrapper
+    formatter.${system} = treefmtEval.config.build.wrapper;
 
     nixosConfigurations = nixpkgs.lib.genAttrs hostNames mkHost;
   };

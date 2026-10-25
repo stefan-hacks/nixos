@@ -1,8 +1,5 @@
 # System-wide program configuration
 {
-  config,
-  lib,
-  pkgs,
   ...
 }: {
   programs.firefox.enable = true;

@@ -1,8 +1,5 @@
 # Firewall configuration
 {
-  config,
-  lib,
-  pkgs,
   ...
 }: {
   networking.firewall = {

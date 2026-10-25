@@ -1,8 +1,6 @@
 # system-level/sensors.nix — Hardware sensor support for lm_sensors and Vitals
 {
-  config,
   lib,
-  pkgs,
   ...
 }: {
   # lm_sensors and libgtop are already in packages.nix (required by Vitals).

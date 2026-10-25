@@ -1,9 +1,6 @@
 # hosts/titan/sensors.nix — Per-host hardware sensor modules.
 # Detected on AZW SER (AMD Ryzen 7 6800H) via `sudo sensors-detect`.
 {
-  config,
-  lib,
-  pkgs,
   ...
 }: {
   # AMD Zen 3+ thermal sensors (Ryzen 7 6800H)

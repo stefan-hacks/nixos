@@ -1,7 +1,5 @@
 # Virtualization support
 {
-  config,
-  lib,
   pkgs,
   ...
 }: {

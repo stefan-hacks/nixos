@@ -1,8 +1,6 @@
 # System-wide packages installed in the system profile.
 # To find more packages and options: https://search.nixos.org/
 {
-  config,
-  lib,
   pkgs,
   inputs,
   ...

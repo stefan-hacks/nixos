@@ -1,8 +1,5 @@
 # Network configuration
 {
-  config,
-  lib,
-  pkgs,
   ...
 }: {
   # Configure network connections interactively with nmcli or nmtui.

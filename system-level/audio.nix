@@ -1,8 +1,5 @@
 # Audio configuration
 {
-  config,
-  lib,
-  pkgs,
   ...
 }: {
   services.pipewire = {

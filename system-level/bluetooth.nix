@@ -3,14 +3,9 @@
 # The Bluetooth controller resumes but BlueZ does not re-trigger HID enumeration.
 # Fix: restart bluetooth.service after resume + kernel-side HID handling.
 {
-  config,
-  lib,
   pkgs,
   ...
-}: let
-  # MX Master 3S MAC address — used by the reconnect hook after resume.
-  mxMasterMac = "D4:10:D5:87:B1:6E";
-in {
+}: {
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;

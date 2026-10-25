@@ -1,8 +1,5 @@
 # Locale and timezone
 {
-  config,
-  lib,
-  pkgs,
   ...
 }: {
   # Set your time zone.

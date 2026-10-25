@@ -1,8 +1,5 @@
 # starship.nix — Home Manager starship prompt (Nerd Font Symbols Preset)
 {
-  config,
-  lib,
-  pkgs,
   ...
 }: {
   programs.starship = {

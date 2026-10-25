@@ -1,8 +1,6 @@
 # nvf — Modular Neovim configuration framework for NixOS.
 # Docs: https://nvf.notashelf.dev/
 {
-  config,
-  lib,
   pkgs,
   inputs,
   ...

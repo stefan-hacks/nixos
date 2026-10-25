@@ -1,8 +1,6 @@
 # system-level/theming.nix — Unified system-wide theming.
 # GDM login screen wallpaper.
 {
-  config,
-  lib,
   pkgs,
   ...
 }: let
@@ -27,7 +25,7 @@ in {
   # (#lockDialogGroup) shows our wallpaper. Using substituteInPlace avoids
   # brittle unified-diff patches.
   nixpkgs.overlays = [
-    (self: super: {
+    (_self: super: {
       gnome-shell = super.gnome-shell.overrideAttrs (old: {
         postPatch =
           (old.postPatch or "")

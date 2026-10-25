@@ -1,8 +1,5 @@
 # System maintenance and auto-upgrade
 {
-  config,
-  lib,
-  pkgs,
   ...
 }: {
   system.autoUpgrade = {

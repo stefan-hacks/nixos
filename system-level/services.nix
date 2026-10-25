@@ -1,7 +1,5 @@
 # Services configuration
 {
-  config,
-  lib,
   pkgs,
   ...
 }: {

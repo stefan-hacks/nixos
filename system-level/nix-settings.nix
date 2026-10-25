@@ -1,7 +1,5 @@
 # Nix package manager settings
 {
-  config,
-  lib,
   pkgs,
   inputs,
   ...
@@ -15,7 +13,7 @@
   # nixos-26.05 stable provides. We import nixpkgs-unstable via flake input
   # and overlay only the packages we need, keeping the rest of the system on stable.
   nixpkgs.overlays = [
-    (self: super: {
+    (_self: _super: {
       joplin-desktop-unstable = inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system}.joplin-desktop;
     })
   ];

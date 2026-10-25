@@ -2,9 +2,6 @@
 # Imports all system-level modules.
 # Hosts import this file plus their hardware-configuration.nix and home-manager user config.
 {
-  config,
-  lib,
-  pkgs,
   ...
 }: {
   imports = [
