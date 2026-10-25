@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   # Ble.sh — syntax-aware line editor for Bash
   home.packages = [pkgs.blesh];
 
@@ -117,7 +114,6 @@
       "gpl" = "git pull";
       "gr" = "git rebase";
       "gra" = "git rebase --abort";
-      "grc" = "git rebase --continue";
       "grep" = "grep --color=auto";
       "gri" = "git rebase -i";
       "grps" = "groups | xargs -n1 | sort";
