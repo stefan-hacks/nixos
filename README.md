@@ -154,7 +154,6 @@ nix flake check
 | Input              | URL                                               | Branch/Tag | Purpose                               |
 | ------------------ | ------------------------------------------------- | ---------- | ------------------------------------- |
 | `nixpkgs`          | `github:NixOS/nixpkgs/nixos-26.05`                | stable     | **Primary package set**               |
-| `nixpkgs-unstable` | `github:NixOS/nixpkgs/nixos-unstable`             | unstable   | **Only** for `joplin-desktop` overlay |
 | `home-manager`     | `github:nix-community/home-manager/release-26.05` | stable     | Per-user dotfiles + programs          |
 | `disko`            | `github:nix-community/disko/master`               | master     | Declarative disk partitioning         |
 | `nvf`              | `github:notashelf/nvf/main`                       | main       | Neovim configuration framework        |
@@ -164,8 +163,8 @@ nix flake check
 | `kitty-scrollback` | `github:mikesmithgh/kitty-scrollback.nvim/v8.0.0` | v8.0.0     | nvf extraPlugin (flake = false)       |
 
 > **Stable-first policy:** All inputs use nixos-26.05 / release-26.05 where
-> available. Unstable is only used when a package is unavailable in stable
-> (currently: `joplin-desktop`).
+> available. GUI applications that need fresher versions are managed via
+> declarative flatpaks instead of unstable overlays.
 
 ---
 
@@ -445,7 +444,7 @@ Included in `system-level/packages.nix`:
 | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | **Flakes**                          | Reproducible inputs with lockfile. All hosts share one `flake.nix`.                                                     |
 | **Home Manager**                    | Declarative per-user config (dotfiles, programs, GNOME dconf). Clean separation from system-level modules.              |
-| **Stable-first**                    | `nixpkgs` and `home-manager` both track 26.05 stable. `nixpkgs-unstable` is only used selectively for `joplin-desktop`. |
+| **Stable-first**                    | `nixpkgs` and `home-manager` both track 26.05 stable. GUI apps needing newer versions are installed via declarative flatpaks. |
 | **Single `system.nix` entry point** | One file imports all shared system modules. Adding a module is one line — it applies fleet-wide.                        |
 | **nix-my-gnome for dconf**          | GNOME settings are generated from a live dconf dump, not hand-edited. Reproducible and version-controlled.              |
 | **nvf maximal**                     | Full language support + IDE-like features (LSP, debugging, completions, git integration) out of the box.                |

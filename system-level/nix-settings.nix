@@ -1,22 +1,6 @@
 # Nix package manager settings
-{
-  pkgs,
-  inputs,
-  ...
-}: {
+{ ... }: {
   nixpkgs.config.allowUnfree = true;
-
-  # ═══════════════════════════════════════════════════════════════════════════
-  # nixpkgs-unstable overlay — selectively pull newer packages
-  # ═══════════════════════════════════════════════════════════════════════════
-  # Some packages (e.g. joplin-desktop) need a version newer than what
-  # nixos-26.05 stable provides. We import nixpkgs-unstable via flake input
-  # and overlay only the packages we need, keeping the rest of the system on stable.
-  nixpkgs.overlays = [
-    (_self: _super: {
-      joplin-desktop-unstable = inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system}.joplin-desktop;
-    })
-  ];
 
   # nix.nixPath is used by `nix-shell`, `nix repl`, and tools that use
   # angle-bracket syntax like `<nixpkgs>` and `<nixos-config>`.
