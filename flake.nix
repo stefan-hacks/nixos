@@ -48,6 +48,10 @@
       url = "github:mikesmithgh/kitty-scrollback.nvim/v8.0.0";
       flake = false;
     };
+
+    nix-flatpak = {
+      url = "github:gmodena/nix-flatpak/?ref=latest";
+    };
   };
 
   outputs = inputs @ {

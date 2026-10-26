@@ -251,44 +251,30 @@
 
     ###########################################################################
     # Desktop / Browsers / Productivity
+    # NOTE: Most GUI apps moved to flatpaks (system-level/flatpak.nix).
+    # Kept: stirling-pdf-desktop (not on Flathub)
     ###########################################################################
-    firefox
-    chromium
-    joplin-desktop-unstable
-    evolution
     gnome-tweaks
-    _1password-gui
-    libreoffice
-    onlyoffice-desktopeditors
     stirling-pdf-desktop
-    localsend
 
     ###########################################################################
     # Media
+    # NOTE: Most GUI media apps moved to flatpaks (system-level/flatpak.nix).
+    # Kept: kew (TUI, not on Flathub), ffmpeg/cava/chafa/yt-dlp (CLI tools)
     ###########################################################################
-    shortwave
-    mpv
-    vlc
     ffmpeg
     jellyfin-tui
-    jellyfin-desktop
     kew
     yt-dlp
-    parabolic
-    soundconverter
-    blanket
-    easyeffects
     cava
     chafa
     pomodoro
 
     ###########################################################################
     # Communication
+    # NOTE: All GUI communication apps moved to flatpaks (system-level/flatpak.nix).
     ###########################################################################
-    element-desktop
-    discord
-    whatsie
-    resources
+    # (empty — hermes-desktop is managed separately if installed)
 
     ###########################################################################
     # System Tools / Misc
@@ -306,9 +292,9 @@
     imagemagick
     exiftool
     guvcview
-    impression
     llama-cpp
-    qbittorrent
+    # impression  → moved to flatpak (io.gitlab.adhami3310.Impression)
+    # qbittorrent → moved to flatpak (org.qbittorrent.qBittorrent)
 
     ###########################################################################
     # Virtualization
