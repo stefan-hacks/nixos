@@ -96,8 +96,12 @@
         <vcpu placement='static'>${toString vm.vcpus}</vcpu>
         <os>
           <type arch='x86_64' machine='pc-q35-9.0'>hvm</type>
-          <boot dev='hd'/>
+          <!-- Boot order: cdrom first for fresh install from ISO.
+               After NixOS is installed, the bootloader on vda takes over.
+               To eject the ISO after install: virsh change-media nixos-minimal sda --eject --live --config
+               -- or simply leave it; SeaBIOS will boot from vda once it has a bootloader. -->
           <boot dev='cdrom'/>
+          <boot dev='hd'/>
           <firmware feature='enrolled-keys' enabled='no'/>
           <firmware feature='secure-boot' enabled='no'/>
         </os>
