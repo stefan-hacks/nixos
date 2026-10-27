@@ -1,5 +1,9 @@
 # Move this configuration block into your user-level Home Manager setup
 {...}: {
+  imports = [
+    inputs.hermes-agent.homeManagerModules.default
+  ];
+
   programs.hermes-agent = {
     enable = true;
     desktop.enable = true; # Creates the desktop launcher menu entries
