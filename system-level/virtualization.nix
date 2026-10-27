@@ -1,8 +1,5 @@
 # Virtualization support
-{
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   # libvirtd — QEMU/KVM hypervisor daemon
   virtualisation.libvirtd = {
     enable = true;

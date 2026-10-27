@@ -1,6 +1,6 @@
 # LazyVim home-manager module via lazyvim-nix.
 # Provides a bleeding-edge LazyVim setup with catppuccin-mocha theme.
-{ inputs, ... }: {
+{inputs, ...}: {
   imports = [
     inputs.lazyvim-nix.homeManagerModules.default
   ];
