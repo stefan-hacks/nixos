@@ -9,16 +9,16 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Added treefmt-nix input to manage both formatting and dead code checking
+    # Hermes Agent Upstream Flake Input
+    hermes-agent = {
+      url = "github:NousResearch/hermes-agent";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # disko = {
-    #   url = "github:nix-community/disko/master";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
 
     nvf = {
       url = "github:notashelf/nvf/main";
@@ -53,8 +53,8 @@
   outputs = inputs @ {
     nixpkgs,
     home-manager,
+    hermes-agent,
     treefmt-nix,
-    # disko,
     ...
   }: let
     system = "x86_64-linux";
@@ -72,24 +72,29 @@
 
         modules = [
           home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = {inherit inputs;};
+            home-manager.users.stefan-hacks = {
+              imports = [
+                # Inject the module here where inputs are fully bound and ready
+                hermes-agent.homeManagerModules.default
+                ./user-level/home-manager/stefan-hacks/default.nix
+              ];
+            };
+          }
           ./hosts/${hostName}
         ];
       };
 
-    # Evaluate treefmt with Alejandra and Deadnix configured together
     treefmtEval = treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} {
       projectRootFile = "flake.nix";
-
-      # Enable Alejandra for pure structural formatting
       programs.alejandra.enable = true;
-
-      # Enable Deadnix to automatically track and strip unused variables
       programs.deadnix.enable = true;
     };
   in {
-    # Replaced the single nixfmt definition with the unified treefmt wrapper
     formatter.${system} = treefmtEval.config.build.wrapper;
-
     nixosConfigurations = nixpkgs.lib.genAttrs hostNames mkHost;
   };
 }

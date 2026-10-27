@@ -1,9 +1,5 @@
 # Home Manager entry point for stefan-hacks
-{
-  config,
-  inputs,
-  ...
-}: {
+{config, ...}: {
   imports = [
     ./programs/bash.nix
     ./programs/git.nix
@@ -14,7 +10,6 @@
     ./programs/zellij.nix
     ./programs/fastfetch.nix
     ./gnome
-    inputs.hermes-agent.homeManagerModules.default
   ];
 
   home.username = "stefan-hacks";
