@@ -1,7 +1,5 @@
 # Move this configuration block into your user-level Home Manager setup
 {
-  config,
-  pkgs,
   ...
 }: {
   programs.hermes-agent = {
