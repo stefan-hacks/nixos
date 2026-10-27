@@ -7,6 +7,7 @@
     ./programs/starship.nix
     ./programs/atuin.nix
     ./programs/helix.nix
+    ./programs/hermes.nix
     ./programs/zellij.nix
     ./programs/fastfetch.nix
     ./gnome
