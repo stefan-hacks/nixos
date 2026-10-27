@@ -25,9 +25,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Add the Hermes Flake input
-    hermes-agent.url = "github:NousResearch/hermes-agent";
-
     nixdatifier = {
       url = "github:Muddyblack/nixdatifier";
       inputs.nixpkgs.follows = "nixpkgs";
