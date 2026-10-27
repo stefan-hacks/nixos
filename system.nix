@@ -34,8 +34,6 @@
       "video"
       "audio"
       "dialout"
-      "libvirtd"
-      "kvm"
     ];
     # Password is managed imperatively or via agenix/sops
   };
