@@ -1,6 +1,5 @@
 # Virtualization support
 {
-  config,
   pkgs,
   ...
 }: {
@@ -16,9 +15,8 @@
       runAsRoot = false;
       ovmf = {
         enable = true;
-        packages = [ pkgs.OVMFFull.fd ];
-
-      } 
+        packages = [pkgs.OVMFFull.fd];
+      };
       # This helper ensures the user-space emulator can hook into network bridge interfaces
       verbatimConfig = ''
         bridge_helper = "${pkgs.qemu}/libexec/qemu-bridge-helper"
@@ -42,7 +40,5 @@
     qemu
     qemu_kvm
     libguestfs
-    nixos-generators
-    wget
   ];
 }
