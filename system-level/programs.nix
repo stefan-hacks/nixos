@@ -22,10 +22,6 @@
     enableBashIntegration = true;
   };
 
-  # hermes-desktop
-  programs.hermes-agent.enable = true;
-  services.hermes-agent.enable = true;
-
   # fzf — enable bash fuzzy completion and keybindings
   programs.fzf = {
     fuzzyCompletion = true;
