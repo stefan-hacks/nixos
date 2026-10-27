@@ -6,6 +6,7 @@
     ./programs/kitty.nix
     ./programs/starship.nix
     ./programs/atuin.nix
+    ./programs/hermes.nix
     ./programs/helix.nix
     ./programs/zellij.nix
     ./programs/fastfetch.nix
