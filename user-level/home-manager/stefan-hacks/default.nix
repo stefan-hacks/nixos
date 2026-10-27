@@ -23,21 +23,6 @@
   # Let Home Manager install and manage itself
   programs.home-manager.enable = true;
 
-  # Hermes
-  programs.hermes-agent = {
-    enable = true;
-    desktop.enable = true;
-  };
-
-  services.hermes-agent = {
-    enable = true;
-    gateway.enable = true;
-    backend.mode = "dashboard";
-    extraDependencyGroups = ["messaging"];
-
-    # Keeping settings blank preserves config.yaml mutability via the Desktop UI
-  };
-
   # ── Nixdatifier ──
   programs.nixdatifier = {
     enable = true;

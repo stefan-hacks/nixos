@@ -9,11 +9,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    hermes-agent = {
-      url = "github:NousResearch/hermes-agent";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -52,19 +47,12 @@
   outputs = inputs @ {
     nixpkgs,
     home-manager,
-    hermes-agent,
     treefmt-nix,
     ...
   }: let
     system = "x86_64-linux";
 
     hostNames = ["ghost" "titan" "minimal" "server"];
-
-    # ─── OVERLAY CONFIGURATION TO BYPASS PATCHELF BUILD FAILURE ───
-    hermesOverlay = _final: prev: {
-      # Overrides any package downstream inside hermes that requests a patched patchelf instance
-      patchelf = prev.patchelf;
-    };
 
     mkHost = hostName:
       nixpkgs.lib.nixosSystem {
@@ -76,9 +64,6 @@
         };
 
         modules = [
-          # Apply the overlay so nixpkgs evaluates cleanly across the host configuration
-          {nixpkgs.overlays = [hermesOverlay];}
-
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
@@ -86,7 +71,6 @@
             home-manager.extraSpecialArgs = {inherit inputs;};
             home-manager.users.stefan-hacks = {
               imports = [
-                hermes-agent.homeManagerModules.default
                 ./user-level/home-manager/stefan-hacks/default.nix
               ];
             };
