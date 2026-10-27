@@ -191,14 +191,9 @@ in {
     vms);
 
   # ── Ensure disk images exist (systemd tmpfiles) ──────────────────────────
-  # If a VM's qcow2 does not exist, create a sparse empty image.
-  # The VM will boot from CD-ROM (ISO) on first run, install NixOS to vda,
-  # then boot from vda on subsequent runs.
-  systemd.tmpfiles.rules =
-    lib.mapAttrsToList (
-      name: _vm: "f /var/lib/libvirt/images/${name}.qcow2 0640 qemu-libvirtd qemu-libvirtd -"
-    )
-    vms;
+  # NOT USED: we let the ensure-vm-disks service create proper qcow2 images.
+  # tmpfiles would create 0-byte files which block qemu-img create.
+  # systemd.tmpfiles.rules = ...;
 
   # ── Auto-create qcow2 disks on boot ──────────────────────────────────────
   systemd.services.ensure-vm-disks = {
@@ -210,8 +205,13 @@ in {
         set -euo pipefail
         mkdir -p /var/lib/libvirt/images
         ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: vm: ''
-            if [ ! -f /var/lib/libvirt/images/${name}.qcow2 ]; then
+            # Check if file exists AND is a valid qcow2 (not a 0-byte tmpfile)
+            if [ -f /var/lib/libvirt/images/${name}.qcow2 ] && \
+               ${pkgs.qemu}/bin/qemu-img info /var/lib/libvirt/images/${name}.qcow2 &>/dev/null; then
+              echo "${name}.qcow2 already exists and is valid."
+            else
               echo "Creating ${name}.qcow2 (${vm.diskSize})..."
+              rm -f /var/lib/libvirt/images/${name}.qcow2
               ${pkgs.qemu}/bin/qemu-img create -f qcow2 /var/lib/libvirt/images/${name}.qcow2 ${vm.diskSize}
             fi
           '')
