@@ -266,6 +266,7 @@
     jellyfin-tui
     kew
     yt-dlp
+    mpv
     cava
     chafa
     pomodoro

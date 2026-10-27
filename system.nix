@@ -21,7 +21,6 @@
     ./system-level/packages.nix
     ./system-level/theming.nix
     ./system-level/flatpak.nix
-    ./system-level/libvirt-vms.nix
   ];
 
   # System-level user account (Home Manager handles dotfiles and user config)
