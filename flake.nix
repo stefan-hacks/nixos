@@ -14,8 +14,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nvf = {
-      url = "github:notashelf/nvf/main";
+    lazyvim-nix = {
+      url = "github:pfassina/lazyvim-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -29,6 +29,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-flatpak = {
+      url = "github:gmodena/nix-flatpak/?ref=latest";
+    };
+
     vellum = {
       url = "github:blackhat-7/vellum.nvim";
       flake = false;
@@ -37,10 +41,6 @@
     kitty-scrollback = {
       url = "github:mikesmithgh/kitty-scrollback.nvim/v8.0.0";
       flake = false;
-    };
-
-    nix-flatpak = {
-      url = "github:gmodena/nix-flatpak/?ref=latest";
     };
   };
 

@@ -9,6 +9,7 @@
     ./programs/helix.nix
     ./programs/zellij.nix
     ./programs/fastfetch.nix
+    ./programs/lazyvim.nix
     ./gnome
   ];
 

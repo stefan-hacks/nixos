@@ -19,7 +19,6 @@
     ./system-level/services.nix
     ./system-level/virtualization.nix
     ./system-level/packages.nix
-    ./system-level/nvf.nix
     ./system-level/theming.nix
     ./system-level/flatpak.nix
   ];

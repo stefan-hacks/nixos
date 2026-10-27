@@ -12,8 +12,8 @@
 ┌─────────────────────────────────────────────────────────────────────┐
 │  flake.nix                                                          │
 │  ├── inputs: nixpkgs (26.05), home-manager (release-26.05),        │
-│  │          disko, nvf, nixdatifier, nix-graph,       │
-│  │          vellum, kitty-scrollback
+│  │          lazyvim-nix, nixdatifier, nix-graph,       │
+│  │          nix-flatpak, vellum, kitty-scrollback
 │  └── outputs: nixosConfigurations.{titan,ghost,minimal,server}       │
 │                                                                     │
 │  HOST (hosts/<host>/default.nix)                                    │
@@ -23,7 +23,7 @@
 │                                                                     │
 │  SYSTEM (system.nix)                                                │
 │  ├── system-level/  ──→  boot, desktop, audio, networking,        │
-│  │                         packages, nvf (maximal), security,      │
+│  │                         packages, flatpak, security,      │
 │  │                         maintenance, theming, virtualization       │
 │  └── users.users.stefan-hacks                                       │
 │                                                                     │
@@ -119,7 +119,7 @@ nix flake check
 │   ├── services.nix                # Printing, kanata
 │   ├── virtualization.nix          # QEMU/KVM, virt-manager
 │   ├── packages.nix                # System-wide packages (the big list)
-│   ├── nvf.nix                     # nvf maximal Neovim config
+│   ├── flatpak.nix                 # Declarative system-wide flatpak apps
 │
 └── user-level/home-manager/stefan-hacks/   # HM user config
     ├── default.nix                 # HM entry point
@@ -156,11 +156,12 @@ nix flake check
 | `nixpkgs`          | `github:NixOS/nixpkgs/nixos-26.05`                | stable     | **Primary package set**               |
 | `home-manager`     | `github:nix-community/home-manager/release-26.05` | stable     | Per-user dotfiles + programs          |
 | `disko`            | `github:nix-community/disko/master`               | master     | Declarative disk partitioning         |
-| `nvf`              | `github:notashelf/nvf/main`                       | main       | Neovim configuration framework        |
 | `nixdatifier`      | `github:Muddyblack/nixdatifier`                   | master     | NixOS desktop widget + TUI            |
 | `nix-graph`        | `github:AlexAntonik/nix-graph`                    | default    | Interactive Nix dependency graph TUI  |
-| `vellum`           | `github:blackhat-7/vellum.nvim`                   | —          | nvf extraPlugin (flake = false)       |
-| `kitty-scrollback` | `github:mikesmithgh/kitty-scrollback.nvim/v8.0.0` | v8.0.0     | nvf extraPlugin (flake = false)       |
+| `nix-flatpak`      | `github:gmodena/nix-flatpak`                      | latest     | Declarative system-wide flatpaks      |
+| `lazyvim-nix`      | `github:pfassina/lazyvim-nix`                     | main       | LazyVim home-manager module             |
+| `vellum`           | `github:blackhat-7/vellum.nvim`                   | —          | Extra nvim plugin (flake = false)     |
+| `kitty-scrollback` | `github:mikesmithgh/kitty-scrollback.nvim/v8.0.0` | v8.0.0     | Kitty scrollback nvim plugin          |
 
 > **Stable-first policy:** All inputs use nixos-26.05 / release-26.05 where
 > available. GUI applications that need fresher versions are managed via
@@ -286,26 +287,16 @@ aliases covering:
 
 See `user-level/home-manager/stefan-hacks/programs/bash.nix` for the full list.
 
-### Neovim (nvf maximal)
+### Neovim (LazyVim via lazyvim-nix)
 
-The `nvf.nix` module enables the **maximal bundled configuration**:
+Neovim is configured via [lazyvim-nix](https://github.com/pfassina/lazyvim-nix) as a Home Manager module:
 
-- **Autocomplete:** `blink-cmp` (rust fuzzy matcher)
-- **LSP:** rust-analyzer, nixd, bashls, jsonls, yamlls, taplo, clangd, gopls,
-  pylsp, lua_ls, tsserver, java-language-server, kotlin-language-server, texlab,
-  dockerls, sqlls
-- **Languages:** nix, bash, rust, go, python, typescript, java, kotlin, zig,
-  lua, typst, tex, json, toml, yaml, xml, docker, html, css, scss, cmake, sql,
-  markdown
-- **Extra plugins:** vellum.nvim, kitty-scrollback.nvim
-- **Git:** gitsigns, neogit
-- **UI:** alpha dashboard, noice, colorizer, illuminate, fidget,
-  indent-blankline
-- **Motion:** hop, leap, precognition
-- **Terminal:** toggleterm + lazygit
+- **Distribution:** LazyVim (bleeding-edge, auto-tracks upstream releases)
+- **Theme:** catppuccin-mocha
+- **Languages:** Handled by LazyVim extras (enable as needed)
+- **Config:** `user-level/home-manager/stefan-hacks/programs/lazyvim.nix`
 
-> **Note:** Building nvf maximal downloads many language servers. The first
-> build may take a while. The `nvf` cachix cache is recommended.
+> **Note:** LazyVim downloads plugins on first launch. The initial `nvim` start may take a moment while lazy.nvim bootstraps.
 
 ---
 
@@ -447,7 +438,7 @@ Included in `system-level/packages.nix`:
 | **Stable-first**                    | `nixpkgs` and `home-manager` both track 26.05 stable. GUI apps needing newer versions are installed via declarative flatpaks. |
 | **Single `system.nix` entry point** | One file imports all shared system modules. Adding a module is one line — it applies fleet-wide.                        |
 | **nix-my-gnome for dconf**          | GNOME settings are generated from a live dconf dump, not hand-edited. Reproducible and version-controlled.              |
-| **nvf maximal**                     | Full language support + IDE-like features (LSP, debugging, completions, git integration) out of the box.                |
+| **LazyVim**                         | Bleeding-edge LazyVim via lazyvim-nix with catppuccin-mocha theme. Plugins auto-track upstream releases.                              |
 | **Convention-based bash aliases**   | `Downloads/_bash_aliases` is the canonical source. Aliases are extracted and embedded into `bash.nix` automatically.    |
 
 ---

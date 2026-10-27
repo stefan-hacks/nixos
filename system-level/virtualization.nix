@@ -13,10 +13,6 @@
     qemu = {
       package = pkgs.qemu_kvm;
       runAsRoot = false;
-      ovmf = {
-        enable = true;
-        packages = [pkgs.OVMFFull.fd];
-      };
       # This helper ensures the user-space emulator can hook into network bridge interfaces
       verbatimConfig = ''
         bridge_helper = "${pkgs.qemu}/libexec/qemu-bridge-helper"
@@ -35,7 +31,6 @@
 
   environment.systemPackages = with pkgs; [
     virt-manager
-    virt-install
     virt-viewer
     qemu
     qemu_kvm

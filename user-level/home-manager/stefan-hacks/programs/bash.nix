@@ -45,6 +45,7 @@
     c = "clear";
     e = "exit";
     v = "vim";
+    nv = "nvim";
     b = "btop";
     h = "history";
     j = "jobs -l";
