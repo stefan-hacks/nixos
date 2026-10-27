@@ -9,7 +9,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Hermes Agent Upstream Flake Input
     hermes-agent = {
       url = "github:NousResearch/hermes-agent";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -61,6 +60,12 @@
 
     hostNames = ["ghost" "titan" "minimal" "server"];
 
+    # ─── OVERLAY CONFIGURATION TO BYPASS PATCHELF BUILD FAILURE ───
+    hermesOverlay = _final: prev: {
+      # Overrides any package downstream inside hermes that requests a patched patchelf instance
+      patchelf = prev.patchelf;
+    };
+
     mkHost = hostName:
       nixpkgs.lib.nixosSystem {
         inherit system;
@@ -71,6 +76,9 @@
         };
 
         modules = [
+          # Apply the overlay so nixpkgs evaluates cleanly across the host configuration
+          {nixpkgs.overlays = [hermesOverlay];}
+
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
@@ -78,7 +86,6 @@
             home-manager.extraSpecialArgs = {inherit inputs;};
             home-manager.users.stefan-hacks = {
               imports = [
-                # Inject the module here where inputs are fully bound and ready
                 hermes-agent.homeManagerModules.default
                 ./user-level/home-manager/stefan-hacks/default.nix
               ];
