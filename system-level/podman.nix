@@ -14,7 +14,7 @@
   virtualisation.oci-containers.backend = "podman";
   virtualisation.oci-containers.containers = {
     debian = {
-      image = "docker.io/library/debian:bookworm-slim";
+      image = "docker.io/library/debian:latest";
       autoStart = true;
       ports = ["127.0.0.1:2222:22"];
       volumes = [
