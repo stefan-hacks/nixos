@@ -1,6 +1,6 @@
 # git.nix — Home Manager git configuration
 # All git aliases live here (not in bash.nix) so git provides tab-completion.
-{pkgs, ...}: let
+{ pkgs, ... }: let
   # Complex shell-based alias: auto-commit with human-readable summary
   gitLazy = pkgs.writeShellScriptBin "git-lazy" ''
     set -e
@@ -39,98 +39,98 @@ in {
   programs.git = {
     enable = true;
 
-    userName = "stefan-hacks";
-    userEmail = "stefanmrobertson@gmail.com";
+    settings = {
+      user.name = "stefan-hacks";
+      user.email = "stefanmrobertson@gmail.com";
 
-    extraConfig = {
       credential."https://github.com".helper = "!gh auth git-credential";
       credential."https://gist.github.com".helper = "!gh auth git-credential";
+
       init.defaultBranch = "main";
       push.autoSetupRemote = true;
       pull.rebase = false;
       fetch.prune = true;
       log.date = "iso";
-    };
 
-    # ── Power-programmer aliases ──
-    # Simple aliases: git <alias> maps to git <command>
-    aliases = {
-      # ── Basics ──
-      s = "status -sb"; # short status with branch
-      st = "status"; # full status
-      ss = "status --short"; # minimal status
+      # ── Power-programmer aliases ──
+      alias = {
+        # ── Basics ──
+        s = "status -sb";
+        st = "status";
+        ss = "status --short";
 
-      # ── Staging ──
-      a = "add"; # stage file
-      aa = "add -A"; # stage all
-      ap = "add -p"; # stage patch interactively
-      unstage = "restore --staged"; # unstage file
-      unstage-all = "restore --staged :"; # unstage everything
-      co = "checkout"; # checkout file/branch
-      cob = "checkout -b"; # create and switch to branch
+        # ── Staging ──
+        a = "add";
+        aa = "add -A";
+        ap = "add -p";
+        unstage = "restore --staged";
+        "unstage-all" = "restore --staged :";
+        co = "checkout";
+        cob = "checkout -b";
 
-      # ── Committing ──
-      ci = "commit"; # commit
-      cm = "commit -m"; # commit with message
-      amend = "commit --amend"; # amend last commit
-      amendn = "commit --amend --no-edit"; # amend without editing message
-      undo = "reset --soft HEAD~1"; # undo last commit (keep changes)
-      undo-hard = "reset --hard HEAD~1"; # undo last commit (discard)
-      wip = "!git add -A && git commit -m 'wip: save point'"; # quick save
+        # ── Committing ──
+        ci = "commit";
+        cm = "commit -m";
+        amend = "commit --amend";
+        amendn = "commit --amend --no-edit";
+        undo = "reset --soft HEAD~1";
+        "undo-hard" = "reset --hard HEAD~1";
+        wip = "!git add -A && git commit -m 'wip: save point'";
 
-      # ── Branching ──
-      br = "branch"; # list branches
-      brv = "branch -vv"; # verbose branch list
-      brd = "branch -d"; # delete branch
-      brD = "branch -D"; # force delete branch
-      sw = "switch"; # switch branch
-      swc = "switch -c"; # create and switch
-      rename = "branch -m"; # rename current branch
-      current = "rev-parse --abbrev-ref HEAD"; # show current branch name
+        # ── Branching ──
+        br = "branch";
+        brv = "branch -vv";
+        brd = "branch -d";
+        brD = "branch -D";
+        sw = "switch";
+        swc = "switch -c";
+        rename = "branch -m";
+        current = "rev-parse --abbrev-ref HEAD";
 
-      # ── Diff ──
-      d = "diff"; # diff unstaged
-      ds = "diff --staged"; # diff staged
-      dw = "diff --word-diff"; # word-level diff
-      last = "diff HEAD~1"; # diff last commit
+        # ── Diff ──
+        d = "diff";
+        ds = "diff --staged";
+        dw = "diff --word-diff";
+        last = "diff HEAD~1";
 
-      # ── Log / History ──
-      l = "log --oneline --graph --decorate --all -20"; # compact log
-      lg = "log --oneline --graph --decorate --all"; # full compact log
-      lga = "log --oneline --graph --decorate --all --branches"; # all branches
-      hist = "log --pretty=format:'%C(yellow)%h%Creset %C(cyan)%ad%Creset %C(blue)%an%Creset %s' --date=short --graph"; # detailed log
-      who = "log -p -M --follow --stat --"; # who changed this file
-      contributors = "shortlog -sne"; # contributor stats
+        # ── Log / History ──
+        l = "log --oneline --graph --decorate --all -20";
+        lg = "log --oneline --graph --decorate --all";
+        lga = "log --oneline --graph --decorate --all --branches";
+        hist = "log --pretty=format:'%C(yellow)%h%Creset %C(cyan)%ad%Creset %C(blue)%an%Creset %s' --date=short --graph";
+        who = "log -p -M --follow --stat --";
+        contributors = "shortlog -sne";
 
-      # ── Remote / Sync ──
-      p = "push"; # push current branch
-      pf = "push --force-with-lease"; # safer force push
-      pl = "pull"; # pull
-      f = "fetch --all --prune"; # fetch all remotes, prune stale
-      fa = "fetch --all"; # fetch all remotes
-      pt = "push --tags"; # push tags
+        # ── Remote / Sync ──
+        p = "push";
+        pf = "push --force-with-lease";
+        pl = "pull";
+        f = "fetch --all --prune";
+        fa = "fetch --all";
+        pt = "push --tags";
 
-      # ── Stash ──
-      stash = "stash"; # stash changes
-      stp = "stash pop"; # pop stash
-      sta = "stash apply"; # apply stash (keep in list)
-      sts = "stash show -p"; # show stash diff
-      stl = "stash list"; # list stashes
+        # ── Stash ──
+        stash = "stash";
+        stp = "stash pop";
+        sta = "stash apply";
+        sts = "stash show -p";
+        stl = "stash list";
 
-      # ── Cherry-pick / Rebase ──
-      cp = "cherry-pick"; # cherry-pick commit
-      cpnc = "cherry-pick --no-commit"; # cherry-pick without commit
-      rb = "rebase"; # rebase
-      rbi = "rebase -i"; # interactive rebase
-      rba = "rebase --abort"; # abort rebase
-      rbc = "rebase --continue"; # continue rebase
+        # ── Cherry-pick / Rebase ──
+        cp = "cherry-pick";
+        cpnc = "cherry-pick --no-commit";
+        rb = "rebase";
+        rbi = "rebase -i";
+        rba = "rebase --abort";
+        rbc = "rebase --continue";
 
-      # ── Cleanup ──
-      cleanup = "!git fetch --all --prune && git branch -vv | grep ': gone]' | awk '{print \\$1}' | xargs -r git branch -D"; # remove merged branches
-      nuke = "!git reset --hard HEAD && git clean -fd"; # discard ALL changes
+        # ── Cleanup ──
+        cleanup = "!git fetch --all --prune && git branch -vv | grep ': gone]' | awk '{print \$1}' | xargs -r git branch -D";
+        nuke = "!git reset --hard HEAD && git clean -fd";
 
-      # ── Lazy auto-commit ──
-      lazy = "!${gitLazy}/bin/git-lazy";
+        # ── Lazy auto-commit ──
+        lazy = "!${gitLazy}/bin/git-lazy";
+      };
     };
   };
 }
