@@ -60,6 +60,7 @@
     sv = "sudoedit";
     showpath = "echo \"$PATH\" | tr : '\\n' | nl";
     biggest = "du -ah . | sort -rh | head -20";
+    cheat="tldr"
   };
 
   # eza replaces ls
