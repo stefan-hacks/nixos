@@ -356,6 +356,7 @@ in {
 
         export NIXCFG="''${NIXCFG:-$HOME/.config/nixos}"   # flake location, used by the n* helpers
         export EDITOR=vim
+        export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
         set -o vi
 
         _have() { command -v "$1" >/dev/null 2>&1; }
