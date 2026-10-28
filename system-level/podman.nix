@@ -29,22 +29,14 @@
           apt-get update -qq
           apt-get install -y -qq openssh-server
 
-          mkdir -p /root/.ssh /var/run/sshd
-          chmod 700 /root/.ssh
-
-          for key in /tmp/host-ssh/id_ed25519.pub /tmp/host-ssh/id_rsa.pub /tmp/host-ssh/id_ecdsa.pub; do
-            if [ -f "$key" ]; then
-              cp "$key" /root/.ssh/authorized_keys
-              chmod 600 /root/.ssh/authorized_keys
-              break
-            fi
-          done
+          mkdir -p /var/run/sshd
 
           {
-            echo "PermitRootLogin prohibit-password"
-            echo "PasswordAuthentication no"
-            echo "PubkeyAuthentication yes"
+            echo "PermitRootLogin yes"
+            echo "PasswordAuthentication yes"
           } >> /etc/ssh/sshd_config
+
+          echo 'root:root' | chpasswd
 
           [ ! -f /etc/ssh/ssh_host_ed25519_key ] && ssh-keygen -A
 
@@ -66,22 +58,14 @@
           set -e
           dnf install -y openssh-server
 
-          mkdir -p /root/.ssh /var/run/sshd
-          chmod 700 /root/.ssh
-
-          for key in /tmp/host-ssh/id_ed25519.pub /tmp/host-ssh/id_rsa.pub /tmp/host-ssh/id_ecdsa.pub; do
-            if [ -f "$key" ]; then
-              cp "$key" /root/.ssh/authorized_keys
-              chmod 600 /root/.ssh/authorized_keys
-              break
-            fi
-          done
+          mkdir -p /var/run/sshd
 
           {
-            echo "PermitRootLogin prohibit-password"
-            echo "PasswordAuthentication no"
-            echo "PubkeyAuthentication yes"
+            echo "PermitRootLogin yes"
+            echo "PasswordAuthentication yes"
           } >> /etc/ssh/sshd_config
+
+          echo 'root:root' | chpasswd
 
           [ ! -f /etc/ssh/ssh_host_ed25519_key ] && ssh-keygen -A
 
