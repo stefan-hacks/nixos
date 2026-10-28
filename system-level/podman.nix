@@ -1,10 +1,10 @@
 # Podman + declarative containers (system-level)
 # Provides a Debian and Rocky Linux container accessible via SSH on localhost ports.
-{ pkgs, ... }: {
+{pkgs, ...}: {
   # ── Podman daemonless container engine ──
   virtualisation.podman = {
     enable = true;
-    dockerCompat = true;                     # `docker` → `podman` alias
+    dockerCompat = true; # `docker` → `podman` alias
     defaultNetwork.settings.dns_enabled = true; # DNS for inter-container comms
   };
 
@@ -16,13 +16,14 @@
     debian = {
       image = "docker.io/library/debian:bookworm-slim";
       autoStart = true;
-      ports = [ "127.0.0.1:2222:22" ];
+      ports = ["127.0.0.1:2222:22"];
       volumes = [
         "/home/stefan-hacks/.ssh:/tmp/host-ssh:ro"
       ];
       # Run setup inside the container (no access to host /nix/store)
       cmd = [
-        "bash" "-c"
+        "bash"
+        "-c"
         ''
           set -e
           export DEBIAN_FRONTEND=noninteractive
@@ -48,12 +49,13 @@
     rocky = {
       image = "docker.io/library/rockylinux:9";
       autoStart = true;
-      ports = [ "127.0.0.1:2223:22" ];
+      ports = ["127.0.0.1:2223:22"];
       volumes = [
         "/home/stefan-hacks/.ssh:/tmp/host-ssh:ro"
       ];
       cmd = [
-        "bash" "-c"
+        "bash"
+        "-c"
         ''
           set -e
           dnf install -y openssh-server
@@ -83,5 +85,5 @@
     skopeo
   ];
 
-  users.users."stefan-hacks".extraGroups = [ "podman" ];
+  users.users."stefan-hacks".extraGroups = ["podman"];
 }
