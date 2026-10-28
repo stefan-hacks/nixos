@@ -18,7 +18,7 @@
       autoStart = true;
       ports = [ "127.0.0.1:2222:22" ];
       volumes = [
-        "/home/stefan-hacks/.ssh:/root/.ssh:ro"
+        "/home/stefan-hacks/.ssh:/tmp/host-ssh:ro"
       ];
       # Run setup inside the container (no access to host /nix/store)
       cmd = [
@@ -32,7 +32,7 @@
           mkdir -p /root/.ssh /var/run/sshd
           chmod 700 /root/.ssh
 
-          for key in /root/.ssh/id_ed25519.pub /root/.ssh/id_rsa.pub /root/.ssh/id_ecdsa.pub; do
+          for key in /tmp/host-ssh/id_ed25519.pub /tmp/host-ssh/id_rsa.pub /tmp/host-ssh/id_ecdsa.pub; do
             if [ -f "$key" ]; then
               cp "$key" /root/.ssh/authorized_keys
               chmod 600 /root/.ssh/authorized_keys
@@ -58,7 +58,7 @@
       autoStart = true;
       ports = [ "127.0.0.1:2223:22" ];
       volumes = [
-        "/home/stefan-hacks/.ssh:/root/.ssh:ro"
+        "/home/stefan-hacks/.ssh:/tmp/host-ssh:ro"
       ];
       cmd = [
         "bash" "-c"
@@ -69,7 +69,7 @@
           mkdir -p /root/.ssh /var/run/sshd
           chmod 700 /root/.ssh
 
-          for key in /root/.ssh/id_ed25519.pub /root/.ssh/id_rsa.pub /root/.ssh/id_ecdsa.pub; do
+          for key in /tmp/host-ssh/id_ed25519.pub /tmp/host-ssh/id_rsa.pub /tmp/host-ssh/id_ecdsa.pub; do
             if [ -f "$key" ]; then
               cp "$key" /root/.ssh/authorized_keys
               chmod 600 /root/.ssh/authorized_keys
