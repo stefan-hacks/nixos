@@ -245,6 +245,15 @@
     kx = "kubectl exec -it";
     kctx = "kubectl config use-context";
 
+    # k8s extras
+    ks = "k9s";
+    hl = "helm";
+    hli = "helm install";
+    hlun = "helm uninstall";
+    hlst = "helm status";
+    kns = "kubens";
+    kctxn = "kubectx";
+
     # terraform / ansible / direnv
     tf = "terraform";
     tfi = "terraform init";
