@@ -1,5 +1,5 @@
 # System-wide program configuration
-{...}: {
+_: {
   # programs.firefox.enable = true;
   programs.gpaste.enable = true;
   programs.starship.enable = true;

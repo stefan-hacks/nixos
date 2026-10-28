@@ -1,7 +1,5 @@
 # Logging and audit configuration
-{
-  ...
-}: {
+_: {
   services.logrotate = {
     enable = true;
     # Native NixOS options wrap formatting neatly without defaulting to dry-run states

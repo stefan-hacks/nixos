@@ -1,7 +1,5 @@
 # Fail2ban intrusion prevention
-{
-  ...
-}: {
+_: {
   services.fail2ban = {
     enable = true;
     maxretry = 5;

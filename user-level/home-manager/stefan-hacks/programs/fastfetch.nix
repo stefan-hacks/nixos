@@ -1,7 +1,5 @@
 # fastfetch.nix — Home Manager fastfetch system info
-{
-  ...
-}: {
+_: {
   programs.fastfetch = {
     enable = true;
   };

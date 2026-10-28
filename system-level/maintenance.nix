@@ -1,7 +1,5 @@
 # System maintenance and auto-upgrade
-{
-  ...
-}: {
+_: {
   system.autoUpgrade = {
     enable = true;
 

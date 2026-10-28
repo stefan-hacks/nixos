@@ -1,5 +1,5 @@
 # Nix package manager settings
-{...}: {
+_: {
   nixpkgs.config.allowUnfree = true;
 
   # nix.nixPath is used by `nix-shell`, `nix repl`, and tools that use

@@ -1,8 +1,6 @@
 # kitty.nix — Home Manager kitty terminal configuration
 # Includes kitty-scrollback.nvim integration and Catppuccin themes.
-{
-  ...
-}: let
+_: let
   # Catppuccin-Mocha theme (dark)
   darkTheme = ''
     # vim:ft=kitty

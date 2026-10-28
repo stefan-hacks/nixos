@@ -1,7 +1,5 @@
 # Firewall configuration
-{
-  ...
-}: {
+_: {
   networking.firewall = {
     enable = true;
     # Allow TCP ports.

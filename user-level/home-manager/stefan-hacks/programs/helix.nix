@@ -1,7 +1,5 @@
 # helix.nix — Home Manager helix configuration
-{
-  ...
-}: {
+_: {
   programs.helix = {
     enable = true;
     settings = {

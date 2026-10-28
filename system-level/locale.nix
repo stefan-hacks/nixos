@@ -1,7 +1,5 @@
 # Locale and timezone
-{
-  ...
-}: {
+_: {
   # Set your time zone.
   time.timeZone = "America/Sao_Paulo";
 

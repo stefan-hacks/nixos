@@ -1,7 +1,5 @@
 # starship.nix — Home Manager starship prompt (Nerd Font Symbols Preset)
-{
-  ...
-}: {
+_: {
   programs.starship = {
     enable = true;
     enableBashIntegration = true;

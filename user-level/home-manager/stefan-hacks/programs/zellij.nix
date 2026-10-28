@@ -1,6 +1,6 @@
 # Zellij terminal multiplexer — Home Manager module
 # Config lives in ./zellij-config.kdl and is symlinked to ~/.config/zellij/config.kdl
-{ ...}: {
+_: {
   programs.zellij = {
     enable = true;
   };

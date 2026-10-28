@@ -1,7 +1,5 @@
 # atuin.nix — Home Manager atuin shell history
-{
-  ...
-}: {
+_: {
   programs.atuin = {
     enable = true;
     enableBashIntegration = true;
