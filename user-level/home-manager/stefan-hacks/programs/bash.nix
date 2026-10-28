@@ -47,6 +47,7 @@
     v = "vim";
     nv = "nvim";
     src = "source ~/.bashrc";
+    lg = "lazygit";
     b = "btop";
     h = "history";
     j = "jobs -l";
@@ -60,7 +61,7 @@
     sv = "sudoedit";
     showpath = "echo \"$PATH\" | tr : '\\n' | nl";
     biggest = "du -ah . | sort -rh | head -20";
-    cheat="tldr";
+    cheat = "tldr";
   };
 
   # eza replaces ls
@@ -183,38 +184,6 @@
     cln30 = "sudo nix-collect-garbage --delete-older-than 30d";
   };
 
-  git = {
-    g = "git";
-    ga = "git add";
-    gaa = "git add -A";
-    gap = "git add -p";
-    gb = "git branch -a";
-    gc = "git commit -m";
-    gca = "git commit --amend";
-    gcan = "git commit --amend --no-edit";
-    gco = "git checkout";
-    gcb = "git checkout -b";
-    gsw = "git switch";
-    gswc = "git switch -c";
-    gcp = "git cherry-pick";
-    gd = "git diff";
-    gds = "git diff --staged";
-    gf = "git fetch --all --prune";
-    gl = "git log --oneline --graph --decorate --all";
-    gm = "git merge";
-    gp = "git push";
-    gpl = "git pull";
-    gr = "git rebase";
-    gri = "git rebase -i";
-    grs = "git restore";
-    grss = "git restore --staged";
-    gs = "git status -sb";
-    gst = "git stash";
-    gstp = "git stash pop";
-    gwt = "git worktree";
-    lg = "lazygit";
-  };
-
   infra = {
     # docker / podman
     dc = "docker compose";
@@ -279,7 +248,6 @@
     "systemd" = systemd;
     "network & ssh" = network;
     "nix" = nix;
-    "git" = git;
     "containers, kubernetes, terraform, ansible" = infra;
   };
 
