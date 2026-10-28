@@ -1,46 +1,6 @@
 # Podman + declarative containers (system-level)
 # Provides a Debian and Rocky Linux container accessible via SSH on localhost ports.
-{ pkgs, ... }: let
-  sshSetupScript = pkgs.writeShellScriptBin "container-ssh-setup" ''
-    set -e
-    # Install OpenSSH server (Debian vs Rocky paths differ)
-    if command -v apt-get >/dev/null 2>&1; then
-      export DEBIAN_FRONTEND=noninteractive
-      apt-get update -qq
-      apt-get install -y -qq openssh-server >/dev/null 2>&1
-    elif command -v dnf >/dev/null 2>&1; then
-      dnf install -y openssh-server >/dev/null 2>&1
-    elif command -v yum >/dev/null 2>&1; then
-      yum install -y openssh-server >/dev/null 2>&1
-    fi
-
-    mkdir -p /root/.ssh /var/run/sshd
-    chmod 700 /root/.ssh
-
-    # Authorise the host user's public key if mounted
-    for key in /root/.ssh/id_ed25519.pub /root/.ssh/id_rsa.pub /root/.ssh/id_ecdsa.pub; do
-      if [ -f "$key" ]; then
-        cp "$key" /root/.ssh/authorized_keys
-        chmod 600 /root/.ssh/authorized_keys
-        break
-      fi
-    done
-
-    # Force key-only auth for root
-    {
-      echo "PermitRootLogin prohibit-password"
-      echo "PasswordAuthentication no"
-      echo "PubkeyAuthentication yes"
-    } >> /etc/ssh/sshd_config
-
-    # Generate host keys if missing (containers often ship without them)
-    if [ ! -f /etc/ssh/ssh_host_ed25519_key ]; then
-      ssh-keygen -A
-    fi
-
-    exec /usr/sbin/sshd -D
-  '';
-in {
+{ pkgs, ... }: {
   # ── Podman daemonless container engine ──
   virtualisation.podman = {
     enable = true;
@@ -60,7 +20,37 @@ in {
       volumes = [
         "/home/stefan-hacks/.ssh:/root/.ssh:ro"
       ];
-      cmd = [ "${sshSetupScript}/bin/container-ssh-setup" ];
+      # Run setup inside the container (no access to host /nix/store)
+      cmd = [
+        "bash" "-c"
+        ''
+          set -e
+          export DEBIAN_FRONTEND=noninteractive
+          apt-get update -qq
+          apt-get install -y -qq openssh-server
+
+          mkdir -p /root/.ssh /var/run/sshd
+          chmod 700 /root/.ssh
+
+          for key in /root/.ssh/id_ed25519.pub /root/.ssh/id_rsa.pub /root/.ssh/id_ecdsa.pub; do
+            if [ -f "$key" ]; then
+              cp "$key" /root/.ssh/authorized_keys
+              chmod 600 /root/.ssh/authorized_keys
+              break
+            fi
+          done
+
+          {
+            echo "PermitRootLogin prohibit-password"
+            echo "PasswordAuthentication no"
+            echo "PubkeyAuthentication yes"
+          } >> /etc/ssh/sshd_config
+
+          [ ! -f /etc/ssh/ssh_host_ed25519_key ] && ssh-keygen -A
+
+          exec /usr/sbin/sshd -D
+        ''
+      ];
     };
 
     rocky = {
@@ -70,7 +60,34 @@ in {
       volumes = [
         "/home/stefan-hacks/.ssh:/root/.ssh:ro"
       ];
-      cmd = [ "${sshSetupScript}/bin/container-ssh-setup" ];
+      cmd = [
+        "bash" "-c"
+        ''
+          set -e
+          dnf install -y openssh-server
+
+          mkdir -p /root/.ssh /var/run/sshd
+          chmod 700 /root/.ssh
+
+          for key in /root/.ssh/id_ed25519.pub /root/.ssh/id_rsa.pub /root/.ssh/id_ecdsa.pub; do
+            if [ -f "$key" ]; then
+              cp "$key" /root/.ssh/authorized_keys
+              chmod 600 /root/.ssh/authorized_keys
+              break
+            fi
+          done
+
+          {
+            echo "PermitRootLogin prohibit-password"
+            echo "PasswordAuthentication no"
+            echo "PubkeyAuthentication yes"
+          } >> /etc/ssh/sshd_config
+
+          [ ! -f /etc/ssh/ssh_host_ed25519_key ] && ssh-keygen -A
+
+          exec /usr/sbin/sshd -D
+        ''
+      ];
     };
   };
 
@@ -82,6 +99,5 @@ in {
     skopeo
   ];
 
-  # Allow stefan-hacks to manage rootless podman too
   users.users."stefan-hacks".extraGroups = [ "podman" ];
 }
