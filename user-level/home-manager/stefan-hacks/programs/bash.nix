@@ -166,6 +166,10 @@
 
     # per-host rebuilds, full commands ($NIXCFG = flake dir, so they work anywhere)
     nrb = "sudo nixos-rebuild switch --rollback";
+    nrbt = "sudo nixos-rebuild dry-build --flake .#titan";
+    nrbm = "sudo nixos-rebuild dry-build --flake .#minimal";
+    nrbs = "sudo nixos-rebuild dry-build --flake .#server";
+    nrbg = "sudo nixos-rebuild dry-build --flake .#ghost";
     nrst = "sudo nixos-rebuild switch --flake .#titan";
     nrsm = "sudo nixos-rebuild switch --flake .#minimal";
     nrss = "sudo nixos-rebuild switch --flake .#server";
