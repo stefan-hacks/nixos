@@ -1,6 +1,6 @@
 # git.nix — Home Manager git configuration
 # All git aliases live here (not in bash.nix) so git provides tab-completion.
-{ pkgs, ... }: let
+{pkgs, ...}: let
   # Complex shell-based alias: auto-commit with human-readable summary
   gitLazy = pkgs.writeShellScriptBin "git-lazy" ''
     set -e
