@@ -46,6 +46,7 @@
     e = "exit";
     v = "vim";
     nv = "nvim";
+    src = "source ~/.bashrc";
     b = "btop";
     h = "history";
     j = "jobs -l";
