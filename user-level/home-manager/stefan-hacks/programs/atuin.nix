@@ -1,8 +1,11 @@
 # atuin.nix — Home Manager atuin shell history
+# NOTE: enableBashIntegration is disabled here because bash.nix handles atuin
+# initialization manually at initExtra order 2100 (after ble-attach), ensuring
+# atuin detects BLE_ATTACHED and sets up ble.sh-compatible keybindings.
 _: {
   programs.atuin = {
     enable = true;
-    enableBashIntegration = true;
+    enableBashIntegration = false;
 
     settings = {
       sync_address = "https://api.atuin.sh";

@@ -112,7 +112,7 @@
     la = "${base} -a";
     lla = "${base} -la --header";
     lt = "${base} --tree --level=2";
-    lta = "${base} -a --tree --level=2";
+    lta = "${base} -a --tree --level=3";
     lgi = "${base} --tree --git-ignore"; # tree, respecting .gitignore
     lS = "${base} -la --header --sort=size --reverse"; # biggest first
     lm = "${base} -la --header --sort=modified --reverse"; # newest first
@@ -335,10 +335,6 @@ in {
     enableBashIntegration = lib.mkForce false;
   };
 
-  # atuin itself is enabled in atuin.nix; its bash hook is started by hand below
-  # (initExtra) so it loads after ble.sh and does not use bash-preexec
-  programs.atuin.enableBashIntegration = lib.mkForce false;
-
   home.file.".bash_aliases".text = bashAliases + "\n";
 
   # ---------------------------------------------------------------------------
@@ -480,8 +476,8 @@ in {
         kns() { kubectl config set-context --current --namespace="''${1:?usage: kns <namespace>}"; }
       ''
       (lib.mkOrder 1900 ''
-        # atuin after ble.sh so it hooks ble's history; after fzf so Ctrl-R is atuin's
-        if _have atuin; then eval "$(atuin init bash)"; fi
+        # (placeholder) fzf bash integration is already handled by
+        # programs.fzf.enableBashIntegration in the HM fzf module.
       '')
       (lib.mkOrder 1950 ''
         # zoxide must initialise last (after starship/atuin). ble.sh runs the prompt
@@ -492,6 +488,12 @@ in {
       (lib.mkOrder 2000 ''
         # ble.sh attaches LAST, once every other prompt/key hook is registered
         [[ ! ''${BLE_VERSION-} ]] || ble-attach
+      '')
+      (lib.mkOrder 2100 ''
+        # atuin AFTER ble-attach so it detects BLE_ATTACHED and sets up ble.sh-
+        # compatible keybindings. Running before ble-attach causes plain-bash
+        # bind settings that ble.sh ignores, so up arrow prints "A5" garbage.
+        if _have atuin; then eval "$(atuin init bash)"; fi
       '')
     ];
   };
