@@ -12,7 +12,8 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   # `colourify <cmd>` runs a command through grc. Aliases that need quoting
   # tricks or logic are functions further down instead.
   colourised =
@@ -61,6 +62,8 @@
     sv = "sudoedit";
     showpath = "echo \"$PATH\" | tr : '\\n' | nl";
     biggest = "du -ah . | sort -rh | head -20";
+    ff = "fastfetch";
+    cpu = "cpufetch";
     cheat = "tldr";
   };
 
@@ -102,19 +105,21 @@
   };
 
   # eza replaces ls
-  eza = let
-    base = "eza --icons=auto --git --group-directories-first";
-  in {
-    ls = base;
-    ll = "${base} -l --header";
-    la = "${base} -a";
-    lla = "${base} -la --header";
-    lt = "${base} --tree --level=2";
-    lta = "${base} -a --tree --level=2";
-    lgi = "${base} --tree --git-ignore"; # tree, respecting .gitignore
-    lS = "${base} -la --header --sort=size --reverse"; # biggest first
-    lm = "${base} -la --header --sort=modified --reverse"; # newest first
-  };
+  eza =
+    let
+      base = "eza --icons=auto --git --group-directories-first";
+    in
+    {
+      ls = base;
+      ll = "${base} -l --header";
+      la = "${base} -a";
+      lla = "${base} -la --header";
+      lt = "${base} --tree --level=2";
+      lta = "${base} -a --tree --level=2";
+      lgi = "${base} --tree --git-ignore"; # tree, respecting .gitignore
+      lS = "${base} -la --header --sort=size --reverse"; # biggest first
+      lm = "${base} -la --header --sort=modified --reverse"; # newest first
+    };
 
   system = {
     cpuinfo = "lscpu";
@@ -289,15 +294,17 @@
     "containers, kubernetes, terraform, ansible" = infra;
   };
 
-  aliasLines = set:
-    lib.concatStringsSep "\n" (lib.mapAttrsToList
-      (name: value: "alias -- ${name}=${lib.escapeShellArg value}")
-      set);
+  aliasLines =
+    set:
+    lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (name: value: "alias -- ${name}=${lib.escapeShellArg value}") set
+    );
 
-  bashAliases = lib.concatStringsSep "\n\n" (lib.mapAttrsToList
-    (title: set: "# ----- ${title} -----\n${aliasLines set}")
-    aliasGroups);
-in {
+  bashAliases = lib.concatStringsSep "\n\n" (
+    lib.mapAttrsToList (title: set: "# ----- ${title} -----\n${aliasLines set}") aliasGroups
+  );
+in
+{
   home.packages = with pkgs; [
     blesh
     grc
@@ -345,7 +352,10 @@ in {
   programs.bash = {
     enable = true;
     enableCompletion = true;
-    historyControl = ["ignoredups" "ignorespace"];
+    historyControl = [
+      "ignoredups"
+      "ignorespace"
+    ];
     historySize = 100000;
     historyFileSize = 200000;
 
