@@ -7,11 +7,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1793286040,
-        "narHash": "sha256-SrS7AYZ3SlkTU9AN/j8dVmQFdE3dMoNx2lwU/QhTz8M=",
+        "lastModified": 1793288469,
+        "narHash": "sha256-LYF9Ivv/6KmDGfwX2fnuxGgjNe9h0BZ5ZgKHBPlhAEg=",
         "owner": "stefan-hacks",
         "repo": "ble.sh",
-        "rev": "1c0d75b4a2d45dab85fb0c17bfbf356cda309de9",
+        "rev": "09ad45fa1152a5cbbf8117f6ee7e4e9168b1ab9e",
         "type": "github"
       },
       "original": {
