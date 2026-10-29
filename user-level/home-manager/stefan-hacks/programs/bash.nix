@@ -12,8 +12,7 @@
   lib,
   pkgs,
   ...
-}:
-let
+}: let
   # `colourify <cmd>` runs a command through grc. Aliases that need quoting
   # tricks or logic are functions further down instead.
   colourised =
@@ -105,21 +104,19 @@ let
   };
 
   # eza replaces ls
-  eza =
-    let
-      base = "eza --icons=auto --git --group-directories-first";
-    in
-    {
-      ls = base;
-      ll = "${base} -l --header";
-      la = "${base} -a";
-      lla = "${base} -la --header";
-      lt = "${base} --tree --level=2";
-      lta = "${base} -a --tree --level=2";
-      lgi = "${base} --tree --git-ignore"; # tree, respecting .gitignore
-      lS = "${base} -la --header --sort=size --reverse"; # biggest first
-      lm = "${base} -la --header --sort=modified --reverse"; # newest first
-    };
+  eza = let
+    base = "eza --icons=auto --git --group-directories-first";
+  in {
+    ls = base;
+    ll = "${base} -l --header";
+    la = "${base} -a";
+    lla = "${base} -la --header";
+    lt = "${base} --tree --level=2";
+    lta = "${base} -a --tree --level=2";
+    lgi = "${base} --tree --git-ignore"; # tree, respecting .gitignore
+    lS = "${base} -la --header --sort=size --reverse"; # biggest first
+    lm = "${base} -la --header --sort=modified --reverse"; # newest first
+  };
 
   system = {
     cpuinfo = "lscpu";
@@ -294,8 +291,7 @@ let
     "containers, kubernetes, terraform, ansible" = infra;
   };
 
-  aliasLines =
-    set:
+  aliasLines = set:
     lib.concatStringsSep "\n" (
       lib.mapAttrsToList (name: value: "alias -- ${name}=${lib.escapeShellArg value}") set
     );
@@ -303,8 +299,7 @@ let
   bashAliases = lib.concatStringsSep "\n\n" (
     lib.mapAttrsToList (title: set: "# ----- ${title} -----\n${aliasLines set}") aliasGroups
   );
-in
-{
+in {
   home.packages = with pkgs; [
     blesh
     grc
