@@ -75,12 +75,8 @@ _: {
                 "key": "{$4}├─ {icon}  {$1}Packages{$2}"
             },
             {
-                "type": "command",
-                "keyIcon": "\uE760",
-                "key": "{$4}\u2570\u2500 {icon}  {$1}Starship{$2}",
-                "text": "starship --version | head -1 | awk '{print $2}'"
+                "type": "break"
             },
-            { "type": "break" },
             {
                 "type": "custom",
                 "key": " ",

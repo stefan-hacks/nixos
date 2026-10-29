@@ -4,7 +4,6 @@
     ./programs/bash.nix
     ./programs/git.nix
     ./programs/kitty.nix
-    ./programs/starship.nix
     ./programs/atuin.nix
     ./programs/helix.nix
     ./programs/zellij.nix

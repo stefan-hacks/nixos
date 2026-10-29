@@ -1,9 +1,6 @@
 # system-level/theming.nix — Unified system-wide theming.
 # GDM login screen wallpaper.
-{
-  pkgs,
-  ...
-}: let
+{pkgs, ...}: let
   # ═══════════════════════════════════════════════════════════════════════════
   # Single wallpaper used for the GDM login screen
   # ═══════════════════════════════════════════════════════════════════════════

@@ -2,7 +2,6 @@
 _: {
   # programs.firefox.enable = true;
   programs.gpaste.enable = true;
-  programs.starship.enable = true;
 
   # Configure the Atuin Shell Client System-Wide
   programs.atuin = {

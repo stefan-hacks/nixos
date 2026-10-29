@@ -1,13 +1,11 @@
 # Home Manager module: Bash for infrastructure / sysadmin / Nix work
 #
-#   - ble.sh line editor (config inlined below, no ./blerc)
-#   - grc colouring via `colourify`, eza for ls, starship + zoxide + atuin + fzf
+#   - grc colouring via `colourify`, eza for ls, zoxide + atuin + fzf
 #   - Nix, systemd, git and container aliases; helper functions at the bottom
 #
 # Aliases live in their own ~/.bash_aliases (generated below, grouped by topic);
 # ~/.bashrc only sources it.
-# ~/.bashrc order: bashrcExtra (ble.sh) -> initExtra (aliases file, env,
-# functions, atuin, zoxide) -> ble-attach last.
+# ~/.bashrc order: initExtra (aliases file, env, functions, atuin, zoxide)
 {
   lib,
   pkgs,
@@ -299,27 +297,14 @@
     aliasGroups);
 in {
   home.packages = with pkgs; [
-    blesh
     grc
     nvd
     nix-output-monitor
   ];
 
   # ---------------------------------------------------------------------------
-  # ble.sh (replaces ./blerc)
-  # ---------------------------------------------------------------------------
-  home.file.".blerc".text = ''
-    bleopt history_share=1
-    bleopt prompt_ps1_final='\[$(tput setaf 6)\]\w \[$(tput sgr0)\]\$ '
-    bleopt complete_auto_complete=1
-    bleopt complete_menu_complete=1
-    bleopt complete_ambiguous=1
-  '';
-
-  # ---------------------------------------------------------------------------
   # Prompt, navigation, ls
   # ---------------------------------------------------------------------------
-  programs.starship.enable = true;
   programs.fzf.enable = true;
 
   # eza's ls aliases are in ~/.bash_aliases; zoxide's hook is started by hand
@@ -334,7 +319,7 @@ in {
   };
 
   # atuin itself is enabled in atuin.nix; its bash hook is started by hand below
-  # (initExtra) so it loads after ble.sh and does not use bash-preexec
+  # (initExtra) so it does not use bash-preexec
   programs.atuin.enableBashIntegration = lib.mkForce false;
 
   home.file.".bash_aliases".text = bashAliases + "\n";
@@ -348,13 +333,6 @@ in {
     historyControl = ["ignoredups" "ignorespace"];
     historySize = 100000;
     historyFileSize = 200000;
-
-    bashrcExtra = ''
-      # ble.sh must be sourced first (interactive shells only); it attaches at the very end
-      if [[ $- == *i* ]] && command -v blesh-share >/dev/null 2>&1; then
-        source -- "$(blesh-share)"/ble.sh --attach=none
-      fi
-    '';
 
     initExtra = lib.mkMerge [
       ''
@@ -471,18 +449,12 @@ in {
         kns() { kubectl config set-context --current --namespace="''${1:?usage: kns <namespace>}"; }
       ''
       (lib.mkOrder 1900 ''
-        # atuin after ble.sh so it hooks ble's history; after fzf so Ctrl-R is atuin's
         if _have atuin; then eval "$(atuin init bash)"; fi
       '')
       (lib.mkOrder 1950 ''
-        # zoxide must initialise last (after starship/atuin). ble.sh runs the prompt
-        # hooks itself, so zoxide's PROMPT_COMMAND self-check would false-positive.
+        # zoxide must initialise last (after atuin)
         export _ZO_DOCTOR=0
         if _have zoxide; then eval "$(zoxide init bash)"; fi
-      '')
-      (lib.mkOrder 2000 ''
-        # ble.sh attaches LAST, once every other prompt/key hook is registered
-        [[ ! ''${BLE_VERSION-} ]] || ble-attach
       '')
     ];
   };
