@@ -9,16 +9,6 @@ _: {
   xdg.configFile."fastfetch/config.jsonc".text = ''
     {
         "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
-        "logo": {
-            "type": "kitty-direct",
-            "source": "$HOME/.config/nixit/assets/icon2.png",
-            "width": 40,
-            "height": 20,
-            "padding": {
-                "top": 2,
-                "right": 2
-            }
-        },
         "display": {
             "color": {
                 "keys": ""

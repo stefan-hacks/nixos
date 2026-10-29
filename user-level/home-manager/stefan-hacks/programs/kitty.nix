@@ -123,7 +123,9 @@ in {
     # Core settings that HM manages natively
     settings = {
       # ── Shell integration ──
-      shell_integration = "enabled";
+      # DISABLED: conflicts with line editors (e.g. zsh-syntax-highlighting, etc.)
+      # shell_integration = "enabled";
+      shell_integration = "disabled";
       allow_remote_control = "yes";
       listen_on = "unix:/tmp/kitty";
 

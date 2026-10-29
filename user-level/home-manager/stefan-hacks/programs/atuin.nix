@@ -1,8 +1,10 @@
 # atuin.nix — Home Manager atuin shell history
+# NOTE: enableBashIntegration is disabled here because bash.nix handles atuin
+# initialization manually.
 _: {
   programs.atuin = {
     enable = true;
-    enableBashIntegration = true;
+    enableBashIntegration = false;
 
     settings = {
       sync_address = "https://api.atuin.sh";

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 {inputs, ...}: {
+=======
+{ ...}: {
+>>>>>>> 363fa343c3f1e9d875ec6f6f9a8c7f199f9ff21e
   imports = [
     ./hardware-configuration.nix
     ../../system.nix
@@ -21,12 +25,4 @@
   };
 
   system.stateVersion = "26.05";
-
-  # Home Manager integration
-  home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    sharedModules = [inputs.nixdatifier.homeManagerModules.default];
-    users.stefan-hacks = import ../../user-level/home-manager/stefan-hacks;
-  };
 }
