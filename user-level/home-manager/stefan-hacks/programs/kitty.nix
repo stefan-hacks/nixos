@@ -123,10 +123,7 @@ in {
     # Core settings that HM manages natively
     settings = {
       # ── Shell integration ──
-      # DISABLED: conflicts with ble.sh line editor (ble.sh provides its own
-      # prompt reporting; kitty's shell-integration hooks fight with ble.sh
-      # during exit, causing hang + escape-sequence garbage like
-      # ffd^[[100;5u^[[100;5u).
+      # DISABLED: conflicts with line editors (e.g. zsh-syntax-highlighting, etc.)
       # shell_integration = "enabled";
       shell_integration = "disabled";
       allow_remote_control = "yes";

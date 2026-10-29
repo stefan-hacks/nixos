@@ -42,6 +42,10 @@
       url = "github:mikesmithgh/kitty-scrollback.nvim/v8.0.0";
       flake = false;
     };
+
+    ble-sh = {
+      url = "github:stefan-hacks/ble.sh";
+    };
   };
 
   outputs = inputs @ {
@@ -72,6 +76,7 @@
             home-manager.extraSpecialArgs = {inherit inputs;};
             home-manager.users.stefan-hacks = {
               imports = [
+                inputs.nixdatifier.homeManagerModules.default
                 ./user-level/home-manager/stefan-hacks/default.nix
               ];
             };

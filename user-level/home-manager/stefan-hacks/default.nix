@@ -1,6 +1,11 @@
 # Home Manager entry point for stefan-hacks
-{config, ...}: {
+{
+  config,
+  inputs,
+  ...
+}: {
   imports = [
+    inputs.ble-sh.homeModules.default
     ./programs/bash.nix
     ./programs/git.nix
     ./programs/kitty.nix
@@ -15,6 +20,19 @@
 
   home.username = "stefan-hacks";
   home.homeDirectory = "/home/stefan-hacks";
+
+  # ── ble.sh (Bash Line Editor) fork ──
+  programs.ble-sh = {
+    enable = true;
+    enableBashIntegration = true;
+    rcInit = ''
+      bleopt history_share=1
+      bleopt prompt_ps1_final='\[$(tput setaf 6)\]\w \[$(tput sgr0)\]\$ '
+      bleopt complete_auto_complete=1
+      bleopt complete_menu_complete=1
+      bleopt complete_ambiguous=1
+    '';
+  };
 
   # Ensure ~/.local/bin is on PATH
   home.sessionPath = [
