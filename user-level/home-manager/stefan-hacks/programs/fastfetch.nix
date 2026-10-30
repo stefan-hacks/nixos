@@ -32,16 +32,6 @@ _: {
             ],
             "brightColor": false
         },
-        "logo": {
-            "type": "auto",
-            "source": "/home/stefan-hacks/.config/nixos/assets/nix_logo.png",
-            "width": 34,
-            "height": 24,
-            "padding": {
-                "left": 2,
-                "right": 4
-            }
-        },
         "modules": [
             { "type": "break" },
             {
