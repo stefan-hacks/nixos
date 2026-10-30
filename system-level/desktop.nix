@@ -15,6 +15,7 @@
   # GNOME Extensions
   environment.systemPackages = with pkgs.gnomeExtensions; [
     appindicator
+    arcmenu
     blur-my-shell
     dynamic-music-pill
     pomodoro-timer
