@@ -330,9 +330,25 @@ in {
       # ble.sh must be sourced first (interactive shells only); it attaches at the very end
       if [[ $- == *i* ]] && command -v blesh-share >/dev/null 2>&1; then
         source -- "$(blesh-share)"/ble.sh --attach=none
+
         # keymap_vi_mode_string_nmap is declared in the autoloaded keymap/vi.sh
         # module, so defer bleopt until after that module loads.
-        blehook/eval-after-load keymap_vi "bleopt keymap_vi_mode_string_nmap='-- NORMAL --'"
+        blehook/eval-after-load keymap_vi "bleopt keymap_vi_mode_string_nmap=$'\e[1m-- NORMAL --\e[m'"
+
+        # atuin must initialise AFTER ble.sh is sourced but BEFORE ble-attach.
+        # If atuin runs after ble-attach, ble.sh's keymap is already loaded and
+        # atuin's `bind` calls do not update ble.sh's active keybindings — the
+        # up-arrow falls back to plain bash history.  By initialising atuin here
+        # (after source, before attach), standard bash `bind` sets the keys in
+        # bash's readline table; ble-attach then loads that table into ble.sh's
+        # own keymap, preserving atuin's up-arrow binding.
+        #
+        # NOTE: atuin needs XDG_CONFIG_HOME to find its config.  In non-login
+        # shells (kitty) HM session variables haven't been sourced yet when
+        # bashrcExtra runs, so we explicitly export the config dir to prevent
+        # atuin from falling back to /etc/atuin (which causes permission errors).
+        export ATUIN_CONFIG_DIR="''${HOME}/.config/atuin"
+        if command -v atuin >/dev/null 2>&1; then eval "$(atuin init bash)"; fi
       fi
     '';
 
@@ -441,17 +457,11 @@ in {
         eval "$(${pkgs.zoxide}/bin/zoxide init bash)"
       '')
       (lib.mkOrder 2000 ''
-        # ble.sh MUST attach BEFORE atuin initialises.
-        # If atuin runs first, it cannot detect ''${BLE_ATTACHED} and falls back
-        # to raw escape-sequence bindings (e.g. \e[A for up-arrow). ble.sh then
-        # intercepts those sequences and emits them as literal text — the "A5"
-        # garbage on up-arrow.  By attaching ble.sh first, atuin sees BLE_ATTACHED
-        # and registers ble.sh-compatible widgets instead.
+        # ble.sh attaches here, AFTER atuin has already initialised in bashrcExtra.
+        # ble-attach loads bash's readline keymap (which now contains atuin's
+        # up-arrow binding set by `atuin init bash` above) into ble.sh's own
+        # keymap, so atuin works correctly in vi-insert and vi-command modes.
         [[ ! ''${BLE_VERSION-} ]] || ble-attach
-      '')
-      (lib.mkOrder 2100 ''
-        # atuin MUST initialise AFTER ble-attach (see order-2000 comment above).
-        if _have atuin; then eval "$(atuin init bash)"; fi
       '')
     ];
   };
