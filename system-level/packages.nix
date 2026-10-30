@@ -4,7 +4,8 @@
   pkgs,
   inputs,
   ...
-}: {
+}:
+{
   environment.systemPackages = with pkgs; [
     ###########################################################################
     # Core Utilities
@@ -39,6 +40,7 @@
     carapace
     atuin
     zoxide
+    starship
     fzf
     termscp
     television
