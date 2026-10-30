@@ -434,14 +434,21 @@ in {
         dsh() { docker exec -it "''${1:?usage: dsh <container> [shell]}" "''${2:-sh}"; }
         kns() { kubectl config set-context --current --namespace="''${1:?usage: kns <namespace>}"; }
       ''
-      (lib.mkOrder 1900 ''
-        if _have atuin; then eval "$(atuin init bash)"; fi
-      '')
       (lib.mkOrder 1950 ''
         eval "$(${pkgs.zoxide}/bin/zoxide init bash)"
       '')
       (lib.mkOrder 2000 ''
+        # ble.sh MUST attach BEFORE atuin initialises.
+        # If atuin runs first, it cannot detect ''${BLE_ATTACHED} and falls back
+        # to raw escape-sequence bindings (e.g. \e[A for up-arrow). ble.sh then
+        # intercepts those sequences and emits them as literal text — the "A5"
+        # garbage on up-arrow.  By attaching ble.sh first, atuin sees BLE_ATTACHED
+        # and registers ble.sh-compatible widgets instead.
         [[ ! ''${BLE_VERSION-} ]] || ble-attach
+      '')
+      (lib.mkOrder 2100 ''
+        # atuin MUST initialise AFTER ble-attach (see order-2000 comment above).
+        if _have atuin; then eval "$(atuin init bash)"; fi
       '')
     ];
   };

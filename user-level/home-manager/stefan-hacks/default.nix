@@ -1,5 +1,5 @@
 # Home Manager entry point for stefan-hacks
-{ config, ... }: {
+{config, ...}: {
   imports = [
     ./programs/bash.nix
     ./programs/git.nix
