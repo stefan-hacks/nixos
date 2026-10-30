@@ -292,10 +292,6 @@ in {
     bleopt complete_auto_complete=1
     bleopt complete_menu_complete=1
     bleopt complete_ambiguous=1
-
-    # Show "-- NORMAL --" indicator when switching to vi normal mode.
-    # Uses ANSI escape sequences: \e[1m = bold, \e[m = reset.
-    bleopt keymap_vi_mode_string_nmap=$'\e[1m-- NORMAL --\e[m'
   '';
 
   # ---------------------------------------------------------------------------
@@ -334,6 +330,9 @@ in {
       # ble.sh must be sourced first (interactive shells only); it attaches at the very end
       if [[ $- == *i* ]] && command -v blesh-share >/dev/null 2>&1; then
         source -- "$(blesh-share)"/ble.sh --attach=none
+        # keymap_vi_mode_string_nmap is declared in the autoloaded keymap/vi.sh
+        # module, so defer bleopt until after that module loads.
+        blehook/eval-after-load keymap_vi "bleopt keymap_vi_mode_string_nmap='--- NORMAL ---'"
       fi
     '';
 
