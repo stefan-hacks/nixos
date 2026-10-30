@@ -55,6 +55,22 @@
       shellcheck
       shfmt
 
+      # Fix: luarocks/hererocks bootstrap failure — provide system luarocks
+      # so lazy.nvim skips hererocks self-install and uses the system one.
+      luarocks
+      lua5_1
+
+      # Fix: tree-sitter-cli required by nvim-treesitter for parser compilation
+      tree-sitter
+
+      # Fix: vellum.nvim needs a browser for markdown preview rendering
+      chromium
+
+      # Fix: snacks.nvim inline image rendering (PDF, LaTeX math, Mermaid diagrams)
+      ghostscript
+      tectonic
+      mermaid-cli
+
       # Generic tools
       ripgrep
       fd
