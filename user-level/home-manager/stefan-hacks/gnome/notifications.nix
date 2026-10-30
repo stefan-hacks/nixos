@@ -3,7 +3,7 @@
 { ...}: {
   dconf.settings = {
     "org/gnome/desktop/notifications" = {
-      application-children = ["firefox" "org-gnome-console" "org-gnome-characters" "gnome-about-panel" "gnome-power-panel" "de-haeckerfelix-shortwave" "discord" "org-gnome-pomodoro" "com-ktechpit-whatsie" "org-gnome-nautilus" "chromium-browser" "1password" "org-gnome-papers" "org-gnome-loupe" "gnome-printers-panel" "org-gnome-extensions" "org-gnome-shell-extensions" "virt-manager" "mpv" "org-mozilla-firefox" "org-gnome-settings" "org-gnome-epiphany" "org-gnome-evolution" "mullvad-vpn"];
+      application-children = ["firefox" "org-gnome-console" "org-gnome-characters" "gnome-about-panel" "gnome-power-panel" "de-haeckerfelix-shortwave" "discord" "org-gnome-pomodoro" "com-ktechpit-whatsie" "org-gnome-nautilus" "chromium-browser" "1password" "org-gnome-papers" "org-gnome-loupe" "gnome-printers-panel" "org-gnome-extensions" "org-gnome-shell-extensions" "virt-manager" "mpv" "org-mozilla-firefox" "org-gnome-settings" "org-gnome-epiphany" "org-gnome-evolution" "mullvad-vpn" "org-gnome-evolution-alarm-notify"];
       show-banners = true;
     };
 

@@ -10,6 +10,7 @@
     ./media.nix
     ./misc.nix
     ./misc-apps.nix
+    ./mutter.nix
     ./nautilus.nix
     ./notifications.nix
     ./settings-daemon.nix

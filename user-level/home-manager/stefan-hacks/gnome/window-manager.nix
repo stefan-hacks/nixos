@@ -2,6 +2,10 @@
 # Do not hand-edit generated sections; re-run nmg against a fresh dconf dump instead.
 { ...}: {
   dconf.settings = {
+    "org/gnome/desktop/wm/keybindings" = {
+      activate-window-menu = [];
+    };
+
     "org/gnome/desktop/wm/preferences" = {
       button-layout = "close,minimize,maximize:appmenu";
     };
