@@ -25,9 +25,6 @@
     ./system-level/podman.nix
   ];
 
-  # Enable blesh (Bash Line Editor) system-wide — user config lives in ~/.blerc
-  programs.bash.blesh.enable = true;
-
   # System-level user account (Home Manager handles dotfiles and user config)
   users.users."stefan-hacks" = {
     isNormalUser = true;

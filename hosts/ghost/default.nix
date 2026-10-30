@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-{inputs, ...}: {
-=======
 { ...}: {
->>>>>>> 363fa343c3f1e9d875ec6f6f9a8c7f199f9ff21e
   imports = [
     ./hardware-configuration.nix
     ../../system.nix
