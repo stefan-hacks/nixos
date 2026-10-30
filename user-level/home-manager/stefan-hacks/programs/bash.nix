@@ -331,24 +331,11 @@ in {
       if [[ $- == *i* ]] && command -v blesh-share >/dev/null 2>&1; then
         source -- "$(blesh-share)"/ble.sh --attach=none
 
-        # keymap_vi_mode_string_nmap is declared in the autoloaded keymap/vi.sh
-        # module, so defer bleopt until after that module loads.
-        blehook/eval-after-load keymap_vi "bleopt keymap_vi_mode_string_nmap=$'\e[1m-- NORMAL --\e[m'"
-
-        # atuin must initialise AFTER ble.sh is sourced but BEFORE ble-attach.
-        # If atuin runs after ble-attach, ble.sh's keymap is already loaded and
-        # atuin's `bind` calls do not update ble.sh's active keybindings — the
-        # up-arrow falls back to plain bash history.  By initialising atuin here
-        # (after source, before attach), standard bash `bind` sets the keys in
-        # bash's readline table; ble-attach then loads that table into ble.sh's
-        # own keymap, preserving atuin's up-arrow binding.
-        #
-        # NOTE: atuin needs XDG_CONFIG_HOME to find its config.  In non-login
-        # shells (kitty) HM session variables haven't been sourced yet when
-        # bashrcExtra runs, so we explicitly export the config dir to prevent
-        # atuin from falling back to /etc/atuin (which causes permission errors).
-        export ATUIN_CONFIG_DIR="''${HOME}/.config/atuin"
-        if command -v atuin >/dev/null 2>&1; then eval "$(atuin init bash)"; fi
+        # Remove ble.sh's read wrapper to prevent "not a valid identifier" errors
+        # when carapace/fzf call `read` in completion contexts. ble.sh's read wrapper
+        # intercepts all read calls and enters a special interactive mode that breaks
+        # non-interactive reads (e.g., here-strings used by carapace completion).
+        unset -f read
       fi
     '';
 
@@ -457,11 +444,16 @@ in {
         eval "$(${pkgs.zoxide}/bin/zoxide init bash)"
       '')
       (lib.mkOrder 2000 ''
-        # ble.sh attaches here, AFTER atuin has already initialised in bashrcExtra.
-        # ble-attach loads bash's readline keymap (which now contains atuin's
-        # up-arrow binding set by `atuin init bash` above) into ble.sh's own
-        # keymap, so atuin works correctly in vi-insert and vi-command modes.
+        # ble.sh attaches here.
         [[ ! ''${BLE_VERSION-} ]] || ble-attach
+      '')
+      (lib.mkOrder 2100 ''
+        # atuin initialises AFTER ble-attach.  It detects BLE_ATTACHED and
+        # registers ble.sh-compatible widgets for up-arrow history search.
+        # NOTE: atuin needs ATUIN_CONFIG_DIR set in non-login shells (kitty)
+        # because HM session variables haven't been sourced yet.
+        export ATUIN_CONFIG_DIR="''${HOME}/.config/atuin"
+        if command -v atuin >/dev/null 2>&1; then eval "$(atuin init bash)"; fi
       '')
     ];
   };
