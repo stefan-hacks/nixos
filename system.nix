@@ -23,6 +23,7 @@
     ./system-level/flatpak.nix
     ./system-level/kubernetes.nix
     ./system-level/podman.nix
+    ./system-level/nvf.nix
   ];
 
   # System-level user account (Home Manager handles dotfiles and user config)

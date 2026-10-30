@@ -32,7 +32,7 @@
     watch = "watch ";
     c = "clear";
     e = "exit";
-    v = "vim";
+    v = "nvim";
     nv = "nvim";
     src = "source ~/.bashrc";
     lg = "lazygit";
@@ -336,7 +336,7 @@ in {
     initExtra = lib.mkMerge [
       ''
         export NIXCFG="''${NIXCFG:-$HOME/.config/nixos}"
-        export EDITOR=vim
+        export EDITOR=nvim
         export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
         set -o vi
 

@@ -27,7 +27,6 @@
     unzip
     zip
     p7zip
-    vim
     evil-helix
     hw-probe
     less
