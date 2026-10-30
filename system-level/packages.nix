@@ -4,8 +4,7 @@
   pkgs,
   inputs,
   ...
-}:
-{
+}: {
   environment.systemPackages = with pkgs; [
     ###########################################################################
     # Core Utilities
