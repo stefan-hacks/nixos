@@ -5,6 +5,7 @@
     ./programs/git.nix
     ./programs/kitty.nix
     ./programs/atuin.nix
+    ./programs/carapace.nix
     ./programs/starship.nix
     ./programs/helix.nix
     ./programs/zellij.nix

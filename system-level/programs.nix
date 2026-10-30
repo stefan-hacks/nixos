@@ -16,14 +16,6 @@ _: {
   #   settings = { ... };
   # };
 
-  # Zoxide — package available system-wide, but bash integration is handled
-  # at user-level in bash.nix so we can control init order (after ble.sh
-  # source, before ble-attach).
-  programs.zoxide = {
-    enable = true;
-    enableBashIntegration = false; # DISABLED — handled in user bash.nix
-  };
-
   # fzf — enable bash fuzzy completion and keybindings
   programs.fzf = {
     fuzzyCompletion = true;
