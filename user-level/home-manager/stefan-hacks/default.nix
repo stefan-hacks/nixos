@@ -1,10 +1,11 @@
 # Home Manager entry point for stefan-hacks
-{config, ...}: {
+{ config, ... }: {
   imports = [
     ./programs/bash.nix
     ./programs/git.nix
     ./programs/kitty.nix
     ./programs/atuin.nix
+    ./programs/starship.nix
     ./programs/helix.nix
     ./programs/zellij.nix
     ./programs/fastfetch.nix
