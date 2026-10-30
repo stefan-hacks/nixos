@@ -32,6 +32,10 @@ _: {
             ],
             "brightColor": false
         },
+        "logo": {
+            "source": "/home/stefan-hacks/.config/nixos/assets/nix_logo.png",
+            "type": "auto"
+        },
         "modules": [
             { "type": "break" },
             {
