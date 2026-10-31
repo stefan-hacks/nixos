@@ -21,6 +21,6 @@ _: {
   # as an fzf --color option (which would fail with "invalid color specification").
   environment.sessionVariables = {
     FZF_DEFAULT_OPTS = "--preview 'bat --color=always {}'";
-    FLAKE = "/home/stefan-hacks/.config/nixos";
+    NH_FLAKE = "/home/stefan-hacks/.config/nixos";
   };
 }
