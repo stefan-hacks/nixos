@@ -1,5 +1,9 @@
 # Home Manager entry point for stefan-hacks
-{ config, inputs, ... }: {
+{
+  config,
+  inputs,
+  ...
+}: {
   imports = [
     inputs.wiki-nix.homeManagerModules.default
     ./programs/bash.nix
