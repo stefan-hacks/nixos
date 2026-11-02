@@ -21,8 +21,8 @@
     ./system-level/packages.nix
     ./system-level/theming.nix
     ./system-level/flatpak.nix
-    ./system-level/kubernetes.nix
-    ./system-level/podman.nix
+    # ./system-level/kubernetes.nix
+    # ./system-level/podman.nix
     ./system-level/nvf.nix
   ];
 
