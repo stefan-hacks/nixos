@@ -47,11 +47,6 @@
       url = "github:mikesmithgh/kitty-scrollback.nvim/v8.0.0";
       flake = false;
     };
-
-    look = {
-      url = "github:kunkka19xx/look";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = inputs @ {
