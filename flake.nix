@@ -38,6 +38,11 @@
       flake = false;
     };
 
+    wiki-nix = {
+      url = "github:stefan-hacks/wiki-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     kitty-scrollback = {
       url = "github:mikesmithgh/kitty-scrollback.nvim/v8.0.0";
       flake = false;
