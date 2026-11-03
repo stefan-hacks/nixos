@@ -130,11 +130,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792854929,
-        "narHash": "sha256-OQ/uC72XOaM5jMK0+HRC4KjwT75cCfByQa+/D4i9qzc=",
+        "lastModified": 1793711909,
+        "narHash": "sha256-luImzE+MwFJCoCSKx/k0Gxwj7zP3UfrpcQZT3ZjPT+M=",
         "owner": "Muddyblack",
         "repo": "nixdatifier",
-        "rev": "52269db2a7a2ff74b596057fd0e7d1e7c374aef4",
+        "rev": "4de616a1185e4083a3b9e0c603a31605fc9bb447",
         "type": "github"
       },
       "original": {
@@ -276,11 +276,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1793640352,
-        "narHash": "sha256-ETPEmHYNKNvWzwnQrmuyQNhpyCRZZaE8+wTsC1aNFiQ=",
+        "lastModified": 1793712546,
+        "narHash": "sha256-34aVq4AMRqw1d+ZgEvYM4YkpSzKII8iobF6FQDv0ZHI=",
         "owner": "stefan-hacks",
         "repo": "wiki-nix",
-        "rev": "c9b51df2adb98bf51a5fc1c7415772f4c7b567c5",
+        "rev": "0761398e7cdbb705f45677bcb2826229840710d3",
         "type": "github"
       },
       "original": {
