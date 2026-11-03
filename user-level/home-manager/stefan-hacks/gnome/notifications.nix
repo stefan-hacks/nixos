@@ -67,6 +67,10 @@
       application-id = "org.gnome.Console.desktop";
     };
 
+    "org/gnome/desktop/notifications/application/org-gnome-contacts" = {
+      application-id = "org.gnome.Contacts.desktop";
+    };
+
     "org/gnome/desktop/notifications/application/org-gnome-epiphany" = {
       application-id = "org.gnome.Epiphany.desktop";
     };
@@ -81,6 +85,10 @@
 
     "org/gnome/desktop/notifications/application/org-gnome-extensions" = {
       application-id = "org.gnome.Extensions.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/org-gnome-goa-daemon" = {
+      application-id = "org.gnome.goa-daemon.desktop";
     };
 
     "org/gnome/desktop/notifications/application/org-gnome-loupe" = {

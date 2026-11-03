@@ -19,6 +19,10 @@
       last-folder-path = "/home/stefan-hacks/distro_images";
     };
 
+    "org/gnome/portal/filechooser/look" = {
+      last-folder-path = "/home/stefan-hacks/.config/nixos/assets/wallpapers/nixos_wallpapers";
+    };
+
     "org/gnome/portal/filechooser/org.gnome.Nautilus" = {
       last-folder-path = "/home/stefan-hacks/.config/kanata";
     };
@@ -48,6 +52,7 @@
     };
 
     "org/gnome/settings-daemon/plugins/media-keys" = {
+      custom-keybindings = ["/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/look-toggle/"];
       home = ["<Control>1"];
       mic-mute = ["F8"];
       next = ["<Control><Super>period"];
@@ -57,6 +62,12 @@
       volume-mute = ["F5"];
       volume-up = ["F7"];
       www = ["<Control>2"];
+    };
+
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/look-toggle" = {
+      binding = "<Alt>space";
+      command = "/nix/store/dxzmwc48akqwqa8qb58w747hjhrsvvci-glib-2.88.3-bin/bin/gdbus call --session --dest com.look.Desktop --object-path /com/look/Desktop --method com.look.Desktop.Toggle";
+      name = "Look Toggle";
     };
 
     "org/gnome/settings-daemon/plugins/power" = {
