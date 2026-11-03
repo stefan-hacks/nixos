@@ -276,11 +276,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1793629298,
-        "narHash": "sha256-xznPexjFwWTbSQEwGSDVtQJJ2vWz3X74cRg4LIOIh1I=",
+        "lastModified": 1793640352,
+        "narHash": "sha256-ETPEmHYNKNvWzwnQrmuyQNhpyCRZZaE8+wTsC1aNFiQ=",
         "owner": "stefan-hacks",
         "repo": "wiki-nix",
-        "rev": "4761df68b56d14f82f31cfd53e85ef6f5512e057",
+        "rev": "c9b51df2adb98bf51a5fc1c7415772f4c7b567c5",
         "type": "github"
       },
       "original": {
