@@ -6,19 +6,42 @@ let
     hash = "sha256-iVMeYk4ewn4NPh+grrzUuhMbDKA8NlgegH7YOTuohII=";
   };
 in
-pkgs.symlinkJoin {
-  name = "wikiman-with-devdocs";
-  paths = [ pkgs.wikiman ];
+pkgs.stdenvNoCC.mkDerivation {
+  pname = "wikiman-with-devdocs";
+  version = pkgs.wikiman.version;
+
+  src = pkgs.wikiman;
+
+  dontUnpack = true;
 
   nativeBuildInputs = [ pkgs.makeWrapper ];
 
-  postBuild = ''
-    # Extract devdocs data into share/doc/devdocs
+  buildPhase = ''
+    mkdir -p $out
+
+    # Copy wikiman files (NOT symlink — wikiman uses `find -type f`)
+    cp -rL $src/* $out/
+    chmod -R u+w $out
+
+    # Remove symlinks and copy real files for sources
+    rm -rf $out/share/wikiman/sources
+    mkdir -p $out/share/wikiman/sources
+    cp -L $src/share/wikiman/sources/* $out/share/wikiman/sources/
+
+    # Same for widgets
+    rm -rf $out/share/wikiman/widgets
+    mkdir -p $out/share/wikiman/widgets
+    cp -rL $src/share/wikiman/widgets/* $out/share/wikiman/widgets/ 2>/dev/null || true
+
+    # Extract devdocs data
     mkdir -p $out/share/doc
     tar xf ${devdocsData} -C $out/share/doc --strip-components=3
+  '';
 
-    # Re-wrap wikiman so conf_sys_usr points at the joined output
-    # (which now contains both the program and the devdocs data)
+  dontFixup = false;
+
+  postFixup = ''
+    # Re-wrap the wikiman binary
     rm -f $out/bin/wikiman
     makeWrapper ${pkgs.wikiman}/bin/.wikiman-wrapped $out/bin/wikiman \
       --prefix PATH : "${lib.makeBinPath (with pkgs; [ fzf ripgrep gawk w3m coreutils parallel ])}":$out/bin \
