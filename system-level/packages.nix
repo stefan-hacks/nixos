@@ -332,6 +332,7 @@
     tailspin
     wiper
     tealdeer
+    (callPackage ./wikiman-devdocs.nix {})
 
     ###########################################################################
     # Security / Network Scanning

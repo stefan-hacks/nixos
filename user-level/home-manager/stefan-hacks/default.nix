@@ -5,7 +5,6 @@
   ...
 }: {
   imports = [
-    inputs.wiki-nix.homeManagerModules.default
     ./programs/bash.nix
     ./programs/git.nix
     ./programs/kitty.nix
@@ -32,12 +31,6 @@
 
   # Let Home Manager manage its own configuration.
   programs.home-manager.enable = true;
-
-  # Wiki-Nix — offline Nix ecosystem documentation
-  programs.wiki-nix = {
-    enable = true;
-    package = inputs.wiki-nix.packages.x86_64-linux.wnix;
-  };
 
   # Nixdatifier
   programs.nixdatifier = {
