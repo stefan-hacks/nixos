@@ -112,11 +112,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793711909,
-        "narHash": "sha256-luImzE+MwFJCoCSKx/k0Gxwj7zP3UfrpcQZT3ZjPT+M=",
+        "lastModified": 1793796783,
+        "narHash": "sha256-SQGGXoOCA7lkSNoL1dc0jp9fap9ZwrWX/YAnZgZa07U=",
         "owner": "Muddyblack",
         "repo": "nixdatifier",
-        "rev": "4de616a1185e4083a3b9e0c603a31605fc9bb447",
+        "rev": "571f25749905bdae1270f8e4cedc0f8ba45a93df",
         "type": "github"
       },
       "original": {
