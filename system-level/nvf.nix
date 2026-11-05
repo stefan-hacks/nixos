@@ -208,7 +208,7 @@
         cinnamon-nvim.enable = true;
         fidget-nvim.enable = true;
         highlight-undo.enable = true;
-        blink-indent.enable = true;
+        blink-indent.enable = false;  # DISABLED: duplicate of indent-blankline
         indent-blankline.enable = true;
         cellular-automaton.enable = false;
       };
@@ -301,7 +301,7 @@
       ui = {
         borders.enable = true;
         dropbar-nvim.enable = false;
-        noice.enable = true;
+        noice.enable = false;  # DISABLED: causes rendering artifacts in Kitty
         colorizer.enable = true;
         modes-nvim.enable = false;
         illuminate.enable = true;
