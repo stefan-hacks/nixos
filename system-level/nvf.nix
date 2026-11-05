@@ -208,7 +208,7 @@
         cinnamon-nvim.enable = true;
         fidget-nvim.enable = true;
         highlight-undo.enable = true;
-        blink-indent.enable = false;  # DISABLED: duplicate of indent-blankline
+        blink-indent.enable = false; # DISABLED: duplicate of indent-blankline
         indent-blankline.enable = true;
         cellular-automaton.enable = false;
       };
@@ -247,7 +247,7 @@
         icon-picker.enable = true;
         surround.enable = true;
         leetcode-nvim.enable = true;
-        multicursors.enable = true;
+        multicursors.enable = false; # DISABLED: heavy extmark usage conflicts with other virtual-text plugins
         smart-splits.enable = true;
         undotree.enable = true;
         nvim-biscuits.enable = true;
@@ -256,10 +256,10 @@
         motion = {
           hop.enable = true;
           leap.enable = true;
-          precognition.enable = true;
+          precognition.enable = false; # DISABLED: leaves stale motion-hint virtual text artifacts
         };
         images = {
-          image-nvim.enable = false;
+          image-nvim.enable = true;
           img-clip.enable = true;
         };
       };
@@ -301,7 +301,7 @@
       ui = {
         borders.enable = true;
         dropbar-nvim.enable = false;
-        noice.enable = false;  # DISABLED: causes rendering artifacts in Kitty
+        noice.enable = false; # DISABLED: causes rendering artifacts in Kitty
         colorizer.enable = true;
         modes-nvim.enable = false;
         illuminate.enable = true;
