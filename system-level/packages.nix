@@ -251,6 +251,7 @@
     # Kept: stirling-pdf-desktop (not on Flathub)
     ###########################################################################
     gnome-tweaks
+    gnome-themes-extra
     stirling-pdf-desktop
 
     ###########################################################################
