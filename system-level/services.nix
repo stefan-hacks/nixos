@@ -227,6 +227,8 @@
             ;; . key: tap/hold=Move window one monitor right (Shift+Super+Right)
             w4 (tap-hold $tap-time $hold-time S-M-rght S-M-rght)
 
+            pou (unicode £)          ;; UK Pound (U+00A3)
+            eur (unicode €)          ;; Euro     (U+20AC)
 
             ;; Mouse wheel emulation (Layer 4 — Editing)
             ;; H key: mouse wheel left
@@ -252,7 +254,7 @@
           ;; LAYER TWO - Symbols - programming layer - spacebar held
           (deflayer two
             caps @qtd @pum @dsb @isb @mut @vdn @vup @mic @psc @lts _    _
-            _    _    _    _    _    _    _    _    _    _    _    _    _    bspc
+            _    _    _    @eur @pou _    _    _    _    _    _    _    _    bspc
             tab  S-1  S-2  S-3  S-4  S-5  0    S-9  S-0  S-[  S-]  [    ]    _
             esc  S-6  S-7  S-8  /    grv  S-grv S-\ S-;  S-'  _    _    ret
             _    -    S-=  S--  =    \    S-,  S-.  ,    .    S-/  _
