@@ -23,6 +23,10 @@
       last-folder-path = "/home/stefan-hacks/.config/nixos/assets/wallpapers/nixos_wallpapers";
     };
 
+    "org/gnome/portal/filechooser/org.chromium.Chromium" = {
+      last-folder-path = "/home/stefan-hacks/Downloads/docs";
+    };
+
     "org/gnome/portal/filechooser/org.gnome.Nautilus" = {
       last-folder-path = "/home/stefan-hacks/.config/kanata";
     };

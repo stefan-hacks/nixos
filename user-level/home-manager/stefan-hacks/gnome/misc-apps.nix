@@ -39,6 +39,7 @@
       sizing-mode = "free";
       text-color = "blue";
       window-height = 1048;
+      window-maximized = true;
       zoom = 0.56442400000000004;
     };
 

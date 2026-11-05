@@ -16,6 +16,7 @@
       color-scheme = "prefer-dark";
       document-font-name = "JetBrainsMono Nerd Font Thin 12";
       font-name = "JetBrainsMono Nerd Font Thin 11";
+      gtk-theme = "Adwaita-dark";
       monospace-font-name = "JetBrainsMono Nerd Font 11";
     };
 

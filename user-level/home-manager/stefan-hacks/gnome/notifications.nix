@@ -3,7 +3,7 @@
 { ...}: {
   dconf.settings = {
     "org/gnome/desktop/notifications" = {
-      application-children = ["firefox" "org-gnome-console" "org-gnome-characters" "gnome-about-panel" "gnome-power-panel" "de-haeckerfelix-shortwave" "discord" "org-gnome-pomodoro" "com-ktechpit-whatsie" "org-gnome-nautilus" "chromium-browser" "1password" "org-gnome-papers" "org-gnome-loupe" "gnome-printers-panel" "org-gnome-extensions" "org-gnome-shell-extensions" "virt-manager" "mpv" "org-mozilla-firefox" "org-gnome-settings" "org-gnome-epiphany" "org-gnome-evolution" "mullvad-vpn" "org-gnome-evolution-alarm-notify"];
+      application-children = ["firefox" "org-gnome-console" "org-gnome-characters" "gnome-about-panel" "gnome-power-panel" "de-haeckerfelix-shortwave" "discord" "org-gnome-pomodoro" "com-ktechpit-whatsie" "org-gnome-nautilus" "chromium-browser" "1password" "org-gnome-papers" "org-gnome-loupe" "gnome-printers-panel" "org-gnome-extensions" "org-gnome-shell-extensions" "virt-manager" "mpv" "org-mozilla-firefox" "org-gnome-settings" "org-gnome-epiphany" "org-gnome-evolution" "mullvad-vpn" "org-gnome-evolution-alarm-notify" "org-gnome-software"];
       show-banners = true;
     };
 
@@ -119,8 +119,20 @@
       application-id = "org.gnome.Software.desktop";
     };
 
+    "org/gnome/desktop/notifications/application/org-libreoffice-libreoffice-writer" = {
+      application-id = "org.libreoffice.LibreOffice.writer.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/org-libreoffice-libreoffice" = {
+      application-id = "org.libreoffice.LibreOffice.desktop";
+    };
+
     "org/gnome/desktop/notifications/application/org-mozilla-firefox" = {
       application-id = "org.mozilla.firefox.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/org-onlyoffice-desktopeditors" = {
+      application-id = "org.onlyoffice.desktopeditors.desktop";
     };
 
     "org/gnome/desktop/notifications/application/virt-manager" = {

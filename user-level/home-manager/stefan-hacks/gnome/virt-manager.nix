@@ -40,6 +40,11 @@
       network-traffic = false;
     };
 
+    "org/virt-manager/virt-manager/vms/0e774bbb5c644eb390b8e39163b50874" = {
+      autoconnect = 1;
+      vm-window-size = lib.hm.gvariant.mkTuple [1280 842];
+    };
+
     "org/virt-manager/virt-manager/vms/2c1786b3b8dc4ffc80781f63c7fe0927" = {
       autoconnect = 1;
       vm-window-size = lib.hm.gvariant.mkTuple [1920 1011];
