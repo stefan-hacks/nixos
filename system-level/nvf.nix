@@ -40,32 +40,15 @@
       # ── Theme ──
       theme = {
         enable = true;
-        name = "base16";
-        base16-colors = {
-          base00 = "#1e1e1e";
-          base01 = "#242424";
-          base02 = "#303030";
-          base03 = "#5e5c64";
-          base04 = "#9a9996";
-          base05 = "#ffffff";
-          base06 = "#f6f5f4";
-          base07 = "#deddda";
-          base08 = "#e01b24";
-          base09 = "#ff7800";
-          base0A = "#f6d32d";
-          base0B = "#33d17a";
-          base0C = "#5e5c64";
-          base0D = "#3584e4";
-          base0E = "#c061cb";
-          base0F = "#b5835a";
-        };
+        name = "catppuccin";
+        style = "mocha";
         transparent = false;
       };
 
       # ── Status line ──
       statusline.lualine = {
         enable = true;
-        setupOpts.options.theme = "base16";
+        setupOpts.options.theme = "catppuccin";
         integrations.breadcrumbs = {
           vanilla.enable = false;
           nvim-navic.enable = true;

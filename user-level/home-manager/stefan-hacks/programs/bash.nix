@@ -345,8 +345,8 @@ in {
         export EDITOR=nvim
         export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
-        # GNOME Adwaita dark colors for fzf
-        export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color=fg:#FFFFFF,bg:#1E1E1E,hl:#3584E4,fg+:#FFFFFF,bg+:#303030,hl+:#62A0EA,info:#33D17A,prompt:#3584E4,pointer:#E01B24,marker:#33D17A,spinner:#C061CB,header:#5E5C64"
+        # Catppuccin-Mocha colors for fzf
+        export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color=fg:#CDD6F4,bg:#1E1E2E,hl:#89B4FA,fg+:#CDD6F4,bg+:#313244,hl+:#B4BEFE,info:#A6E3A1,prompt:#89B4FA,pointer:#F38BA8,marker:#A6E3A1,spinner:#CBA6F7,header:#6C7086"
 
         set -o vi
 

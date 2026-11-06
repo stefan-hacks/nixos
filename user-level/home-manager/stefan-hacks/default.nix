@@ -29,10 +29,10 @@
   };
 
   # Let Home Manager manage its own configuration.
-  # btop configuration with GNOME Adwaita dark theme
+  # btop configuration with Catppuccin-Mocha theme
   xdg.configFile."btop/btop.conf".text = ''
     # btop configuration — managed by Nix
-    color_theme = "adwaita-dark"
+    color_theme = "catppuccin-mocha"
     theme_background = True
     truecolor = True
     force_tty = False
@@ -79,66 +79,66 @@
     proc_editor = "nvim"
   '';
 
-  # btop Adwaita dark theme
-  xdg.configFile."btop/themes/adwaita-dark.theme".text = ''
-    #Bashtop theme with GNOME Adwaita dark palette
+  # btop Catppuccin-Mocha theme
+  xdg.configFile."btop/themes/catppuccin-mocha.theme".text = ''
+    #Bashtop theme with Catppuccin-Mocha palette (https://github.com/catppuccin/catppuccin)
     # Main background, empty for terminal default, need to be empty if you want transparent background
-    theme[main_bg]="#1E1E1E"
+    theme[main_bg]="#1E1E2E"
     # Main text color
-    theme[main_fg]="#FFFFFF"
+    theme[main_fg]="#CDD6F4"
     # Title color for boxes
-    theme[title]="#3584E4"
+    theme[title]="#CBA6F7"
     # Highlight color for keyboard shortcuts
-    theme[hi_fg]="#3584E4"
+    theme[hi_fg]="#89B4FA"
     # Background color of selected item in processes box
-    theme[selected_bg]="#303030"
+    theme[selected_bg]="#313244"
     # Foreground color of selected item in processes box
-    theme[selected_fg]="#FFFFFF"
+    theme[selected_fg]="#CDD6F4"
     # Color of inactive/disabled text
-    theme[inactive_fg]="#9A9996"
+    theme[inactive_fg]="#6C7086"
     # Color of text appearing on top of graphs, i.e uptime and current network graph scaling
-    theme[graph_text]="#FFFFFF"
+    theme[graph_text]="#CDD6F4"
     # Background color of the percentage meters
-    theme[meter_bg]="#3D3846"
+    theme[meter_bg]="#45475A"
     # Misc colors for processes box including mini cpu graphs, details memory graph and details status text
-    theme[proc_misc]="#3584E4"
+    theme[proc_misc]="#89B4FA"
     # Cpu box outline color
-    theme[cpu_box]="#3584E4"
+    theme[cpu_box]="#89B4FA"
     # Memory box outline color
-    theme[mem_box]="#33D17A"
+    theme[mem_box]="#A6E3A1"
     # Net box outline color
-    theme[net_box]="#C061CB"
+    theme[net_box]="#F5C2E7"
     # Proc box outline color
-    theme[proc_box]="#F6D32D"
+    theme[proc_box]="#F9E2AF"
     # Box divider line and small arrows color
-    theme[div_line]="#3D3846"
+    theme[div_line]="#45475A"
     # Temperature graph colors
-    theme[temp_start]="#33D17A"
-    theme[temp_mid]="#F6D32D"
-    theme[temp_end]="#E01B24"
+    theme[temp_start]="#A6E3A1"
+    theme[temp_mid]="#F9E2AF"
+    theme[temp_end]="#F38BA8"
     # CPU graph colors
-    theme[cpu_start]="#3584E4"
-    theme[cpu_mid]="#C061CB"
-    theme[cpu_end]="#E01B24"
+    theme[cpu_start]="#89B4FA"
+    theme[cpu_mid]="#CBA6F7"
+    theme[cpu_end]="#F38BA8"
     # Mem/Memory graph colors
-    theme[mem_start]="#33D17A"
-    theme[mem_mid]="#F6D32D"
-    theme[mem_end]="#E01B24"
+    theme[mem_start]="#A6E3A1"
+    theme[mem_mid]="#F9E2AF"
+    theme[mem_end]="#F38BA8"
     # Net graph colors
-    theme[net_start]="#33D17A"
-    theme[net_mid]="#F6D32D"
-    theme[net_end]="#E01B24"
+    theme[net_start]="#A6E3A1"
+    theme[net_mid]="#F9E2AF"
+    theme[net_end]="#F38BA8"
     # Proc box color gradient for processes
-    theme[proc_start]="#3584E4"
-    theme[proc_mid]="#C061CB"
-    theme[proc_end]="#E01B24"
+    theme[proc_start]="#89B4FA"
+    theme[proc_mid]="#CBA6F7"
+    theme[proc_end]="#F38BA8"
   '';
 
-  # bat configuration with Adwaita dark theme
+  # bat configuration with Catppuccin-Mocha theme
   programs.bat = {
     enable = true;
     config = {
-      theme = "ansi-dark";
+      theme = "Catppuccin-mocha";
       style = "numbers,changes,header";
     };
   };

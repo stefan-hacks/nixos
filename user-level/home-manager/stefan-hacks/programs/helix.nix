@@ -3,7 +3,7 @@ _: {
   programs.helix = {
     enable = true;
     settings = {
-      theme = "nord";
+      theme = "catppuccin_mocha";
       editor = {
         line-number = "relative";
         mouse = true;

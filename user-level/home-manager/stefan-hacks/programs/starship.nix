@@ -3,23 +3,23 @@
     enable = true;
     # Configuration written to ~/.config/starship.toml
     settings = {
-      # Use Adwaita dark palette
-      palette = "adwaita-dark";
+      # Use Catppuccin-Mocha palette
+      palette = "catppuccin-mocha";
 
-      palettes.adwaita-dark = {
-        bg = "#1E1E1E";
-        fg = "#FFFFFF";
-        blue = "#3584E4";
-        green = "#33D17A";
-        red = "#E01B24";
-        yellow = "#F6D32D";
-        purple = "#C061CB";
-        cyan = "#5E5C64";
-        white = "#F6F5F4";
-        black = "#3D3846";
+      palettes.catppuccin-mocha = {
+        bg = "#1E1E2E";
+        fg = "#CDD6F4";
+        blue = "#89B4FA";
+        green = "#A6E3A1";
+        red = "#F38BA8";
+        yellow = "#F9E2AF";
+        purple = "#CBA6F7";
+        cyan = "#94E2D5";
+        white = "#BAC2DE";
+        black = "#45475A";
       };
 
-      # Use blue (Adwaita accent) for directory
+      # Use blue (Catppuccin accent) for directory
       directory = {
         truncation_length = 3;
         truncation_symbol = "…/";
@@ -33,7 +33,7 @@
         error_symbol = "[✕](bold red)";
       };
 
-      # Git uses Adwaita colors
+      # Git uses Catppuccin colors
       git_branch = {
         style = "bold purple";
       };
