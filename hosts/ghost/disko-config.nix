@@ -16,7 +16,7 @@
           ESP = {
             name = "ESP";
             type = "EF00";
-            size = "512M";
+            size = "1G";
             content = {
               type = "filesystem";
               format = "vfat";
@@ -33,7 +33,7 @@
               name = "cryptroot";
               settings = {
                 allowDiscards = true;
-                uuid = "8a350d7a-ce96-4ba6-938c-61b2739239f5";
+                uuid = "bcf8be51-1c8a-4da2-8dec-c728b7082e6d";
               };
               content = {
                 type = "lvm";
@@ -48,7 +48,7 @@
                     };
                   };
                   swap = {
-                    size = "8G";
+                    size = "64G";
                     content = {
                       type = "swap";
                     };
