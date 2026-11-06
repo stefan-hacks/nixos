@@ -310,8 +310,8 @@ web_client {
 // 
 // explicit_theme_hue "dark"
 
-// Nord theme
-theme "nord"
+// Use zellij default (inherits terminal colors for Adwaita consistency)
+// theme "nord"
 
 // Choose the base input mode of zellij.
 // Default: normal

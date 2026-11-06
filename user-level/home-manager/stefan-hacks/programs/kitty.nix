@@ -1,116 +1,114 @@
 # kitty.nix — Home Manager kitty terminal configuration
-# Includes kitty-scrollback.nvim integration and Nord themes.
+# Includes kitty-scrollback.nvim integration and GNOME Adwaita dark theme.
 _: let
-  # Nord theme (dark)
+  # GNOME Adwaita dark theme
   darkTheme = ''
     # vim:ft=kitty
-    ## name:     Nord
-    ## author:   Arctic Ice Studio
-    ## license:  MIT
-    ## upstream: https://www.nordtheme.com/docs/colors-and-palettes
+    ## name:     Adwaita Dark
+    ## author:   GNOME Project
+    ## upstream: https://gnome.pages.gitlab.gnome.org/libadwaita/
 
-    foreground              #D8DEE9
-    background              #2E3440
-    selection_foreground    #D8DEE9
-    selection_background    #434C5E
+    foreground              #FFFFFF
+    background              #1E1E1E
+    selection_foreground    #FFFFFF
+    selection_background    #303030
 
-    cursor                  #D8DEE9
-    cursor_text_color       #3B4252
+    cursor                  #FFFFFF
+    cursor_text_color       #1E1E1E
 
-    url_color               #88C0D0
+    url_color               #3584E4
 
-    active_border_color     #81A1C1
-    inactive_border_color   #4C566A
-    bell_border_color       #88C0D0
+    active_border_color     #3584E4
+    inactive_border_color   #3D3846
+    bell_border_color       #F6D32D
 
     wayland_titlebar_color system
     macos_titlebar_color system
 
-    active_tab_foreground   #3B4252
-    active_tab_background   #88C0D0
-    inactive_tab_foreground #E5E9F0
-    inactive_tab_background #4C566A
-    tab_bar_background      #3B4252
+    active_tab_foreground   #1E1E1E
+    active_tab_background   #3584E4
+    inactive_tab_foreground #FFFFFF
+    inactive_tab_background #303030
+    tab_bar_background      #1E1E1E
 
-    mark1_foreground #3B4252
-    mark1_background #88C0D0
-    mark2_foreground #3B4252
-    mark2_background #BF616A
-    mark3_foreground #3B4252
-    mark3_background #EBCB8B
+    mark1_foreground #1E1E1E
+    mark1_background #3584E4
+    mark2_foreground #1E1E1E
+    mark2_background #E01B24
+    mark3_foreground #1E1E1E
+    mark3_background #F6D32D
 
-    color0  #3B4252
-    color8  #4C566A
-    color1  #BF616A
-    color9  #BF616A
-    color2  #A3BE8C
-    color10 #A3BE8C
-    color3  #EBCB8B
-    color11 #D08770
-    color4  #81A1C1
-    color12 #5E81AC
-    color5  #B48EAD
-    color13 #B48EAD
-    color6  #88C0D0
-    color14 #8FBCBB
-    color7  #E5E9F0
-    color15 #ECEFF4
+    color0  #1E1E1E
+    color8  #3D3846
+    color1  #E01B24
+    color9  #ED333B
+    color2  #33D17A
+    color10 #57E389
+    color3  #F6D32D
+    color11 #F8E45C
+    color4  #3584E4
+    color12 #62A0EA
+    color5  #C061CB
+    color13 #DC8ADD
+    color6  #5E5C64
+    color14 #77767B
+    color7  #FFFFFF
+    color15 #F6F5F4
   '';
 
-  # Nord light theme (Snow Storm)
+  # GNOME Adwaita light theme
   lightTheme = ''
     # vim:ft=kitty
-    ## name:     Nord Light
-    ## author:   Arctic Ice Studio
-    ## license:  MIT
-    ## upstream: https://www.nordtheme.com/docs/colors-and-palettes
+    ## name:     Adwaita Light
+    ## author:   GNOME Project
+    ## upstream: https://gnome.pages.gitlab.gnome.org/libadwaita/
 
-    foreground              #2E3440
-    background              #ECEFF4
-    selection_foreground    #2E3440
-    selection_background    #D8DEE9
+    foreground              #1E1E1E
+    background              #FAFAFA
+    selection_foreground      #1E1E1E
+    selection_background      #DEDDEA
 
-    cursor                  #2E3440
-    cursor_text_color       #ECEFF4
+    cursor                  #1E1E1E
+    cursor_text_color       #FAFAFA
 
-    url_color               #5E81AC
+    url_color               #1C71D8
 
-    active_border_color     #5E81AC
-    inactive_border_color   #D8DEE9
-    bell_border_color       #88C0D0
+    active_border_color     #3584E4
+    inactive_border_color   #C0BFBC
+    bell_border_color       #F6D32D
 
     wayland_titlebar_color system
     macos_titlebar_color system
 
-    active_tab_foreground   #ECEFF4
-    active_tab_background   #5E81AC
-    inactive_tab_foreground #2E3440
-    inactive_tab_background #D8DEE9
-    tab_bar_background      #E5E9F0
+    active_tab_foreground   #FAFAFA
+    active_tab_background   #3584E4
+    inactive_tab_foreground #1E1E1E
+    inactive_tab_background #DEDDEA
+    tab_bar_background      #F6F5F4
 
-    mark1_foreground #ECEFF4
-    mark1_background #5E81AC
-    mark2_foreground #ECEFF4
-    mark2_background #BF616A
-    mark3_foreground #ECEFF4
-    mark3_background #EBCB8B
+    mark1_foreground #FAFAFA
+    mark1_background #3584E4
+    mark2_foreground #FAFAFA
+    mark2_background #E01B24
+    mark3_foreground #FAFAFA
+    mark3_background #F6D32D
 
-    color0  #2E3440
-    color8  #4C566A
-    color1  #BF616A
-    color9  #BF616A
-    color2  #A3BE8C
-    color10 #A3BE8C
-    color3  #EBCB8B
-    color11 #D08770
-    color4  #5E81AC
-    color12 #81A1C1
-    color5  #B48EAD
-    color13 #B48EAD
-    color6  #88C0D0
-    color14 #8FBCBB
-    color7  #4C566A
-    color15 #2E3440
+    color0  #1E1E1E
+    color8  #5E5C64
+    color1  #E01B24
+    color9  #C01C28
+    color2  #33D17A
+    color10 #26A269
+    color3  #F6D32D
+    color11 #E5A50A
+    color4  #3584E4
+    color12 #1A5FB4
+    color5  #C061CB
+    color13 #9141AC
+    color6  #5E5C64
+    color14 #3D3846
+    color7  #FFFFFF
+    color15 #F6F5F4
   '';
 
   # kitty-scrollback.nvim Python kitten
@@ -145,8 +143,8 @@ in {
       window_border_width = "1pt";
       draw_minimal_borders = "yes";
       hide_window_decorations = "yes";
-      active_border_color = "#81A1C1";
-      inactive_border_color = "#4C566A";
+      active_border_color = "#3584E4";
+      inactive_border_color = "#3D3846";
 
       # ── Window sizing ──
       remember_window_size = "no";
