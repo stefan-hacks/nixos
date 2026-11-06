@@ -344,6 +344,10 @@ in {
         export NIXCFG="''${NIXCFG:-$HOME/.config/nixos}"
         export EDITOR=nvim
         export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+
+        # Nord colors for fzf
+        export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color=fg:#D8DEE9,bg:#2E3440,hl:#81A1C1,fg+:#ECEFF4,bg+:#434C5E,hl+:#88C0D0,info:#A3BE8C,prompt:#81A1C1,pointer:#BF616A,marker:#A3BE8C,spinner:#B48EAD,header:#88C0D0"
+
         set -o vi
 
         _have() { command -v "$1" >/dev/null 2>&1; }

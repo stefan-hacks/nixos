@@ -1,117 +1,116 @@
 # kitty.nix — Home Manager kitty terminal configuration
-# Includes kitty-scrollback.nvim integration and Catppuccin themes.
+# Includes kitty-scrollback.nvim integration and Nord themes.
 _: let
-  # Catppuccin-Mocha theme (dark)
+  # Nord theme (dark)
   darkTheme = ''
     # vim:ft=kitty
-    ## name:     Catppuccin-Mocha
-    ## author:   Pocco81 (https://github.com/Pocco81)
+    ## name:     Nord
+    ## author:   Arctic Ice Studio
     ## license:  MIT
-    ## upstream: https://github.com/catppuccin/kitty/blob/main/themes/mocha.conf
-    ## blurb:    Soothing pastel theme for the high-spirited!
+    ## upstream: https://www.nordtheme.com/docs/colors-and-palettes
 
-    foreground              #CDD6F4
-    background              #1E1E2E
-    selection_foreground    #1E1E2E
-    selection_background    #F5E0DC
+    foreground              #D8DEE9
+    background              #2E3440
+    selection_foreground    #D8DEE9
+    selection_background    #434C5E
 
-    cursor                  #F5E0DC
-    cursor_text_color       #1E1E2E
+    cursor                  #D8DEE9
+    cursor_text_color       #3B4252
 
-    url_color               #F5E0DC
+    url_color               #88C0D0
 
-    active_border_color     #B4BEFE
-    inactive_border_color   #6C7086
-    bell_border_color       #F9E2AF
+    active_border_color     #81A1C1
+    inactive_border_color   #4C566A
+    bell_border_color       #88C0D0
 
     wayland_titlebar_color system
     macos_titlebar_color system
 
-    active_tab_foreground   #11111B
-    active_tab_background   #CBA6F7
-    inactive_tab_foreground #CDD6F4
-    inactive_tab_background #181825
-    tab_bar_background      #11111B
+    active_tab_foreground   #3B4252
+    active_tab_background   #88C0D0
+    inactive_tab_foreground #E5E9F0
+    inactive_tab_background #4C566A
+    tab_bar_background      #3B4252
 
-    mark1_foreground #1E1E2E
-    mark1_background #B4BEFE
-    mark2_foreground #1E1E2E
-    mark2_background #CBA6F7
-    mark3_foreground #1E1E2E
-    mark3_background #74C7EC
+    mark1_foreground #3B4252
+    mark1_background #88C0D0
+    mark2_foreground #3B4252
+    mark2_background #BF616A
+    mark3_foreground #3B4252
+    mark3_background #EBCB8B
 
-    color0  #45475A
-    color8  #585B70
-    color1  #F38BA8
-    color9  #F38BA8
-    color2  #A6E3A1
-    color10 #A6E3A1
-    color3  #F9E2AF
-    color11 #F9E2AF
-    color4  #89B4FA
-    color12 #89B4FA
-    color5  #F5C2E7
-    color13 #F5C2E7
-    color6  #94E2D5
-    color14 #94E2D5
-    color7  #BAC2DE
-    color15 #A6ADC8
+    color0  #3B4252
+    color8  #4C566A
+    color1  #BF616A
+    color9  #BF616A
+    color2  #A3BE8C
+    color10 #A3BE8C
+    color3  #EBCB8B
+    color11 #D08770
+    color4  #81A1C1
+    color12 #5E81AC
+    color5  #B48EAD
+    color13 #B48EAD
+    color6  #88C0D0
+    color14 #8FBCBB
+    color7  #E5E9F0
+    color15 #ECEFF4
   '';
 
-  # Catppuccin-Latte theme (light)
+  # Nord light theme (Snow Storm)
   lightTheme = ''
     # vim:ft=kitty
-    ## name:     Catppuccin-Latte
-    ## author:   Pocco81 (https://github.com/Pocco81)
+    ## name:     Nord Light
+    ## author:   Arctic Ice Studio
     ## license:  MIT
-    ## upstream: https://github.com/catppuccin/kitty/blob/main/themes/latte.conf
+    ## upstream: https://www.nordtheme.com/docs/colors-and-palettes
 
-    foreground              #4C4F69
-    background              #EFF1F5
-    selection_foreground    #EFF1F5
-    selection_background    #DC8A78
+    foreground              #2E3440
+    background              #ECEFF4
+    selection_foreground    #2E3440
+    selection_background    #D8DEE9
 
-    cursor                  #DC8A78
-    cursor_text_color       #EFF1F5
+    cursor                  #2E3440
+    cursor_text_color       #ECEFF4
 
-    url_color               #DC8A78
+    url_color               #5E81AC
 
-    active_border_color     #7287FD
-    inactive_border_color   #9CA0B0
-    bell_border_color       #DF8E1D
+    active_border_color     #5E81AC
+    inactive_border_color   #D8DEE9
+    bell_border_color       #88C0D0
 
     wayland_titlebar_color system
     macos_titlebar_color system
 
-    active_tab_foreground   #EFF1F5
-    active_tab_background   #8839EF
-    inactive_tab_foreground #4C4F69
-    inactive_tab_background #9CA0B0
-    tab_bar_background      #BCC0CC
+    active_tab_foreground   #ECEFF4
+    active_tab_background   #5E81AC
+    inactive_tab_foreground #2E3440
+    inactive_tab_background #D8DEE9
+    tab_bar_background      #E5E9F0
 
-    mark1_foreground #EFF1F5
-    mark1_background #7287fD
-    mark2_foreground #EFF1F5
-    mark2_background #8839EF
-    mark3_foreground #EFF1F5
-    mark3_background #209FB5
+    mark1_foreground #ECEFF4
+    mark1_background #5E81AC
+    mark2_foreground #ECEFF4
+    mark2_background #BF616A
+    mark3_foreground #ECEFF4
+    mark3_background #EBCB8B
 
-    color0  #5C5F77
-    color8  #6C6F85
-    color1  #D20F39
-    color9  #D20F39
-    color2  #40A02B
-    color10 #40A02B
-    color3  #DF8E1D
-    color11 #DF8E1D
-    color4  #1E66F5
-    color12 #1E66F5
-    color5  #8839EF
-    color13 #8839EF
-    color6  #179299
-    color14 #179299
-    color7  #ACB0Be
-    color15 #BCC0CC
+    color0  #2E3440
+    color8  #4C566A
+    color1  #BF616A
+    color9  #BF616A
+    color2  #A3BE8C
+    color10 #A3BE8C
+    color3  #EBCB8B
+    color11 #D08770
+    color4  #5E81AC
+    color12 #81A1C1
+    color5  #B48EAD
+    color13 #B48EAD
+    color6  #88C0D0
+    color14 #8FBCBB
+    color7  #4C566A
+    color15 #2E3440
   '';
 
   # kitty-scrollback.nvim Python kitten
@@ -146,8 +145,8 @@ in {
       window_border_width = "1pt";
       draw_minimal_borders = "yes";
       hide_window_decorations = "yes";
-      active_border_color = "#00ff00";
-      inactive_border_color = "#282828";
+      active_border_color = "#81A1C1";
+      inactive_border_color = "#4C566A";
 
       # ── Window sizing ──
       remember_window_size = "no";
@@ -198,6 +197,7 @@ in {
       enable_audio_bell = "no";
     };
 
+    # Extra Kitty config (verbatim) — themes + key mappings + kittens
     extraConfig = ''
       # ═══════════════════════════════════════════════════════════════════════════
       # THEME

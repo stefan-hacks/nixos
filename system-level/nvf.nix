@@ -40,15 +40,14 @@
       # ── Theme ──
       theme = {
         enable = true;
-        name = "catppuccin";
-        style = "mocha";
+        name = "nord";
         transparent = false;
       };
 
       # ── Status line ──
       statusline.lualine = {
         enable = true;
-        setupOpts.options.theme = "catppuccin";
+        setupOpts.options.theme = "nord";
         integrations.breadcrumbs = {
           vanilla.enable = false;
           nvim-navic.enable = true;

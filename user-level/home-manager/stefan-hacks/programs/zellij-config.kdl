@@ -309,7 +309,10 @@ web_client {
 // Options: dark, light
 // 
 // explicit_theme_hue "dark"
- 
+
+// Nord theme
+theme "nord"
+
 // Choose the base input mode of zellij.
 // Default: normal
 // 
