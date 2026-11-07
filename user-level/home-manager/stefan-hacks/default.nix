@@ -13,6 +13,7 @@
     ./programs/bat.nix
     ./programs/btop.nix
     ./programs/nixdatifier.nix
+    ./programs/wall-nix.nix
     ./gnome
   ];
 

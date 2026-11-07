@@ -17,7 +17,6 @@
     ./shell.nix
     ./shell-extensions.nix
     ./virt-manager.nix
-    ./wall-nix.nix
     ./window-manager.nix
   ];
 }
