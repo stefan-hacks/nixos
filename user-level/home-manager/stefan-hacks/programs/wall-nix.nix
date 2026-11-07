@@ -28,15 +28,14 @@
       margin = 8.0;           # margin around the floating panel
       borderRadius = 999.0;   # 999 = full pill, 0 = rectangle, 12 = slight rounding
       borderWidth = 0;        # border thickness (0 = no border)
-      alpha = 0.80;           # panel background opacity (0.0 = invisible, 1.0 = solid)
+      backgroundAlpha = 0.80; # panel background opacity (0.0 = invisible, 1.0 = solid)
 
       # Color overrides — leave commented to use the auto-matched palette.
       # Uncomment and tweak if the matched colors look bad.
       # background = "#1e1e2e";   # dark base (catppuccin mocha)
       # foreground = "#cdd6f4";   # light text
-      # accent     = "#89b4fa";   # blue accent
 
-      style = "floating";     # fixed | floating | islands
+      style = "floating";     # fixed | floating | islands | trilands
     };
 
     # ─────────────────────────────────────────────────────────────────────────
@@ -51,8 +50,8 @@
       # borderColor = "#45475a";   # subtle border
 
       borderRadius = 16.0;      # px rounding of menu corners
-      # alpha = 0.95;            # menu opacity (uncomment to override)
-      shadow = true;            # drop shadow behind menus
+      # backgroundAlpha = 0.95;   # menu opacity (uncomment to override)
+      shadowEnabled = true;       # drop shadow behind menus
     };
 
     # ─────────────────────────────────────────────────────────────────────────
