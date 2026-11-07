@@ -453,7 +453,8 @@ in {
         dsh() { docker exec -it "''${1:?usage: dsh <container> [shell]}" "''${2:-sh}"; }
         kns() { kubectl config set-context --current --namespace="''${1:?usage: kns <namespace>}"; }
 
-        help() { "$@" --help 2>&1 | bathelp; }
+        # 'help' is a bash builtin — use 'hlp' instead
+        hlp() { "$@" --help 2>&1 | bathelp; }
       ''
       (lib.mkOrder 1950 ''
         eval "$(${pkgs.zoxide}/bin/zoxide init bash)"
