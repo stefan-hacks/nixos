@@ -254,8 +254,8 @@
         ]
       },
       "locked": {
-        "lastModified": 1794070458,
-        "narHash": "sha256-7AXbEL97xIbNrASYTpdy+CpfDeDCo2YrZfblfODJb1E=",
+        "lastModified": 1794074581,
+        "narHash": "sha256-8Ue3hJbuv2c3VPySkbXlNT0pIpwlQ0YCClsuXApj3mo=",
         "path": "/home/stefan-hacks/Projects/wall-nix",
         "type": "path"
       },
