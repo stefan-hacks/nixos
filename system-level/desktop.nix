@@ -1,5 +1,8 @@
-# Desktop environment — GNOME on X11
-{ pkgs, inputs, ... }: {
+# Desktop environment — GNOME on Wayland
+{
+  pkgs,
+  ...
+}: {
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
@@ -8,15 +11,6 @@
   services.desktopManager.gnome.enable = true;
 
   programs.dconf.enable = true;
-
-  # wall-nix GDM theming (system-level)
-  imports = [ inputs.wall-nix.nixosModules.default ];
-
-  services.displayManager.gdm.wallNix = {
-    enable = true;
-    background = ../assets/wallpapers/nixos_wallpapers/nix-wallpaper-waterfall.png;
-    colors = 5;
-  };
 
   # Configure keymap in X11
   services.xserver.xkb.layout = "us";

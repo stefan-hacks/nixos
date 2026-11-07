@@ -1,5 +1,5 @@
 # Nixdatifier TUI for NixOS rebuild / update / gc tasks
-{ ... }: {
+{...}: {
   programs.nixdatifier = {
     enable = true;
     ui = true;
