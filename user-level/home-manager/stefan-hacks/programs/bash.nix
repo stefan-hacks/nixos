@@ -56,10 +56,10 @@
   # bat extras — all bat-related aliases in one place
   # ---------------------------------------------------------------------------
   bat = {
-    bathelp = "bat --plain --language=help";
-    man     = "batman";
-    diff    = "batdiff";
-    grep    = "batgrep";
+    bathelp = "bat -plhelp";
+    man = "batman";
+    diff = "batdiff";
+    grep = "batgrep";
   };
 
   # Git shell shortcuts — these forward to the git aliases defined in git.nix
