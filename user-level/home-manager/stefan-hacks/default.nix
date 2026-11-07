@@ -13,6 +13,7 @@
     ./programs/helix.nix
     ./programs/zellij.nix
     ./programs/fastfetch.nix
+    ./programs/bat.nix
     ./gnome
   ];
 
@@ -133,15 +134,6 @@
     theme[proc_mid]="#CBA6F7"
     theme[proc_end]="#F38BA8"
   '';
-
-  # bat configuration with Catppuccin-Mocha theme
-  programs.bat = {
-    enable = true;
-    config = {
-      theme = "Catppuccin-mocha";
-      style = "numbers,changes,header";
-    };
-  };
 
   programs.home-manager.enable = true;
 
