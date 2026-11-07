@@ -43,8 +43,6 @@
     "..." = "cd ../..";
     "...." = "cd ../../..";
     cdc = "cd ~/.config";
-    grep = "grep --color=auto";
-    diff = "diff --color=auto";
     rgi = "rg -i";
     sv = "sudoedit";
     showpath = "echo \"$PATH\" | tr : '\\n' | nl";
@@ -52,6 +50,16 @@
     ff = "fastfetch";
     cpu = "cpufetch";
     cheat = "tldr";
+  };
+
+  # ---------------------------------------------------------------------------
+  # bat extras — all bat-related aliases in one place
+  # ---------------------------------------------------------------------------
+  bat = {
+    bathelp = "bat --plain --language=help";
+    man     = "batman";
+    diff    = "batdiff";
+    grep    = "batgrep";
   };
 
   # Git shell shortcuts — these forward to the git aliases defined in git.nix
@@ -269,6 +277,7 @@
   # Merge all alias groups for Home Manager's native Bash alias handling.
   allAliases = lib.foldl' (acc: aliases: acc // aliases) {} [
     shell
+    bat
     eza
     colourised
     system
@@ -443,6 +452,8 @@ in {
 
         dsh() { docker exec -it "''${1:?usage: dsh <container> [shell]}" "''${2:-sh}"; }
         kns() { kubectl config set-context --current --namespace="''${1:?usage: kns <namespace>}"; }
+
+        help() { "$@" --help 2>&1 | bathelp; }
       ''
       (lib.mkOrder 1950 ''
         eval "$(${pkgs.zoxide}/bin/zoxide init bash)"
