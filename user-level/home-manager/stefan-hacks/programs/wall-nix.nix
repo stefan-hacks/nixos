@@ -6,6 +6,7 @@
     gdmBackground = ../../../../assets/wallpapers/nixos_wallpapers/nix-wallpaper-waterfall.png;
     colors = 5;
     variant = "dark";
+    kittyTheme = true;
     autoSwitch = true;
   };
 }
