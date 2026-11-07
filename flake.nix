@@ -42,6 +42,11 @@
       url = "github:mikesmithgh/kitty-scrollback.nvim/v8.0.0";
       flake = false;
     };
+
+    wall-nix = {
+      url = "path:/home/stefan-hacks/Projects/wall-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs @ {
@@ -73,6 +78,7 @@
             home-manager.users.stefan-hacks = {
               imports = [
                 inputs.nixdatifier.homeManagerModules.default
+                inputs.wall-nix.homeManagerModules.default
                 ./user-level/home-manager/stefan-hacks/default.nix
               ];
             };
