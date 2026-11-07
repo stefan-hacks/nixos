@@ -453,8 +453,23 @@ in {
         dsh() { docker exec -it "''${1:?usage: dsh <container> [shell]}" "''${2:-sh}"; }
         kns() { kubectl config set-context --current --namespace="''${1:?usage: kns <namespace>}"; }
 
-        # 'help' is a bash builtin — use 'hh' instead
-        hh() { "$@" --help 2>&1 | bathelp; }
+        # 'help' is a bash builtin — use 'g' instead
+        g() { "$@" --help 2>&1 | bathelp; }
+
+        # batpipe: make `less` automatically use bat for syntax-highlighted previews
+        export LESSOPEN="|batpipe %s"
+
+        # batwatch: watch files for changes and re-print with bat
+        bw() {
+          [[ $# -ge 1 ]] || { echo "usage: bw <file>..." >&2; return 1; }
+          batwatch "$@"
+        }
+
+        # prettybat: pretty-print source code and highlight with bat
+        pb() {
+          [[ $# -ge 1 ]] || { echo "usage: pb <file>..." >&2; return 1; }
+          prettybat "$@"
+        }
       ''
       (lib.mkOrder 1950 ''
         eval "$(${pkgs.zoxide}/bin/zoxide init bash)"
