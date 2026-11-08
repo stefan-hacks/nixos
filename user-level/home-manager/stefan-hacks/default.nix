@@ -2,7 +2,6 @@
 {config, ...}: {
   imports = [
     ./programs/aliases.nix
-    ./programs/avatar.nix
     ./programs/bash.nix
     ./programs/git.nix
     ./programs/kitty.nix
