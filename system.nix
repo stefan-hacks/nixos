@@ -5,7 +5,6 @@
   imports = [
     # System-level modules (shared OS configuration)
     ./system-level/boot.nix
-    ./system-level/avatar.nix
     ./system-level/nix-settings.nix
     ./system-level/bluetooth.nix
     ./system-level/desktop.nix
