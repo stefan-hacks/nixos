@@ -1,7 +1,119 @@
 # kitty.nix — Home Manager kitty terminal configuration
-# Includes kitty-scrollback.nvim integration.
-# All theming is handled by wall-nix via include wall-nix-theme.conf
+# Includes kitty-scrollback.nvim integration and Catppuccin-Mocha themes.
 _: let
+  # Catppuccin-Mocha theme (dark)
+  darkTheme = ''
+    # vim:ft=kitty
+    ## name:     Catppuccin-Mocha
+    ## author:   Pocco81 (https://github.com/Pocco81)
+    ## license:  MIT
+    ## upstream: https://github.com/catppuccin/kitty/blob/main/themes/mocha.conf
+    ## blurb:    Soothing pastel theme for the high-spirited!
+
+    foreground              #CDD6F4
+    background              #1E1E2E
+    selection_foreground    #1E1E2E
+    selection_background    #F5E0DC
+
+    cursor                  #F5E0DC
+    cursor_text_color       #1E1E2E
+
+    url_color               #F5E0DC
+
+    active_border_color     #B4BEFE
+    inactive_border_color   #6C7086
+    bell_border_color       #F9E2AF
+
+    wayland_titlebar_color system
+    macos_titlebar_color system
+
+    active_tab_foreground   #11111B
+    active_tab_background   #CBA6F7
+    inactive_tab_foreground #CDD6F4
+    inactive_tab_background #181825
+    tab_bar_background      #11111B
+
+    mark1_foreground #1E1E2E
+    mark1_background #B4BEFE
+    mark2_foreground #1E1E2E
+    mark2_background #CBA6F7
+    mark3_foreground #1E1E2E
+    mark3_background #74C7EC
+
+    color0  #45475A
+    color8  #585B70
+    color1  #F38BA8
+    color9  #F38BA8
+    color2  #A6E3A1
+    color10 #A6E3A1
+    color3  #F9E2AF
+    color11 #F9E2AF
+    color4  #89B4FA
+    color12 #89B4FA
+    color5  #F5C2E7
+    color13 #F5C2E7
+    color6  #94E2D5
+    color14 #94E2D5
+    color7  #BAC2DE
+    color15 #A6ADC8
+  '';
+
+  # Catppuccin-Latte theme (light)
+  lightTheme = ''
+    # vim:ft=kitty
+    ## name:     Catppuccin-Latte
+    ## author:   Pocco81 (https://github.com/Pocco81)
+    ## license:  MIT
+    ## upstream: https://github.com/catppuccin/kitty/blob/main/themes/latte.conf
+
+    foreground              #4C4F69
+    background              #EFF1F5
+    selection_foreground    #EFF1F5
+    selection_background    #DC8A78
+
+    cursor                  #DC8A78
+    cursor_text_color       #EFF1F5
+
+    url_color               #DC8A78
+
+    active_border_color     #7287FD
+    inactive_border_color   #9CA0B0
+    bell_border_color       #DF8E1D
+
+    wayland_titlebar_color system
+    macos_titlebar_color system
+
+    active_tab_foreground   #EFF1F5
+    active_tab_background   #8839EF
+    inactive_tab_foreground #4C4F69
+    inactive_tab_background #9CA0B0
+    tab_bar_background      #BCC0CC
+
+    mark1_foreground #EFF1F5
+    mark1_background #7287fD
+    mark2_foreground #EFF1F5
+    mark2_background #8839EF
+    mark3_foreground #EFF1F5
+    mark3_background #209FB5
+
+    color0  #5C5F77
+    color8  #6C6F85
+    color1  #D20F39
+    color9  #D20F39
+    color2  #40A02B
+    color10 #40A02B
+    color3  #DF8E1D
+    color11 #DF8E1D
+    color4  #1E66F5
+    color12 #1E66F5
+    color5  #8839EF
+    color13 #8839EF
+    color6  #179299
+    color14 #179299
+    color7  #ACB0Be
+    color15 #BCC0CC
+  '';
+
   # kitty-scrollback.nvim Python kitten
   kittyScrollbackNvimPy = builtins.readFile ./kitty_scrollback_nvim.py;
 in {
@@ -34,6 +146,8 @@ in {
       window_border_width = "1pt";
       draw_minimal_borders = "yes";
       hide_window_decorations = "yes";
+      active_border_color = "#B4BEFE";
+      inactive_border_color = "#6C7086";
 
       # ── Window sizing ──
       remember_window_size = "no";
@@ -84,12 +198,12 @@ in {
       enable_audio_bell = "no";
     };
 
-    # Extra Kitty config (verbatim) — key mappings + kittens
+    # Extra Kitty config (verbatim) — themes + key mappings + kittens
     extraConfig = ''
       # ═══════════════════════════════════════════════════════════════════════════
-      # THEME — managed by wall-nix
+      # THEME
       # ═══════════════════════════════════════════════════════════════════════════
-      include wall-nix-theme.conf
+      include dark-theme.auto.conf
 
       # ═══════════════════════════════════════════════════════════════════════════
       # KEYBINDINGS
@@ -129,7 +243,7 @@ in {
 
       # Window / pane management
       map alt+- launch --cwd=current --location=hsplit
-      map alt+\\ launch --cwd=current --location=vsplit
+      map alt+\ launch --cwd=current --location=vsplit
 
       map alt+h neighboring_window left
       map alt+l neighboring_window right
@@ -266,6 +380,9 @@ in {
     '';
   };
 
-  # Place kitten in ~/.config/kitty/
+  # Place theme files and kitten in ~/.config/kitty/
+  xdg.configFile."kitty/dark-theme.auto.conf".text = darkTheme;
+  xdg.configFile."kitty/light-theme.auto.conf".text = lightTheme;
+  xdg.configFile."kitty/no-preference-theme.auto.conf".text = lightTheme;
   xdg.configFile."kitty/kitty_scrollback_nvim.py".text = kittyScrollbackNvimPy;
 }

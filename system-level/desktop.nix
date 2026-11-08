@@ -1,8 +1,5 @@
-# Desktop environment — GNOME on Wayland
-{
-  pkgs,
-  ...
-}: {
+# Desktop environment — GNOME on X11
+{pkgs, ...}: {
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 

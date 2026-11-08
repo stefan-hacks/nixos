@@ -19,7 +19,7 @@
     ./system-level/services.nix
     ./system-level/virtualization.nix
     ./system-level/packages.nix
-    ./system-level/wall-nix.nix
+    ./system-level/theming.nix
     ./system-level/flatpak.nix
     # ./system-level/kubernetes.nix
     # ./system-level/podman.nix
