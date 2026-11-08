@@ -1,6 +1,7 @@
 # Home Manager entry point for stefan-hacks
 {config, ...}: {
   imports = [
+    ./programs/aliases.nix
     ./programs/bash.nix
     ./programs/git.nix
     ./programs/kitty.nix
@@ -26,6 +27,9 @@
     sessionPath = [
       "${config.home.homeDirectory}/.local/bin"
     ];
+    sessionVariables = {
+      NH_FLAKE = "/home/stefan-hacks/.config/nixos";
+    };
   };
 
   programs.home-manager.enable = true;

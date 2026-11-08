@@ -16,7 +16,7 @@
     ./system-level/logging.nix
     ./system-level/maintenance.nix
     ./system-level/programs.nix
-    ./system-level/services.nix
+    ./system-level/kanata.nix
     ./system-level/virtualization.nix
     ./system-level/packages.nix
     ./system-level/theming.nix

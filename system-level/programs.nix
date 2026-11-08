@@ -15,12 +15,4 @@ _: {
     enable = true;
     enableSSHSupport = true;
   };
-
-  # fzf — set default options globally so all fzf invocations get the preview.
-  # Quoted preview command ensures --color=always is passed to bat, not parsed
-  # as an fzf --color option (which would fail with "invalid color specification").
-  environment.sessionVariables = {
-    FZF_DEFAULT_OPTS = "--preview 'bat --color=always {}'";
-    NH_FLAKE = "/home/stefan-hacks/.config/nixos";
-  };
 }

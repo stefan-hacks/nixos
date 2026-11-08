@@ -1,187 +1,63 @@
-# ❄️ NixOS Fleet Configuration
+# ❄️ NixOS Fleet
 
-> Flake-based NixOS with Home Manager. Multi-host, multi-layer modular system
-> for **titan**, **ghost**, **minimal**, and **server** — managed entirely
-> through Nix expressions.
+> Flake-based NixOS with Home Manager. Four hosts — **titan**, **ghost**, **minimal**, **server** — built from focused, single-purpose modules.
 
----
-
-## Installing from NixOS Minimal ISO (Blank SSD)
-
-This is the priority install path for a fresh machine. After install, all
-configuration is declarative — no manual file edits.
-
-### 1. Boot the NixOS minimal installer
-
-Download the latest NixOS minimal ISO, write to USB, boot, and set up
-networking:
-
-```bash
-# Set a password for the nixos user so you can SSH in if needed
-passwd
-
-# Identify your target disk
-lsblk
-# Note the device, e.g. /dev/nvme0n1
-```
-
-### 2. Partition and format with Disko
-
-Disko handles partitioning declaratively. Each host has a `disko-config.nix`.
-
-| Host | Disko template | Layout |
-|------|---------------|--------|
-| **titan** | `hosts/titan/disko-config.nix` | LUKS + LVM (`cryptroot` UUID `8a350d7a-ce96-4ba6-938c-61b2739239f6`) |
-| **ghost** | `hosts/ghost/disko-config.nix` | Same LUKS+LVM (shares cryptroot UUID with titan) |
-| **minimal** | `hosts/minimal/disko-config.nix` | Simple ext4, no LUKS |
-| **server** | `hosts/server/disko-config.nix` | Simple ext4, no LUKS |
-
-**Edit the host's disko template** to set the `device` to your real disk:
-
-```bash
-nano hosts/titan/disko-config.nix
-# Change: device = "/dev/nvme0n1";
-```
-
-**Uncomment the disko imports** in the host's `default.nix`:
-
-```bash
-nano hosts/titan/default.nix
-# Uncomment these two lines:
-# inputs.disko.nixosModules.disko
-# ./disko-config.nix
-```
-
-**Run disko** to partition, format, and mount:
-
-```bash
-# From the NixOS installer:
-sudo nix --experimental-features "nix-command flakes" run \
-  github:nix-community/disko -- \
-  --mode destroy,format,mount ./hosts/<host>/disko-config.nix
-```
-
-> ⚠️ **This erases the entire target disk.**
-
-### 3. Generate hardware configuration
-
-```bash
-# Tell nixos-generate-config NOT to write filesystems — disko already handled them.
-sudo nixos-generate-config --no-filesystems --root /mnt
-```
-
-### 4. Copy your configuration and install
-
-```bash
-# Copy your repo into the target mount
-sudo mkdir -p /mnt/etc/nixos
-sudo cp -r ~/.config/nixos/* /mnt/etc/nixos/
-
-# Copy the generated hardware config into the host directory
-sudo cp /mnt/etc/nixos/hardware-configuration.nix /mnt/etc/nixos/hosts/<host>/
-
-# Install NixOS
-sudo nixos-install --flake /mnt/etc/nixos#<host>
-```
-
-### 5. Set passwords and reboot
-
-```bash
-# Set password for the primary user
-sudo nixos-enter --root /mnt
-passwd stefan-hacks
-exit
-
-# Reboot into the new system
-reboot
-```
-
-### 6. Post-install cleanup
-
-After first boot, **re-comment** the disko import lines in the host's
-`default.nix`. From now on, rebuild with flakes:
-
-```bash
-cd ~/.config/nixos
-sudo nixos-rebuild switch --flake .#<host>
-```
+**Design rule:** every module does exactly what its filename says. If a module touches multiple unrelated systems, it gets split.
 
 ---
 
-## Daily Rebuild Commands
+## Quick Reference
 
 ```bash
 cd ~/.config/nixos
 
-# Dry-run build (no activation)
+# Dry-run a host
 nixos-rebuild build --flake .#titan
 
 # Activate on current machine
 sudo nixos-rebuild switch --flake .#titan
 
-# Update all flake inputs and rebuild
+# Update inputs and rebuild
 nix flake update
 sudo nixos-rebuild switch --flake .#titan
 
-# Verify all four host configs
-nix flake check
+# Format the repo
+nix fmt
 ```
 
 ---
 
-## Architecture Overview
+## Architecture
+
+Three layers, no mixing:
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│  flake.nix                                                          │
-│  ├── inputs: nixpkgs (26.05), home-manager (release-26.05),        │
-│  │          nvf, nixdatifier, nix-graph, nix-flatpak,             │
-│  │          vellum, kitty-scrollback, treefmt-nix                   │
-│  └── outputs: nixosConfigurations.{titan,ghost,minimal,server}       │
-│                                                                     │
-│  HOST (hosts/<host>/default.nix)                                    │
-│  ├── hardware-configuration.nix                                   │
-│  ├── disko-config.nix  (initial install only)                     │
-│  └── imports → system.nix                                           │
-│                                                                     │
-│  SYSTEM (system.nix)                                                │
-│  ├── system-level/  ──→  boot, desktop, audio, networking,        │
-│  │                         packages, flatpak, security,            │
-│  │                         maintenance, theming, virtualization    │
-│  └── users.users.stefan-hacks                                       │
-│                                                                     │
-│  USER (home-manager)                                                │
-│  └── user-level/home-manager/stefan-hacks/                          │
-│      ├── programs/  ──→  bash (ble.sh + vi mode + aliases),        │
-│      │                     kitty, starship, atuin, zoxide,         │
-│      │                     carapace, helix, zellij, fastfetch, git   │
-│      └── gnome/     ──→  dconf modules (nix-my-gnome generated)     │
-└─────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────┐
+│  HOST          hosts/<host>/default.nix                              │
+│  ├── hardware-configuration.nix   (generated, per-machine)         │
+│  ├── sensors.nix                  (host-specific hardware quirks)    │
+│  └── imports → system.nix                                            │
+│                                                                      │
+│  SYSTEM        system.nix                                            │
+│  └── system-level/                                                   │
+│      ├── boot.nix, desktop.nix, audio.nix, networking.nix           │
+│      ├── firewall.nix, fail2ban.nix, bluetooth.nix                  │
+│      ├── locale.nix, logging.nix, maintenance.nix                     │
+│      ├── programs.nix, kanata.nix, virtualization.nix                 │
+│      ├── packages.nix, theming.nix, flatpak.nix                      │
+│      └── nvf.nix                                                     │
+│                                                                      │
+│  USER          user-level/home-manager/stefan-hacks/                │
+│  ├── programs/  →  bash, kitty, starship, atuin, helix, etc.         │
+│  └── gnome/     →  dconf settings (generated by nix-my-gnome)      │
+└──────────────────────────────────────────────────────────────────────┘
 ```
 
-**Design principle:** `system.nix` is the shared OS entry point. Home Manager
-handles all per-user dotfiles and program configuration. Host files are thin
-wrappers.
-
----
-
-## Current Flake Inputs
-
-| Input | URL | Branch/Tag | Purpose |
-|-------|-----|------------|---------|
-| `nixpkgs` | `github:NixOS/nixpkgs/nixos-26.05` | stable | Primary package set |
-| `home-manager` | `github:nix-community/home-manager/release-26.05` | stable | Per-user dotfiles + programs |
-| `nvf` | `github:NotAShelf/nvf` | main | Declarative Neovim (replaces lazyvim-nix) |
-| `nixdatifier` | `github:Muddyblack/nixdatifier` | master | NixOS desktop widget + TUI |
-| `nix-graph` | `github:AlexAntonik/nix-graph` | default | Interactive Nix dependency graph TUI |
-| `nix-flatpak` | `github:gmodena/nix-flatpak/?ref=latest` | latest | Declarative system-wide flatpaks |
-| `vellum` | `github:blackhat-7/vellum.nvim` | — | Extra nvim plugin |
-| `kitty-scrollback` | `github:mikesmithgh/kitty-scrollback.nvim/v8.0.0` | v8.0.0 | Kitty scrollback nvim plugin |
-| `treefmt-nix` | `github:numtide/treefmt-nix` | main | Tree-wide formatter |
-
-> **Stable-first policy:** All inputs use nixos-26.05 / release-26.05 where
-> available. GUI applications that need fresher versions are managed via
-> declarative flatpaks instead of unstable overlays.
+| Layer | Responsibility |
+|-------|-------------|
+| **Host** | Hardware, LUKS, GPU drivers, hostname, per-host imports. Thin wrapper. |
+| **System** | OS-wide settings. Each file is one category (boot, audio, firewall, etc.). |
+| **User** | Dotfiles, program configs, shell aliases, GNOME dconf. Declarative via Home Manager. |
 
 ---
 
@@ -189,16 +65,16 @@ wrappers.
 
 ```
 ~/.config/nixos/
-├── flake.nix                       # Flake inputs + nixosConfigurations
+├── flake.nix
 ├── system.nix                      # Shared OS entry point
-├── README.md                       # You are here
+├── README.md
 │
-├── hosts/                          # Per-machine entry points
+├── hosts/
 │   ├── titan/
-│   │   ├── default.nix             # Host config: amdgpu, LUKS, hostname
+│   │   ├── default.nix             # AMD GPU, LUKS, hostname
 │   │   ├── hardware-configuration.nix
-│   │   ├── sensors.nix             # k10temp (AZW SER limitation: no fan)
-│   │   └── disko-config.nix        # LUKS + LVM layout
+│   │   ├── sensors.nix             # k10temp (no it87 — EC firmware limitation)
+│   │   └── disko-config.nix      # LUKS + LVM (install-time only)
 │   ├── ghost/
 │   │   ├── default.nix             # LUKS (shares cryptroot UUID with titan)
 │   │   ├── hardware-configuration.nix
@@ -206,115 +82,307 @@ wrappers.
 │   ├── minimal/
 │   │   ├── default.nix             # Bare-minimum host
 │   │   ├── hardware-configuration.nix
-│   │   └── disko-config.nix        # Simple ext4, no LUKS
+│   │   └── disko-config.nix        # Simple ext4
 │   └── server/
-│       ├── default.nix             # Headless server host
+│       ├── default.nix             # Headless
 │       ├── hardware-configuration.nix
-│       └── disko-config.nix        # Simple ext4, no LUKS
+│       └── disko-config.nix        # Simple ext4
 │
-├── system-level/                   # Shared OS modules
+├── system-level/                   # One concern per file
+│   ├── audio.nix                   # PipeWire
+│   ├── bluetooth.nix               # BlueZ + IMC 13d3:3621 resume fix
 │   ├── boot.nix                    # systemd-boot, kernel, initrd
-│   ├── nix-settings.nix            # nix daemon, experimental-features, GC
-│   ├── desktop.nix                 # GNOME, GDM, services.displayManager
-│   ├── theming.nix                 # GDM wallpaper, Plymouth, catppuccin
-│   ├── audio.nix                   # PipeWire, Bluetooth audio
-│   ├── networking.nix              # NetworkManager, firewall basics
-│   ├── firewall.nix                # nftables rules
+│   ├── desktop.nix                 # GNOME DE + extensions
 │   ├── fail2ban.nix                # Intrusion prevention
-│   ├── bluetooth.nix               # BlueZ, resume fix for IMC 13d3:3621
+│   ├── firewall.nix                # nftables rules
+│   ├── flatpak.nix                 # Declarative system-wide flatpaks
+│   ├── kanata.nix                  # Keyboard remapping (KDL config)
+│   ├── kubernetes.nix              # (commented out)
 │   ├── locale.nix                  # Timezone, locale, keymap
 │   ├── logging.nix                 # Journal settings
-│   ├── maintenance.nix             # Auto-upgrade, nix.gc
-│   ├── programs.nix                # fzf, mtr, gnupg
-│   ├── services.nix                # Printing, kanata
-│   ├── virtualization.nix          # QEMU/KVM, virt-manager
+│   ├── maintenance.nix             # Auto-upgrade, GC
+│   ├── networking.nix              # NetworkManager
+│   ├── nix-settings.nix            # Nix daemon, experimental-features
+│   ├── nvf.nix                     # Declarative Neovim
 │   ├── packages.nix                # System-wide packages
-│   ├── nvf.nix                     # Declarative Neovim (nvf) config
-│   ├── flatpak.nix                 # Declarative system-wide flatpak apps
-│   └── ...
+│   ├── podman.nix                  # (commented out)
+│   ├── programs.nix                # fzf, mtr, gnupg agent
+│   ├── sensors.nix                 # OpenRGB + OpenTabletDriver
+│   ├── theming.nix                 # GDM wallpaper (gnome-shell SCSS overlay)
+│   └── virtualization.nix          # QEMU/KVM, virt-manager
 │
-└── user-level/home-manager/stefan-hacks/   # HM user config
+└── user-level/home-manager/stefan-hacks/
     ├── default.nix                 # HM entry point
     ├── programs/
-    │   ├── bash.nix                # ble.sh, vi mode, aliases, atuin, zoxide
-    │   ├── kitty.nix               # Kitty terminal (shell_integration disabled for ble.sh)
-    │   ├── starship.nix            # Prompt
+    │   ├── aliases.nix             # All bash aliases (10 categories)
     │   ├── atuin.nix               # Shell history sync
-    │   ├── carapace.nix            # Multi-shell argument completion
-    │   ├── helix.nix               # evil-helix config
-    │   ├── zellij.nix              # Raw KDL config
-    │   ├── fastfetch.nix           # JSONC config
-    │   └── git.nix                 # Git user.name, user.email
+    │   ├── bash.nix                # ble.sh, vi mode, custom functions
+    │   ├── bat.nix                 # Syntax-highlighted cat
+    │   ├── btop.nix                # System monitor
+    │   ├── carapace.nix            # Multi-shell completions
+    │   ├── fastfetch.nix           # System info display
+    │   ├── git.nix                 # Git config + aliases
+    │   ├── helix.nix               # Evil-helix editor
+    │   ├── kitty.nix               # Terminal emulator
+    │   ├── nixdatifier.nix         # NixOS desktop widget
+    │   ├── starship.nix            # Shell prompt
+    │   └── zellij.nix              # Terminal multiplexer (KDL)
     └── gnome/                      # dconf modules (nix-my-gnome generated)
+        ├── accessibility.nix
+        ├── app-folders.nix
+        ├── evolution.nix
+        ├── gtk.nix
+        ├── input-devices.nix
+        ├── media.nix
+        ├── misc-apps.nix
+        ├── misc.nix
+        ├── mutter.nix
+        ├── nautilus.nix
+        ├── notifications.nix
+        ├── settings-daemon.nix
+        ├── shell-extensions.nix
+        ├── shell.nix
+        ├── virt-manager.nix
+        └── window-manager.nix
 ```
 
 ---
 
-## How It Works
+## Installing from NixOS Minimal ISO (Blank SSD)
 
-### Three Layers
+### 1. Boot the installer
 
-| Layer | File(s) | What lives here |
-|-------|---------|-----------------|
-| **Host** | `hosts/<host>/default.nix`, `hardware-configuration.nix` | Hardware, LUKS, GPU drivers, hostname, per-host imports |
-| **System** | `system.nix` + `system-level/*.nix` | OS-wide settings: boot, desktop, audio, network, packages, services, security |
-| **User** | `user-level/home-manager/stefan-hacks/**/*.nix` | Dotfiles, program configs, shell aliases, GNOME dconf |
+```bash
+# Set a password for SSH access
+passwd
 
-### Home Manager Integration
-
-Each host wires Home Manager via `flake.nix`:
-
-```nix
-home-manager = {
-  useGlobalPkgs = true;
-  useUserPackages = true;
-  backupFileExtension = "backup";
-  extraSpecialArgs = {inherit inputs;};
-  users.stefan-hacks = import ../../user-level/home-manager/stefan-hacks;
-};
+# Identify your target disk
+lsblk
 ```
 
-All user config is declarative — no manual `~/.bashrc` edits. Changes are
-activated on rebuild via `home-manager-stefan-hacks.service`.
+### 2. Partition and format with Disko
 
-### Shell Stack (all user-level via Home Manager)
+Each host has a `disko-config.nix`. Edit the `device` line to match your real disk:
 
-| Tool | Role | Integration Notes |
-|------|------|-------------------|
-| **ble.sh** | Bash line editor + vi mode | Sourced in `bashrcExtra`. `unset -f read` removes its read wrapper to prevent conflicts with carapace/fzf completions. |
-| **atuin** | Shell history sync | Initialised AFTER `ble-attach` in initExtra. Detects `BLE_ATTACHED` and registers ble.sh-compatible widgets. `ATUIN_CONFIG_DIR` exported for non-login shells. |
-| **zoxide** | Smart cd | Initialised in initExtra via `zoxide init bash`. |
-| **carapace** | Multi-shell argument completion | `carapace _carapace bash` sourced in initExtra. |
-| **starship** | Prompt | `starship init bash` in initExtra, guarded by `TERM != "dumb"`. |
-| **fzf** | Fuzzy finder | `fzf --bash` in initExtra. |
+```bash
+nano hosts/titan/disko-config.nix
+# Change: device = "/dev/nvme0n1";
+```
 
-### Neovim (nvf)
+Uncomment the disko imports in the host's `default.nix`:
 
-Neovim is configured via [nvf](https://github.com/NotAShelf/nvf) as a Home
-Manager module (replaced lazyvim-nix):
+```bash
+nano hosts/titan/default.nix
+# Uncomment these two lines:
+# "${builtins.fetchTarball "https://github.com/nix-community/disko/archive/master.tar.gz"}/module.nix"
+# ./disko-config.nix
+```
 
-- **Theme:** catppuccin-mocha
-- **Features:** LSP, treesitter, nvim-cmp completion, debugger (DAP)
-- **Languages:** Nix (nixd/alejandra), Rust, Bash, YAML, JSON, TOML, Markdown,
-  HTML, Ansible, Terraform
-- **Extras:** telescope, neo-tree, gitsigns, lualine
-- **Aliases:** `v` → `nvim`, `nv` → `nvim`, `EDITOR=nvim`
-- **Config:** `system-level/nvf.nix`
+Run disko (from the installer):
 
-### Bash Aliases
+```bash
+sudo nix --experimental-features "nix-command flakes" run \
+  github:nix-community/disko -- \
+  --mode destroy,format,mount ./hosts/titan/disko-config.nix
+```
 
-The `bash.nix` module provides aliases folded from multiple categories:
+> ⚠️ **This erases the entire target disk.**
 
-- **Shell** — `..`, `...`, `c`, `e`, `h`, `j`, `lg`, `src`
-- **Nix/NixOS** — `nsw`, `nbd`, `nfu`, `nfc`, `nfmt`, `ndiff`, `ngc`, `nroots`, `nrepair`
-- **Git** — `g`, `gs`, `ga`, `gco`, `gcb`, `gl`, `gd`, `gundo`, `gprune`
-- **Docker/Podman** — `dps`, `dex`, `dlogs`, `dc`, `dcu`, `dcd`
-- **Kubernetes** — `k`, `kgp`, `kgn`, `kd`, `kl`, `kaf`, `kctx`, `kns`
-- **Systemd** — `sctl`, `scts`, `sctr`, `jrn`, `jrnb`, `jrnf`
-- **Networking** — `ipa`, `ports`, `ss`, `dnsq`, `curl-time`
-- **Infra** — `tf`, `tfv`, `ap`, `api`
+### 3. Generate hardware config
 
-See `user-level/home-manager/stefan-hacks/programs/bash.nix` for the full list.
+```bash
+sudo nixos-generate-config --no-filesystems --root /mnt
+```
+
+### 4. Copy configuration and install
+
+```bash
+sudo mkdir -p /mnt/etc/nixos
+sudo cp -r ~/.config/nixos/* /mnt/etc/nixos/
+sudo cp /mnt/etc/nixos/hardware-configuration.nix /mnt/etc/nixos/hosts/titan/
+sudo nixos-install --flake /mnt/etc/nixos#titan
+```
+
+### 5. Set password and reboot
+
+```bash
+sudo nixos-enter --root /mnt
+passwd stefan-hacks
+exit
+reboot
+```
+
+### 6. Post-install
+
+After first boot, re-comment the disko lines in `hosts/titan/default.nix`. From now on:
+
+```bash
+cd ~/.config/nixos
+sudo nixos-rebuild switch --flake .#titan
+```
+
+---
+
+## Using This Repo in an Existing Flake + Home Manager Setup
+
+You don't have to adopt the whole repo. Import only the pieces you need.
+
+### Option A: Import system modules into your own flake
+
+In your `flake.nix`:
+
+```nix
+{
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+  inputs.home-manager = {
+    url = "github:nix-community/home-manager/release-26.05";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+
+  outputs = { self, nixpkgs, home-manager, ... }:
+    let
+      system = "x86_64-linux";
+    in {
+      nixosConfigurations.myhost = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.stefan-hacks = {
+              imports = [
+                ./user-level/home-manager/stefan-hacks/default.nix
+              ];
+            };
+          }
+          # Pick and choose system modules:
+          ./system-level/boot.nix
+          ./system-level/networking.nix
+          ./system-level/audio.nix
+          ./system-level/locale.nix
+          # ...etc
+        ];
+      };
+    };
+}
+```
+
+### Option B: Import only Home Manager user config
+
+If you already have a working NixOS system and just want the user dotfiles:
+
+```nix
+# In your existing home-manager configuration
+{
+  imports = [
+    # Pick individual modules:
+    ./nixos-repo/user-level/home-manager/stefan-hacks/programs/bash.nix
+    ./nixos-repo/user-level/home-manager/stefan-hacks/programs/aliases.nix
+    ./nixos-repo/user-level/home-manager/stefan-hacks/programs/kitty.nix
+    ./nixos-repo/user-level/home-manager/stefan-hacks/programs/starship.nix
+    # ...etc
+  ];
+}
+```
+
+> **Note:** `aliases.nix` depends on `lib` (for `lib.genAttrs` and `lib.foldl'`). `bash.nix` depends on `pkgs` (for zoxide, blesh). Ensure your HM config provides these.
+
+### Option C: Add as a flake input
+
+```nix
+{
+  inputs.stefan-nixos = {
+    url = "github:stefan-hacks/nixos-config"; # or path:/home/.../.config/nixos
+    flake = false;
+  };
+
+  outputs = { self, nixpkgs, home-manager, stefan-nixos, ... }:
+    let
+      system = "x86_64-linux";
+    in {
+      nixosConfigurations.myhost = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.stefan-hacks = {
+              imports = [ (stefan-nixos + "/user-level/home-manager/stefan-hacks/default.nix") ];
+            };
+          }
+          (stefan-nixos + "/system-level/boot.nix")
+          (stefan-nixos + "/system-level/networking.nix")
+          # ...etc
+        ];
+      };
+    };
+}
+```
+
+---
+
+## Module Reference
+
+### System-level modules
+
+| Module | Lines | What it does |
+|--------|-------|-------------|
+| `audio.nix` | ~15 | PipeWire (pulse, alsa, jack) |
+| `bluetooth.nix` | ~45 | BlueZ + USB autosuspend fix for IMC 13d3:3621 |
+| `boot.nix` | ~35 | systemd-boot, kernel params, initrd |
+| `desktop.nix` | ~30 | GNOME DE + extensions list |
+| `fail2ban.nix` | ~25 | SSH brute-force protection |
+| `firewall.nix` | ~20 | nftables rules |
+| `flatpak.nix` | ~70 | Declarative flatpak apps (system-level) |
+| `kanata.nix` | ~290 | Keyboard remapping (KDL) |
+| `locale.nix` | ~15 | Timezone, locale, keymap |
+| `logging.nix` | ~25 | Journald settings |
+| `maintenance.nix` | ~25 | Auto-upgrade, GC |
+| `networking.nix` | ~25 | NetworkManager, firewall basics |
+| `nix-settings.nix` | ~45 | Nix daemon config, flakes, GC |
+| `nvf.nix` | ~350 | Declarative Neovim (LSP, DAP, treesitter) |
+| `packages.nix` | ~350 | System-wide packages |
+| `programs.nix` | ~20 | fzf, mtr, gnupg agent |
+| `sensors.nix` | ~35 | OpenRGB + OpenTabletDriver |
+| `theming.nix` | ~45 | GDM login wallpaper (gnome-shell SCSS overlay) |
+| `virtualization.nix` | ~35 | QEMU/KVM, virt-manager |
+
+### User-level programs
+
+| Module | Lines | What it does |
+|--------|-------|-------------|
+| `aliases.nix` | ~290 | All bash aliases (shell, bat, eza, git, nix, systemd, network, infra) |
+| `bash.nix` | ~200 | ble.sh, vi mode, custom functions, init order |
+| `atuin.nix` | ~15 | Shell history sync |
+| `bat.nix` | ~25 | Syntax highlighting (`Catppuccin Mocha`) |
+| `btop.nix` | ~15 | System monitor |
+| `carapace.nix` | ~10 | Multi-shell completions |
+| `fastfetch.nix` | ~80 | System info (Catppuccin-Mocha palette) |
+| `git.nix` | ~45 | Git config + aliases |
+| `helix.nix` | ~15 | Editor theme |
+| `kitty.nix` | ~390 | Terminal (inline Catppuccin-Mocha theme) |
+| `nixdatifier.nix` | ~15 | NixOS desktop widget |
+| `starship.nix` | ~70 | Shell prompt (Catppuccin-Mocha palette) |
+| `zellij.nix` | ~25 | Terminal multiplexer (KDL config) |
+
+---
+
+## Shell Stack
+
+All shell tools are installed via Home Manager (not system-level) to control init order relative to ble.sh:
+
+| Tool | Role | Integration |
+|------|------|-------------|
+| **ble.sh** | Bash line editor + vi mode | Sourced in `bashrcExtra`. `unset -f read` removes its read wrapper to prevent conflicts with carapace/fzf. |
+| **zoxide** | Smart cd | `zoxide init bash` in initExtra (order 1950) |
+| **atuin** | Shell history | `atuin init bash` AFTER `ble-attach` (order 2100). `ATUIN_CONFIG_DIR` exported for non-login shells. |
+| **carapace** | Arg completion | `carapace _carapace bash` in initExtra |
+| **starship** | Prompt | `starship init bash` in initExtra, guarded by `TERM != "dumb"` |
+| **fzf** | Fuzzy finder | `fzf --bash` in initExtra |
+
+> **Why HM, not system?** System-level packages insert init snippets into `/etc/bashrc` in unpredictable order. HM gives explicit control via `bashrcExtra` → `initExtra` with `lib.mkOrder`.
 
 ---
 
@@ -322,133 +390,61 @@ See `user-level/home-manager/stefan-hacks/programs/bash.nix` for the full list.
 
 | Decision | Rationale |
 |----------|-----------|
+| **Single-purpose modules** | A module named `audio.nix` only touches audio. No kitchen-sink files. |
 | **Flakes** | Reproducible inputs with lockfile. All hosts share one `flake.nix`. |
-| **Home Manager** | Declarative per-user config (dotfiles, programs, GNOME dconf). Clean separation from system-level modules. |
-| **Stable-first** | `nixpkgs` and `home-manager` both track 26.05 stable. GUI apps needing newer versions are installed via declarative flatpaks. |
-| **Single `system.nix` entry point** | One file imports all shared system modules. Adding a module is one line — it applies fleet-wide. |
+| **Home Manager** | Declarative per-user config. Clean separation from system modules. |
+| **Stable-first** | `nixpkgs` and `home-manager` track 26.05. GUI apps needing newer versions use flatpak. |
+| **nvf (not LazyVim)** | Declarative Neovim with native Nix LSP/treesitter. No runtime Mason downloads. |
+| **ble.sh + `unset -f read`** | ble.sh provides vi mode and syntax highlighting, but its `read` wrapper breaks carapace/fzf. Removing the wrapper fixes this. |
+| **All shell tools in HM** | atuin, zoxide, carapace, starship, blesh are all user-level to avoid init-order conflicts. |
 | **nix-my-gnome for dconf** | GNOME settings are generated from a live dconf dump, not hand-edited. Reproducible and version-controlled. |
-| **nvf (not LazyVim)** | Declarative Neovim with native Nix LSP/treesitter packages. No runtime Mason downloads. |
-| **ble.sh + `unset -f read`** | ble.sh provides vi mode and syntax highlighting, but its `read` wrapper breaks carapace/fzf completions. Removing the wrapper fixes this. |
-| **All shell tools in HM** | atuin, zoxide, carapace, starship, blesh are all installed via Home Manager (not system-level) to avoid init-order conflicts with ble.sh. |
+| **KDL for complex configs** | Zellij and Kanata use raw KDL instead of Nix attrset serialization for readability. |
+
+---
+
+## Flake Inputs
+
+| Input | URL | Purpose |
+|-------|-----|---------|
+| `nixpkgs` | `github:NixOS/nixpkgs/nixos-26.05` | Primary package set |
+| `home-manager` | `github:nix-community/home-manager/release-26.05` | Per-user dotfiles |
+| `treefmt-nix` | `github:numtide/treefmt-nix` | Tree-wide formatter (alejandra, deadnix) |
+| `nvf` | `github:NotAShelf/nvf` | Declarative Neovim |
+| `nixdatifier` | `github:Muddyblack/nixdatifier` | NixOS desktop widget |
+| `nix-graph` | `github:AlexAntonik/nix-graph` | Interactive dependency graph TUI |
+| `nix-flatpak` | `github:gmodena/nix-flatpak/?ref=latest` | Declarative system-wide flatpaks |
+| `vellum` | `github:blackhat-7/vellum.nvim` | Extra nvim plugin (non-flake) |
+| `kitty-scrollback` | `github:mikesmithgh/kitty-scrollback.nvim/v8.0.0` | Kitty scrollback plugin (non-flake) |
 
 ---
 
 ## Host Reference
 
-| Host | Hardware | Special Config |
-|------|----------|----------------|
-| **titan** | AMD GPU, AZW SER mini-PC, LUKS encrypted root | `amdgpu` kernel module, k10temp only (no `it87` fan — EC firmware limitation), shared LUKS UUID with ghost |
-| **ghost** | Intel/AMD, LUKS encrypted root | Shared LUKS UUID with titan (`8a350d7a-ce96-4ba6-938c-61b2739239f6`) |
-| **minimal** | Minimal/generic | No GPU drivers, no desktop extras |
-| **server** | Headless | No desktop, minimal packages |
+| Host | Hardware | Notes |
+|------|----------|-------|
+| **titan** | AZW SER mini-PC, AMD GPU, LUKS encrypted root | Shared LUKS UUID with ghost. k10temp only (no it87 fan sensor — EC limitation). |
+| **ghost** | Intel/AMD, LUKS encrypted root | Shared LUKS UUID with titan. |
+| **minimal** | Generic | No GPU drivers, no desktop extras. |
+| **server** | Headless | No desktop, minimal packages. |
 
 ---
 
-## Tooling
+## Tooling in `packages.nix`
 
-Included in `system-level/packages.nix`:
-
-- `nh` — NixOS helper (`nh os switch`)
-- `nix-output-monitor` (`nom`) — live build TUI
-- `nix-index` + `nix-locate` — find which package owns a file
-- `nix-tree` — interactive dependency browser
-- `nix-graph` — TUI dependency graph viewer (reverse/dependents view)
-- `nix-diff` — derivation diff without building
-- `nix-du` — accurate store disk usage
-- `deadnix` — dead code finder
-- `statix` — linter with `--fix`
-- `alejandra` / `nixpkgs-fmt` — formatters
-- `comma` — run packages without installing: `, cowsay hello`
-
----
-
-## How To
-
-### Add a New Host
-
-1. Generate hardware config on the new machine:
-   ```bash
-   nixos-generate-config --root /mnt
-   ```
-
-2. Copy into the repo:
-   ```bash
-   mkdir -p ~/.config/nixos/hosts/newbox
-   cp /mnt/etc/nixos/hardware-configuration.nix ~/.config/nixos/hosts/newbox/
-   ```
-
-3. Create `hosts/newbox/default.nix`:
-   ```nix
-   { config, lib, pkgs, inputs, ... }: {
-     imports = [
-       ./hardware-configuration.nix
-       ../../system.nix
-     ];
-
-     networking.hostName = "newbox";
-     system.stateVersion = "26.05";
-   }
-   ```
-
-4. Add to `flake.nix`:
-   ```nix
-   hostNames = [ "ghost" "titan" "minimal" "server" "newbox" ];
-   ```
-
-5. Build to verify:
-   ```bash
-   nixos-rebuild build --flake .#newbox
-   ```
-
-### Add a System-Level Module
-
-1. Create `system-level/mymodule.nix`:
-   ```nix
-   { config, lib, pkgs, ... }: {
-     # your module content
-   }
-   ```
-
-2. Import it in `system.nix`:
-   ```nix
-   imports = [
-     # ... existing imports ...
-     ./system-level/mymodule.nix
-   ];
-   ```
-
-3. Verify all hosts:
-   ```bash
-   cd ~/.config/nixos
-   nix flake check
-   ```
-
-### Add or Remove Packages
-
-Edit `system-level/packages.nix` and add/remove from
-`environment.systemPackages`.
-
-Build, then switch:
-
-```bash
-nixos-rebuild build --flake .#titan
-sudo nixos-rebuild switch --flake .#titan
-```
-
-### Add a GNOME Extension
-
-Edit `system-level/desktop.nix`:
-
-```nix
-environment.systemPackages = with pkgs.gnomeExtensions; [
-  appindicator
-  blur-my-shell
-  # ...
-];
-```
+- `nh` — NixOS helper
+- `nix-output-monitor` (`nom`) — Live build TUI
+- `nix-index` + `nix-locate` — Find which package owns a file
+- `nix-tree` — Interactive dependency browser
+- `nix-graph` — TUI dependency graph viewer
+- `nix-diff` — Derivation diff without building
+- `nix-du` — Accurate store disk usage
+- `deadnix` — Dead code finder
+- `statix` — Linter with `--fix`
+- `alejandra` / `nixpkgs-fmt` — Formatters
+- `comma` — Run packages without installing: `, cowsay hello`
 
 ---
 
 ## License
 
-MIT — do what you want, but don't blame me if you brick your LUKS partition.
+MIT
