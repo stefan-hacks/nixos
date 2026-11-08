@@ -16,6 +16,7 @@
     ./system-level/logging.nix
     ./system-level/maintenance.nix
     ./system-level/programs.nix
+    ./system-level/i2c.nix
     ./system-level/kanata.nix
     ./system-level/virtualization.nix
     ./system-level/packages.nix
@@ -36,6 +37,7 @@
       "video"
       "audio"
       "dialout"
+      "i2c"
     ];
     # Password is managed imperatively or via agenix/sops
   };

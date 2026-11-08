@@ -207,6 +207,26 @@
             rpr (tap-hold $tap-time $hold-time M-rght M-rght)
 
 
+            ;; Spatial window positioning — Layer 3 left-hand grid (3×3 pad)
+            ;; Q = top-left corner     (Super+Ctrl+Shift+Left)
+            spq (tap-hold $tap-time $hold-time C-S-M-left C-S-M-left)
+            ;; W = top edge            (Super+Ctrl+Up)
+            spw (tap-hold $tap-time $hold-time C-M-up C-M-up)
+            ;; E = top-right corner    (Super+Ctrl+Shift+Right)
+            spe (tap-hold $tap-time $hold-time C-S-M-rght C-S-M-rght)
+            ;; A = left edge           (Super+Ctrl+Left)
+            spa (tap-hold $tap-time $hold-time C-M-left C-M-left)
+            ;; S = center              (Super+Ctrl+C)
+            sps (tap-hold $tap-time $hold-time C-M-c C-M-c)
+            ;; D = right edge          (Super+Ctrl+Right)
+            spd (tap-hold $tap-time $hold-time C-M-rght C-M-rght)
+            ;; Z = bottom-left corner  (Super+Ctrl+Shift+Down)
+            spz (tap-hold $tap-time $hold-time C-S-M-down C-S-M-down)
+            ;; X = bottom edge         (Super+Ctrl+Down)
+            spx (tap-hold $tap-time $hold-time C-M-down C-M-down)
+            ;; C = bottom-right corner (Super+Ctrl+Shift+Up)
+            spc (tap-hold $tap-time $hold-time C-S-M-up C-S-M-up)
+
             ;; GNOME workspace navigation
             ;; Y key: tap/hold=switch to first workspace (Super+Home)
             wtl (tap-hold $tap-time $hold-time M-home M-home)
@@ -264,9 +284,9 @@
           (deflayer three
             caps _    _    _    _    _    _    _    _    _    _    _    lrld
             grv  _    _    _    _    _    _    _    _    _    _    _    _    _
-            tab  _    _    _    _    _    @wtl @dsl @dsr @wtr @pp  @pt  @nt  _
-            esc  _    _    _    _    _    @rpl @rpd @rpu @rpr @mls @mrs ret
-            _    _    _    _    _    _    @w1  @w2  @w3  @w4  _    _
+            tab  @spq @spw @spe _    _    @wtl @dsl @dsr @wtr @pp  @pt  @nt  _
+            esc  @spa @sps @spd _    _    @rpl @rpd @rpu @rpr @mls @mrs ret
+            _    @spz @spx @spc _    _    @w1  @w2  @w3  @w4  _    _
             _    _    _           _                 _    _    _
           )
           ;; LAYER FOUR - Editing - text and terminal editing layer - left ctrl key held

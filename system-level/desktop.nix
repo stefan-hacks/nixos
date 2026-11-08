@@ -16,6 +16,7 @@
   environment.systemPackages = with pkgs.gnomeExtensions; [
     appindicator
     blur-my-shell
+    brightness-control-using-ddcutil
     dynamic-music-pill
     pomodoro-timer
     quick-settings-audio-panel
