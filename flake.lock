@@ -112,11 +112,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793796783,
-        "narHash": "sha256-SQGGXoOCA7lkSNoL1dc0jp9fap9ZwrWX/YAnZgZa07U=",
+        "lastModified": 1794140279,
+        "narHash": "sha256-H3ZAPuNWE9uY/9nr2AOtF95HrwM18xXYNfJ/EncpnJg=",
         "owner": "Muddyblack",
         "repo": "nixdatifier",
-        "rev": "571f25749905bdae1270f8e4cedc0f8ba45a93df",
+        "rev": "14a86d1ccee809482b6d5dac09e73237361b20f7",
         "type": "github"
       },
       "original": {
@@ -199,11 +199,11 @@
     "vellum": {
       "flake": false,
       "locked": {
-        "lastModified": 1794042676,
-        "narHash": "sha256-K+WgyKhFbdYj5S799RlFLCGBHC8Hx+9x7t+LAILaR5A=",
+        "lastModified": 1794117197,
+        "narHash": "sha256-LKFHxe+n/Rugg5hTsRjKtu+f8Yr9cPOPgLoOcin+HBk=",
         "owner": "blackhat-7",
         "repo": "vellum.nvim",
-        "rev": "6fbc35e9032405f386907888628ad78925f187fc",
+        "rev": "4ec5d4979f7d3fb08a799a432a71b4c7feee9144",
         "type": "github"
       },
       "original": {

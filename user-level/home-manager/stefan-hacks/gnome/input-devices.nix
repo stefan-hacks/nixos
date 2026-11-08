@@ -2,6 +2,10 @@
 # Do not hand-edit generated sections; re-run nmg against a fresh dconf dump instead.
 {lib, ...}: {
   dconf.settings = {
+    "desktop/ibus/panel/emoji" = {
+      favorites = ["€" "£"];
+    };
+
     "org/gnome/desktop/input-sources" = {
       sources = [(lib.hm.gvariant.mkTuple ["xkb" "us"])];
       xkb-options = [];
