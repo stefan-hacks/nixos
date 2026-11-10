@@ -16,7 +16,7 @@
     settings.vim = {
       # ── Aliases ──
       viAlias = true;
-      vimAlias = true;
+      vimAlias = false;
 
       # ── Editor options ──
       options = {
