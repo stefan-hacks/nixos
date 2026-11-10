@@ -9,6 +9,7 @@
     ./programs/carapace.nix
     ./programs/starship.nix
     ./programs/helix.nix
+    ./programs/vim.nix
     ./programs/zellij.nix
     ./programs/fastfetch.nix
     ./programs/bat.nix

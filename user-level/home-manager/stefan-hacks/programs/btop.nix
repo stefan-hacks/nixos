@@ -46,7 +46,7 @@
     selected_battery = "Auto"
     show_iface = True
     alternate_ouput = True
-    proc_editor = "nvim"
+    proc_editor = "vim"
   '';
 
   xdg.configFile."btop/themes/catppuccin-mocha.theme".text = ''

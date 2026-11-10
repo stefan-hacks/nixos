@@ -1,0 +1,611 @@
+" ============================================================
+"  ~/.vimrc — Vim 9.1, zero plugins, built-in Catppuccin, kitty-tuned
+" ============================================================
+set nocompatible
+let mapleader = " "
+let g:cat_flavour = 'mocha'          " mocha | latte  (toggle with <leader>t)
+
+" ---------- kitty: plain Esc, clean alternate screen, truecolor, undercurl ----------
+if &term ==# 'xterm-kitty'
+  let &t_TI = ""                     " don't enable kitty keyboard protocol
+  let &t_TE = ""
+  let &t_ti = "\e[?1049h"            " alternate screen on
+  let &t_te = "\e[?1049l"            " alternate screen off -> clean exit
+  let &t_8f = "\e[38;2;%lu;%lu;%lum"
+  let &t_8b = "\e[48;2;%lu;%lu;%lum"
+  let &t_Cs = "\e[4:3m"              " undercurl on
+  let &t_Ce = "\e[4:0m"              " undercurl off
+  let &t_8u = "\e[58:2:%lu:%lu:%lum"
+endif
+let &t_SI = "\e[6 q"                 " insert: bar
+let &t_EI = "\e[2 q"                 " normal: block
+let &t_SR = "\e[4 q"                 " replace: underline
+
+filetype plugin indent on
+syntax on
+syntax sync minlines=300
+
+" ---------- Core ----------
+set encoding=utf-8
+set hidden
+set autoread
+set updatetime=250
+set timeout timeoutlen=600
+set ttimeout ttimeoutlen=20
+set backspace=indent,eol,start
+set mouse=a
+set history=1000
+set belloff=all
+if has('clipboard')
+  set clipboard=unnamedplus
+endif
+
+" ---------- UI ----------
+set number relativenumber
+set cursorline
+set cursorlineopt=number,screenline
+set scrolloff=8
+set sidescrolloff=8
+set signcolumn=yes
+set laststatus=2
+set noshowmode
+set showcmd
+set wildmenu
+set wildmode=longest:full,full
+set wildoptions=pum
+set splitbelow splitright
+set synmaxcol=500
+set list
+set listchars=tab:»\ ,trail:·,nbsp:␣
+let &fillchars = 'vert:│,fold:─,eob: '
+
+" ---------- Soft wrapping (display only, never inserts newlines) ----------
+set wrap
+set linebreak
+ set breakindent
+" set breakindentopt=shift:2,min:20
+" let &showbreak = '↪ '
+set display+=lastline
+set textwidth=0
+set wrapmargin=0
+set formatoptions-=t
+set nojoinspaces
+silent! set smoothscroll
+augroup SoftWrap
+  autocmd!
+  " ftplugins love to set textwidth/auto-wrap; undo that everywhere
+  autocmd FileType * setlocal wrap linebreak textwidth=0 wrapmargin=0 formatoptions-=t
+augroup END
+nnoremap <leader>z :set wrap!<CR>
+
+" ============================================================
+"  Catppuccin (built in — no plugin, no colors/ file)
+" ============================================================
+let s:palettes = {
+  \ 'mocha': {
+  \   'rosewater':'#f5e0dc','flamingo':'#f2cdcd','pink':'#f5c2e7','mauve':'#cba6f7',
+  \   'red':'#f38ba8','maroon':'#eba0ac','peach':'#fab387','yellow':'#f9e2af',
+  \   'green':'#a6e3a1','teal':'#94e2d5','sky':'#89dceb','sapphire':'#74c7ec',
+  \   'blue':'#89b4fa','lavender':'#b4befe','text':'#cdd6f4','sub1':'#bac2de',
+  \   'sub0':'#a6adc8','overlay2':'#9399b2','overlay1':'#7f849c','overlay0':'#6c7086',
+  \   'surface2':'#585b70','surface1':'#45475a','surface0':'#313244',
+  \   'base':'#1e1e2e','mantle':'#181825','crust':'#11111b',
+  \   'diffadd':'#323c3f','diffdel':'#3e2e40','diffchg':'#2e354d','difftxt':'#3e4b6b'},
+  \ 'latte': {
+  \   'rosewater':'#dc8a78','flamingo':'#dd7878','pink':'#ea76cb','mauve':'#8839ef',
+  \   'red':'#d20f39','maroon':'#e64553','peach':'#fe640b','yellow':'#df8e1d',
+  \   'green':'#40a02b','teal':'#179299','sky':'#04a5e5','sapphire':'#209fb5',
+  \   'blue':'#1e66f5','lavender':'#7287fd','text':'#4c4f69','sub1':'#5c5f77',
+  \   'sub0':'#6c6f85','overlay2':'#7c7f93','overlay1':'#8c8fa1','overlay0':'#9ca0b0',
+  \   'surface2':'#acb0be','surface1':'#bcc0cc','surface0':'#ccd0da',
+  \   'base':'#eff1f5','mantle':'#e6e9ef','crust':'#dce0e8',
+  \   'diffadd':'#cce1cd','diffdel':'#e9c4cf','diffchg':'#c5d5f5','difftxt':'#a6c0f5'}}
+
+" H(group, fg, bg [, attr]) — fg/bg are palette names or '' for NONE
+function! s:H(group, fg, bg, ...) abort
+  let l:attr = a:0 ? a:1 : 'NONE'
+  let l:fg = a:fg ==# '' ? 'NONE' : get(s:p, a:fg, a:fg)
+  let l:bg = a:bg ==# '' ? 'NONE' : get(s:p, a:bg, a:bg)
+  execute printf('highlight %s guifg=%s guibg=%s gui=%s cterm=%s',
+        \ a:group, l:fg, l:bg, l:attr, l:attr)
+endfunction
+
+function! s:ApplyTheme() abort
+  let s:p = s:palettes[g:cat_flavour]
+  unlet! g:colors_name
+  let &background = g:cat_flavour ==# 'latte' ? 'light' : 'dark'
+  highlight clear
+  if exists('syntax_on') | syntax reset | endif
+  let g:colors_name = 'catppuccin_' . g:cat_flavour
+
+  let g:terminal_ansi_colors = [
+        \ s:p.surface1, s:p.red, s:p.green, s:p.yellow, s:p.blue, s:p.pink, s:p.teal, s:p.sub1,
+        \ s:p.surface2, s:p.red, s:p.green, s:p.yellow, s:p.blue, s:p.pink, s:p.teal, s:p.sub0]
+
+  " ----- editor UI -----
+  call s:H('Normal',       'text',     'base')
+  call s:H('NormalFloat',  'text',     'mantle')
+  call s:H('NonText',      'surface2', '')
+  call s:H('EndOfBuffer',  'base',     '')
+  call s:H('SpecialKey',   'surface2', '')
+  call s:H('Cursor',       'base',     'rosewater')
+  call s:H('lCursor',      'base',     'rosewater')
+  call s:H('CursorIM',     'base',     'rosewater')
+  call s:H('CursorLine',   '',         'surface0')
+  call s:H('CursorColumn', '',         'surface0')
+  call s:H('ColorColumn',  '',         'surface0')
+  call s:H('LineNr',       'surface2', '')
+  call s:H('CursorLineNr', 'lavender', '', 'bold')
+  call s:H('SignColumn',   'surface2', '')
+  call s:H('FoldColumn',   'surface2', '')
+  call s:H('Folded',       'blue',     'surface0')
+  call s:H('Visual',       '',         'surface1')
+  call s:H('VisualNOS',    '',         'surface1')
+  call s:H('Search',       'base',     'yellow')
+  call s:H('IncSearch',    'base',     'peach')
+  call s:H('CurSearch',    'base',     'peach')
+  call s:H('Substitute',   'base',     'red')
+  call s:H('MatchParen',   'peach',    'surface1', 'bold')
+  call s:H('Conceal',      'overlay1', '')
+  call s:H('QuickFixLine', '',         'surface1', 'bold')
+  call s:H('Terminal',     'text',     'base')
+
+  " ----- menus, splits, tabs, messages -----
+  call s:H('Pmenu',        'text',     'surface0')
+  call s:H('PmenuSel',     'text',     'surface2', 'bold')
+  call s:H('PmenuSbar',    '',         'surface1')
+  call s:H('PmenuThumb',   '',         'overlay0')
+  call s:H('WildMenu',     'text',     'surface2')
+  call s:H('VertSplit',    'surface0', '')
+  silent! call s:H('WinSeparator', 'surface0', '')
+  call s:H('TabLine',      'overlay1', 'mantle')
+  call s:H('TabLineSel',   'base',     'blue', 'bold')
+  call s:H('TabLineFill',  '',         'mantle')
+  call s:H('Directory',    'blue',     '')
+  call s:H('Title',        'blue',     '', 'bold')
+  call s:H('ErrorMsg',     'red',      '', 'bold')
+  call s:H('WarningMsg',   'yellow',   '')
+  call s:H('ModeMsg',      'text',     '', 'bold')
+  call s:H('MoreMsg',      'blue',     '')
+  call s:H('Question',     'blue',     '')
+
+  " ----- diff / spell -----
+  call s:H('DiffAdd',      '', 'diffadd')
+  call s:H('DiffDelete',   'red', 'diffdel')
+  call s:H('DiffChange',   '', 'diffchg')
+  call s:H('DiffText',     '', 'difftxt', 'bold')
+  for [l:g, l:c] in [['SpellBad','red'],['SpellCap','yellow'],['SpellLocal','blue'],['SpellRare','green']]
+    execute printf('highlight %s guifg=NONE guibg=NONE gui=undercurl guisp=%s cterm=underline',
+          \ l:g, s:p[l:c])
+  endfor
+
+  " ----- syntax groups -----
+  call s:H('Comment',      'overlay1', '', 'italic')
+  call s:H('Constant',     'peach',    '')
+  call s:H('String',       'green',    '')
+  call s:H('Character',    'teal',     '')
+  call s:H('Number',       'peach',    '')
+  call s:H('Boolean',      'peach',    '')
+  call s:H('Float',        'peach',    '')
+  call s:H('Identifier',   'flamingo', '')
+  call s:H('Function',     'blue',     '')
+  call s:H('Statement',    'mauve',    '')
+  call s:H('Conditional',  'mauve',    '')
+  call s:H('Repeat',       'mauve',    '')
+  call s:H('Label',        'sapphire', '')
+  call s:H('Operator',     'sky',      '')
+  call s:H('Keyword',      'mauve',    '')
+  call s:H('Exception',    'mauve',    '')
+  call s:H('PreProc',      'pink',     '')
+  call s:H('Include',      'mauve',    '')
+  call s:H('Define',       'mauve',    '')
+  call s:H('Macro',        'mauve',    '')
+  call s:H('PreCondit',    'pink',     '')
+  call s:H('Type',         'yellow',   '')
+  call s:H('StorageClass', 'yellow',   '')
+  call s:H('Structure',    'yellow',   '')
+  call s:H('Typedef',      'yellow',   '')
+  call s:H('Special',      'pink',     '')
+  call s:H('SpecialChar',  'pink',     '')
+  call s:H('Tag',          'blue',     '')
+  call s:H('Delimiter',    'overlay2', '')
+  call s:H('SpecialComment','overlay1','')
+  call s:H('Debug',        'red',      '')
+  call s:H('Underlined',   'blue',     '', 'underline')
+  call s:H('Error',        'red',      '')
+  call s:H('Todo',         'base',     'flamingo', 'bold')
+  call s:H('Ignore',       'surface1', '')
+
+  " infra-friendly tweaks: keys in yaml/json read as functions (blue)
+  highlight! link yamlBlockMappingKey Function
+  highlight! link yamlFlowMappingKey  Function
+  highlight! link jsonKeyword         Function
+
+  " ----- statusline segments (mode-colored) -----
+  call s:H('StatusLine',   'text',     'mantle')
+  call s:H('StatusLineNC', 'overlay0', 'mantle')
+  call s:H('StlNormal',    'base',     'blue',     'bold')
+  call s:H('StlInsert',    'base',     'green',    'bold')
+  call s:H('StlVisual',    'base',     'mauve',    'bold')
+  call s:H('StlReplace',   'base',     'red',      'bold')
+  call s:H('StlCommand',   'base',     'peach',    'bold')
+  call s:H('StlFile',      'text',     'surface0')
+  call s:H('StlMid',       'sub0',     'mantle')
+  call s:H('StlPos',       'base',     'lavender', 'bold')
+
+  " ----- links -----
+  highlight! link LineNrAbove       LineNr
+  highlight! link LineNrBelow       LineNr
+  highlight! link PmenuKind         Pmenu
+  highlight! link PmenuExtra        Pmenu
+  highlight! link PmenuKindSel      PmenuSel
+  highlight! link PmenuExtraSel     PmenuSel
+  highlight! link StatusLineTerm    StatusLine
+  highlight! link StatusLineTermNC  StatusLineNC
+endfunction
+
+function! s:ToggleFlavour() abort
+  let g:cat_flavour = g:cat_flavour ==# 'mocha' ? 'latte' : 'mocha'
+  call s:ApplyTheme()
+  redraw!
+endfunction
+nnoremap <silent> <leader>t :call <SID>ToggleFlavour()<CR>
+
+if has('termguicolors')
+  set termguicolors
+endif
+call s:ApplyTheme()
+
+" ---------- Search ----------
+set incsearch
+set hlsearch
+set ignorecase smartcase
+
+" Manual clear (:nohlsearch keeps the option on, so n/N re-highlight)
+nnoremap <silent> <Esc><Esc> :nohlsearch<CR>
+
+" Auto-clear highlight when the cursor moves away from a search
+let s:from_search = 0
+function! s:Search(key) abort
+  let s:from_search = 1
+  return a:key
+endfunction
+function! s:AutoNoHl() abort
+  if !v:hlsearch | return | endif
+  if s:from_search
+    let s:from_search = 0
+  else
+    call feedkeys("\<Cmd>nohlsearch\<CR>", 'n')
+  endif
+endfunction
+for k in ['n', 'N', '*', '#', 'g*', 'g#', '/', '?']
+  execute printf('nnoremap <expr> %s <SID>Search(%s)', k, string(k))
+endfor
+augroup AutoNoHl
+  autocmd!
+  autocmd CursorMoved * call s:AutoNoHl()
+  autocmd InsertEnter * call feedkeys("\<Cmd>nohlsearch\<CR>", 'n')
+augroup END
+
+" ---------- Indentation ----------
+set expandtab
+set tabstop=4 shiftwidth=4 softtabstop=4
+set smartindent
+set autoindent
+augroup Indent
+  autocmd!
+  autocmd FileType nix,yaml,json,hcl,terraform,jinja,html,css,javascript,lua
+        \ setlocal ts=2 sw=2 sts=2
+  autocmd FileType yaml setlocal indentkeys-=0#
+  autocmd FileType make,go setlocal noexpandtab
+augroup END
+
+" ============================================================
+"  Sysadmin / infrastructure syntax — bundled runtime only
+" ============================================================
+let g:is_bash = 1                          " /bin/sh scripts get bash highlighting
+let g:vim_json_conceal = 0
+let g:markdown_fenced_languages = ['bash=sh', 'sh', 'nix', 'yaml', 'json',
+      \ 'dockerfile', 'hcl', 'terraform', 'python', 'toml', 'systemd']
+
+" Terraform: use the bundled terraform syntax if present, otherwise hcl
+let s:tf_ft = empty(globpath(&runtimepath, 'syntax/terraform.vim')) ? 'hcl' : 'terraform'
+
+augroup InfraFiletypes
+  autocmd!
+  autocmd BufRead,BufNewFile *.nix                          setfiletype nix
+  autocmd BufRead,BufNewFile flake.lock                     setfiletype json
+  execute 'autocmd BufRead,BufNewFile *.tf,*.tfvars setfiletype ' . s:tf_ft
+  autocmd BufRead,BufNewFile *.hcl,*.nomad                  setfiletype hcl
+  autocmd BufRead,BufNewFile Dockerfile*,*.dockerfile,Containerfile* setfiletype dockerfile
+  autocmd BufRead,BufNewFile Jenkinsfile*                   setfiletype groovy
+  autocmd BufRead,BufNewFile Vagrantfile                    setfiletype ruby
+  autocmd BufRead,BufNewFile *.pp                           setfiletype puppet
+  " systemd units, networkd, podman quadlets
+  autocmd BufRead,BufNewFile *.service,*.timer,*.socket,*.mount,*.automount,*.swap,*.path,*.slice,*.scope,*.target
+        \ setfiletype systemd
+  autocmd BufRead,BufNewFile */systemd/network/*.network,*/systemd/network/*.netdev,*/systemd/network/*.link
+        \ setfiletype systemd
+  autocmd BufRead,BufNewFile */containers/systemd/*         setfiletype systemd
+  " Ansible (overrides plain yaml; inline jinja highlighting added below)
+  autocmd BufRead,BufNewFile */playbooks/*.yml,*/playbooks/*.yaml,*/roles/*/tasks/*.yml,*/roles/*/handlers/*.yml,*/group_vars/*,*/host_vars/*,playbook*.yml,site.yml
+        \ set filetype=yaml.ansible
+  " Services and system config
+  autocmd BufRead,BufNewFile */nginx/*.conf,*/nginx/conf.d/*,*/nginx/sites-*/* setfiletype nginx
+  autocmd BufRead,BufNewFile */sudoers.d/*                  setfiletype sudoers
+  autocmd BufRead,BufNewFile */ssh/ssh_config.d/*,*/.ssh/config.d/* setfiletype sshconfig
+  autocmd BufRead,BufNewFile */ssh/sshd_config.d/*          setfiletype sshdconfig
+  autocmd BufRead,BufNewFile *.nft,nftables.conf            setfiletype nftables
+  autocmd BufRead,BufNewFile .env,.env.*,*.env              setfiletype sh
+  " Jinja templates: strip .j2 and detect by the underlying name (nginx.conf.j2 etc.)
+  autocmd BufRead,BufNewFile *.j2
+        \ if &ft ==# '' || &ft ==# 'jinja' |
+        \   execute 'doautocmd filetypedetect BufRead ' . fnameescape(expand('<afile>:r')) |
+        \ endif
+augroup END
+
+" Inline fallback syntax for Nix, used only if Vim's runtime has none
+function! s:NixSyntax() abort
+  if exists('b:current_syntax') | return | endif
+  syntax keyword nixTodo TODO FIXME XXX contained
+  syntax keyword nixKeyword let in if then else rec with inherit assert or import
+  syntax keyword nixBoolean true false null
+  syntax keyword nixBuiltin builtins abort throw toString map filter derivation
+  syntax match   nixNumber  /\<\d\+\(\.\d\+\)\=\>/
+  syntax match   nixAttr    /\<[A-Za-z_][A-Za-z0-9_'-]*\ze\s*=\([^=]\|$\)/
+  syntax match   nixPath    @\(\~\|\.\.\=\)\=/[A-Za-z0-9._+/-]\+@
+  syntax match   nixPath    @<[A-Za-z0-9._/-]\+>@
+  syntax match   nixUri     @https\=://[^ ;)\]"]*@
+  syntax match   nixOperator @\(++\|//\|->\|&&\|||\|!=\|==\)@
+  syntax match   nixEscape  +\\.+ contained
+  syntax region  nixInterp  matchgroup=nixInterpDelim start=+\${+ end=+}+ contained contains=TOP
+  syntax region  nixString  start=+"+ skip=+\\"+ end=+"+ contains=nixInterp,nixEscape
+  syntax region  nixIndString start=+''+ skip=+'''\|''\$\|''\\.+ end=+''+ contains=nixInterp
+  syntax match   nixComment /#.*$/ contains=nixTodo
+  syntax region  nixComment start=+/\*+ end=+\*/+ contains=nixTodo
+  highlight default link nixKeyword     Keyword
+  highlight default link nixBoolean     Boolean
+  highlight default link nixBuiltin     Function
+  highlight default link nixNumber      Number
+  highlight default link nixAttr        Identifier
+  highlight default link nixPath        Special
+  highlight default link nixUri         Underlined
+  highlight default link nixOperator    Operator
+  highlight default link nixEscape      SpecialChar
+  highlight default link nixInterpDelim PreProc
+  highlight default link nixString      String
+  highlight default link nixIndString   String
+  highlight default link nixComment     Comment
+  highlight default link nixTodo        Todo
+  let b:current_syntax = 'nix'
+endfunction
+
+" Inline jinja markers for Ansible yaml
+function! s:AnsibleSyntax() abort
+  syntax match ansibleJinjaExpr    /{{.\{-}}}/  containedin=ALL
+  syntax match ansibleJinjaStmt    /{%.\{-}%}/  containedin=ALL
+  syntax match ansibleJinjaComment /{#.\{-}#}/  containedin=ALL
+  highlight default link ansibleJinjaExpr    PreProc
+  highlight default link ansibleJinjaStmt    Statement
+  highlight default link ansibleJinjaComment Comment
+endfunction
+
+augroup InfraSyntaxFallbacks
+  autocmd!
+  autocmd FileType nix call s:NixSyntax()
+  autocmd Syntax * if &filetype ==# 'yaml.ansible' | call s:AnsibleSyntax() | endif
+augroup END
+
+" ============================================================
+"  Commenting — gcc / gc{motion} / gc (visual) / gbc / gb{motion} / gb (visual)
+" ============================================================
+
+" Line-comment strings for infra filetypes (Vim's own ftplugins cover the rest)
+augroup CommentStrings
+  autocmd!
+  autocmd FileType nix,yaml,toml,dockerfile,systemd,terraform,hcl,nginx,sudoers,sshconfig,sshdconfig,nftables,puppet,conf
+        \ setlocal commentstring=#\ %s
+  autocmd FileType jinja   setlocal commentstring={#\ %s\ #}
+  autocmd FileType groovy  setlocal commentstring=//\ %s
+augroup END
+
+" Block-comment markers per filetype. Filetypes not listed here (sh, yaml,
+" python, systemd, ...) have no block syntax, so gbc falls back to line comments.
+let s:block = {
+      \ 'c': ['/*','*/'],  'cpp': ['/*','*/'], 'java': ['/*','*/'], 'go': ['/*','*/'],
+      \ 'rust': ['/*','*/'], 'javascript': ['/*','*/'], 'typescript': ['/*','*/'],
+      \ 'css': ['/*','*/'], 'scss': ['/*','*/'], 'php': ['/*','*/'], 'sql': ['/*','*/'],
+      \ 'nix': ['/*','*/'], 'terraform': ['/*','*/'], 'hcl': ['/*','*/'],
+      \ 'groovy': ['/*','*/'], 'puppet': ['/*','*/'],
+      \ 'html': ['<!--','-->'], 'xml': ['<!--','-->'], 'markdown': ['<!--','-->'],
+      \ 'lua': ['--[[',']]'], 'jinja': ['{#','#}'], 'haskell': ['{-','-}']}
+
+function! s:CmtParts() abort
+  let l:cs = &commentstring
+  if l:cs !~# '%s' | let l:cs = '# %s' | endif
+  let l:i = stridx(l:cs, '%s')
+  let l:lc = trim(strpart(l:cs, 0, l:i))
+  let l:rc = trim(strpart(l:cs, l:i + 2))
+  return [l:lc ==# '' && l:rc ==# '' ? '#' : l:lc, l:rc]
+endfunction
+
+function! s:BlockMarks() abort
+  for l:f in split(&filetype, '\.')
+    if has_key(s:block, l:f) | return s:block[l:f] | endif
+  endfor
+  let [l:a, l:b] = s:CmtParts()
+  return l:b !=# '' ? [l:a, l:b] : []
+endfunction
+
+" Toggle line comments over [l1, l2]
+function! s:ToggleLines(l1, l2) abort
+  let [l:lc, l:rc] = s:CmtParts()
+  let l:nums = filter(range(a:l1, a:l2), 'getline(v:val) =~# "\\S"')
+  if empty(l:nums) | return | endif
+  let l:view = winsaveview()
+  let l:pl = '^\s*\V' . escape(l:lc, '\')
+  let l:pr = '\V' . escape(l:rc, '\') . '\m\s*$'
+  let l:all = 1
+  for l:n in l:nums
+    let l:txt = getline(l:n)
+    if l:txt !~# l:pl || (l:rc !=# '' && l:txt !~# l:pr)
+      let l:all = 0
+      break
+    endif
+  endfor
+  if l:all
+    for l:n in l:nums
+      let l:txt = substitute(getline(l:n), '^\(\s*\)\V' . escape(l:lc, '\') . '\m\s\?', '\1', '')
+      if l:rc !=# ''
+        let l:txt = substitute(l:txt, '\m\s\?\V' . escape(l:rc, '\') . '\m\s*$', '', '')
+      endif
+      call setline(l:n, l:txt)
+    endfor
+  else
+    let l:ind = min(map(copy(l:nums), 'strlen(matchstr(getline(v:val), "^\\s*"))'))
+    for l:n in l:nums
+      let l:txt = getline(l:n)
+      let l:txt = strpart(l:txt, 0, l:ind) . l:lc . ' ' . strpart(l:txt, l:ind)
+      if l:rc !=# '' | let l:txt .= ' ' . l:rc | endif
+      call setline(l:n, l:txt)
+    endfor
+  endif
+  call winrestview(l:view)
+endfunction
+
+" Toggle ONE block comment wrapping [l1, l2]: opener on the first line,
+" closer at the end of the last line
+function! s:ToggleBlock(l1, l2) abort
+  let l:m = s:BlockMarks()
+  if empty(l:m)
+    call s:ToggleLines(a:l1, a:l2)
+    return
+  endif
+  let [l:o, l:c] = l:m
+  let l:nums = filter(range(a:l1, a:l2), 'getline(v:val) =~# "\\S"')
+  if empty(l:nums) | return | endif
+  let l:first = l:nums[0]
+  let l:last  = l:nums[-1]
+  let l:view = winsaveview()
+  if getline(l:first) =~# '^\s*\V' . escape(l:o, '\')
+        \ && getline(l:last) =~# '\V' . escape(l:c, '\') . '\m\s*$'
+    call setline(l:first, substitute(getline(l:first),
+          \ '^\(\s*\)\V' . escape(l:o, '\') . '\m\s\?', '\1', ''))
+    call setline(l:last, substitute(getline(l:last),
+          \ '\m\s\?\V' . escape(l:c, '\') . '\m\s*$', '', ''))
+  else
+    let l:txt = getline(l:first)
+    let l:ind = strlen(matchstr(l:txt, '^\s*'))
+    call setline(l:first, strpart(l:txt, 0, l:ind) . l:o . ' ' . strpart(l:txt, l:ind))
+    call setline(l:last, getline(l:last) . ' ' . l:c)
+  endif
+  call winrestview(l:view)
+endfunction
+
+function! s:OpLines(type) abort
+  call s:ToggleLines(line("'["), line("']"))
+endfunction
+function! s:OpBlock(type) abort
+  call s:ToggleBlock(line("'["), line("']"))
+endfunction
+
+" gcc  = toggle line comment (3gcc = 3 lines)
+nnoremap <silent> gcc :<C-u>call <SID>ToggleLines(line('.'), min([line('$'), line('.') + v:count1 - 1]))<CR>
+" gc{motion} = toggle line comments over a motion (gcap, gcip, gc5j ...)
+nnoremap <silent> gc :set operatorfunc=<SID>OpLines<CR>g@
+" gc in visual mode
+xnoremap <silent> gc :<C-u>call <SID>ToggleLines(line("'<"), line("'>"))<CR>
+
+" gbc  = toggle block comment on the current line (3gbc wraps 3 lines in ONE block)
+nnoremap <silent> gbc :<C-u>call <SID>ToggleBlock(line('.'), min([line('$'), line('.') + v:count1 - 1]))<CR>
+" gb{motion} = block-comment a whole code block (gbap, gbip, gb}, gb5j ...)
+nnoremap <silent> gb :set operatorfunc=<SID>OpBlock<CR>g@
+" gb in visual mode
+xnoremap <silent> gb :<C-u>call <SID>ToggleBlock(line("'<"), line("'>"))<CR>
+
+" ---------- Files / undo ----------
+silent! call mkdir(expand('~/.vim/undo'),   'p', 0700)
+silent! call mkdir(expand('~/.vim/swap'),   'p', 0700)
+silent! call mkdir(expand('~/.vim/backup'), 'p', 0700)
+set undofile
+set undodir=~/.vim/undo//
+set directory=~/.vim/swap//
+set backupdir=~/.vim/backup//
+
+augroup RestorePos
+  autocmd!
+  autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") |
+        \ exe "normal! g`\"" | endif
+augroup END
+
+augroup Trim
+  autocmd!
+  autocmd BufWritePre * if &ft !~# 'markdown\|diff' |
+        \ let s:v = winsaveview() | keeppatterns %s/\s\+$//e | call winrestview(s:v) | endif
+augroup END
+
+" ---------- Keymaps ----------
+nnoremap <leader>w :w<CR>
+nnoremap <leader>q :q<CR>
+nnoremap <leader>e :Lexplore<CR>
+nnoremap <leader>\ :vsplit<CR>    " Split right
+nnoremap <leader>- :split<CR>     " Split below
+nnoremap <leader>b :ls<CR>:b<Space>
+nnoremap <leader>f :find *
+
+" Windows
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" Move selected lines
+xnoremap J :m '>+1<CR>gv=gv
+xnoremap K :m '<-2<CR>gv=gv
+
+" Keep selection when indenting
+xnoremap < <gv
+xnoremap > >gv
+
+" Wrapped-line movement
+nnoremap <expr> j v:count ? 'j' : 'gj'
+nnoremap <expr> k v:count ? 'k' : 'gk'
+nnoremap <expr> 0 &wrap ? 'g0' : '0'
+nnoremap <expr> $ &wrap ? 'g$' : '$'
+
+nnoremap Y y$
+
+command! W w
+command! Q q
+cnoremap w!! w !sudo tee % >/dev/null
+
+" ---------- Netrw (bundled) ----------
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_winsize = 25
+
+" ---------- Statusline (colors follow the mode) ----------
+let s:modes = {
+      \ 'n': ['NORMAL',  'StlNormal'],  'i': ['INSERT',  'StlInsert'],
+      \ 'v': ['VISUAL',  'StlVisual'],  'V': ['V-LINE',  'StlVisual'],
+      \ "\<C-v>": ['V-BLOCK', 'StlVisual'], 's': ['SELECT', 'StlVisual'],
+      \ 'R': ['REPLACE', 'StlReplace'], 'c': ['COMMAND', 'StlCommand'],
+      \ 't': ['TERMINAL', 'StlInsert']}
+
+function! StatusMode() abort
+  let [l:name, l:grp] = get(s:modes, mode(), [mode(), 'StlNormal'])
+  return '%#' . l:grp . '# ' . l:name . ' %#StlFile#'
+endfunction
+
+set statusline=%{%StatusMode()%}\ %f%m%r%h%w\ %#StlMid#%=%y\ %{&fileencoding?&fileencoding:&encoding}\ [%{&fileformat}]\ %#StlPos#\ %l:%c\ %p%%\
+
+augroup StatusRefresh
+  autocmd!
+  autocmd ModeChanged * redrawstatus
+augroup END
+
+" ---------- Reset cursor shape on exit ----------
+augroup CleanExit
+  autocmd!
+  autocmd VimLeave * silent! call writefile(["\e[0 q"], '/dev/tty', 'b')
+augroup END

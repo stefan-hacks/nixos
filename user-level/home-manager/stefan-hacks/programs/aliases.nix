@@ -30,7 +30,7 @@
     watch = "watch ";
     c = "clear";
     e = "exit";
-    v = "nvim";
+    v = "vim";
     nv = "nvim";
     src = "source ~/.bashrc";
     lg = "lazygit";

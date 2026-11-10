@@ -64,7 +64,7 @@
     initExtra = lib.mkMerge [
       ''
         export NIXCFG="''${NIXCFG:-$HOME/.config/nixos}"
-        export EDITOR=nvim
+        export EDITOR=vim
         export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
         # Catppuccin-Mocha colors for fzf
