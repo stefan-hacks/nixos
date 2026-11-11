@@ -8,6 +8,7 @@
   home.packages = with pkgs; [
     blesh
     grc
+    libnotify
     nvd
     nix-output-monitor
   ];
