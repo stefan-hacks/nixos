@@ -41,7 +41,7 @@ in {
 
     settings = {
       user.name = "stefan-hacks";
-      user.email = "stefanmrobertson@gmail.com";
+      # user.email set imperatively; do not commit email to repo
 
       credential."https://github.com".helper = "!gh auth git-credential";
       credential."https://gist.github.com".helper = "!gh auth git-credential";

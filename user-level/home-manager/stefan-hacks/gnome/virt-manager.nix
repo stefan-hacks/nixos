@@ -32,82 +32,12 @@
     };
 
     "org/virt-manager/virt-manager/urls" = {
-      isos = ["/home/stefan-hacks/distro_images/nixos-minimal-26.05.11767.7993f34ee47e-x86_64-linux.iso"];
+      isos = [];
     };
 
     "org/virt-manager/virt-manager/vmlist-fields" = {
       disk-usage = false;
       network-traffic = false;
-    };
-
-    "org/virt-manager/virt-manager/vms/06704c5333b249a8a1d0aafdf0ba5b88" = {
-      autoconnect = 1;
-      vm-window-size = lib.hm.gvariant.mkTuple [1280 842];
-    };
-
-    "org/virt-manager/virt-manager/vms/0e774bbb5c644eb390b8e39163b50874" = {
-      autoconnect = 1;
-      vm-window-size = lib.hm.gvariant.mkTuple [1280 842];
-    };
-
-    "org/virt-manager/virt-manager/vms/2c1786b3b8dc4ffc80781f63c7fe0927" = {
-      autoconnect = 1;
-      vm-window-size = lib.hm.gvariant.mkTuple [1920 1011];
-    };
-
-    "org/virt-manager/virt-manager/vms/370b8a6afbe343d5955c88301347d0ac" = {
-      autoconnect = 1;
-      vm-window-size = lib.hm.gvariant.mkTuple [1280 842];
-    };
-
-    "org/virt-manager/virt-manager/vms/73e0a2153a844c72bae845e9cda2dd5b" = {
-      autoconnect = 1;
-      vm-window-size = lib.hm.gvariant.mkTuple [1280 842];
-    };
-
-    "org/virt-manager/virt-manager/vms/848ef3b6bca24c19a3a8942a8d0c9e55" = {
-      autoconnect = 1;
-      vm-window-size = lib.hm.gvariant.mkTuple [1280 842];
-    };
-
-    "org/virt-manager/virt-manager/vms/957d93f3cfe14ab19db9a198eda53778" = {
-      autoconnect = 1;
-      vm-window-size = lib.hm.gvariant.mkTuple [1280 842];
-    };
-
-    "org/virt-manager/virt-manager/vms/a7011e9ed0d2405cbf0c8a9c6188d9b6" = {
-      autoconnect = 1;
-      vm-window-size = lib.hm.gvariant.mkTuple [1280 842];
-    };
-
-    "org/virt-manager/virt-manager/vms/a982b5b937c144f19ab45e473cf2a143" = {
-      autoconnect = 1;
-      vm-window-size = lib.hm.gvariant.mkTuple [1280 842];
-    };
-
-    "org/virt-manager/virt-manager/vms/aa2a89aed1c049aabccbfb231e625af3" = {
-      autoconnect = 1;
-      vm-window-size = lib.hm.gvariant.mkTuple [1920 1011];
-    };
-
-    "org/virt-manager/virt-manager/vms/c31f17e4a37d4bf3a3929bd7123de5d2" = {
-      autoconnect = 1;
-      vm-window-size = lib.hm.gvariant.mkTuple [1280 870];
-    };
-
-    "org/virt-manager/virt-manager/vms/d775c10a30a64016a0224e994a98fcf6" = {
-      autoconnect = 1;
-      vm-window-size = lib.hm.gvariant.mkTuple [1280 842];
-    };
-
-    "org/virt-manager/virt-manager/vms/dc43af37017a4f8eb043e3a357df6b94" = {
-      autoconnect = 1;
-      vm-window-size = lib.hm.gvariant.mkTuple [1280 870];
-    };
-
-    "org/virt-manager/virt-manager/vms/f976b4671f414994b1e4121e4eaeceb4" = {
-      autoconnect = 1;
-      vm-window-size = lib.hm.gvariant.mkTuple [1280 842];
     };
   };
 }

@@ -4,7 +4,6 @@
   imports = [
     ./accessibility.nix
     ./app-folders.nix
-    ./evolution.nix
     ./gtk.nix
     ./input-devices.nix
     ./media.nix

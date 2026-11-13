@@ -44,11 +44,7 @@
     };
 
     "org/gnome/settings-daemon/global-shortcuts" = {
-      applications = ["hermes"];
-    };
-
-    "org/gnome/settings-daemon/global-shortcuts/hermes" = {
-      shortcuts = [(lib.hm.gvariant.mkTuple ["F7DEEBF2AF2CE89BF4BBBB294C5B0FB1-Ctrl+Shift+Space" [(lib.hm.gvariant.mkDictionaryEntry ["shortcuts" (lib.hm.gvariant.mkVariant ["<Shift><Control>space"])]) (lib.hm.gvariant.mkDictionaryEntry ["description" (lib.hm.gvariant.mkVariant "Hermes shortcut: Ctrl+Shift+Space")])]])];
+      applications = [];
     };
 
     "org/gnome/settings-daemon/plugins/color" = {
@@ -60,7 +56,7 @@
     };
 
     "org/gnome/settings-daemon/plugins/media-keys" = {
-      custom-keybindings = ["/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/look-toggle/"];
+      custom-keybindings = [];
       home = ["<Control>1"];
       mic-mute = ["F8"];
       next = ["<Control><Super>period"];
@@ -70,12 +66,6 @@
       volume-mute = ["F5"];
       volume-up = ["F7"];
       www = ["<Control>2"];
-    };
-
-    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/look-toggle" = {
-      binding = "<Alt>space";
-      command = "/nix/store/dxzmwc48akqwqa8qb58w747hjhrsvvci-glib-2.88.3-bin/bin/gdbus call --session --dest com.look.Desktop --object-path /com/look/Desktop --method com.look.Desktop.Toggle";
-      name = "Look Toggle";
     };
 
     "org/gnome/settings-daemon/plugins/power" = {

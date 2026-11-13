@@ -33,11 +33,19 @@
           mkdir -p /var/run/sshd
 
           {
-            echo "PermitRootLogin yes"
-            echo "PasswordAuthentication yes"
+            echo "PermitRootLogin prohibit-password"
+            echo "PasswordAuthentication no"
+            echo "PubkeyAuthentication yes"
+            echo "AuthorizedKeysFile /tmp/host-ssh/authorized_keys"
           } >> /etc/ssh/sshd_config
 
-          echo 'root:root' | chpasswd
+          # Copy host SSH keys for key-based auth instead of hardcoded password
+          if [ -f /tmp/host-ssh/authorized_keys ]; then
+            mkdir -p /root/.ssh
+            cp /tmp/host-ssh/authorized_keys /root/.ssh/authorized_keys
+            chmod 700 /root/.ssh
+            chmod 600 /root/.ssh/authorized_keys
+          fi
 
           [ ! -f /etc/ssh/ssh_host_ed25519_key ] && ssh-keygen -A
 
@@ -63,11 +71,19 @@
           mkdir -p /var/run/sshd
 
           {
-            echo "PermitRootLogin yes"
-            echo "PasswordAuthentication yes"
+            echo "PermitRootLogin prohibit-password"
+            echo "PasswordAuthentication no"
+            echo "PubkeyAuthentication yes"
+            echo "AuthorizedKeysFile /tmp/host-ssh/authorized_keys"
           } >> /etc/ssh/sshd_config
 
-          echo 'root:root' | chpasswd
+          # Copy host SSH keys for key-based auth instead of hardcoded password
+          if [ -f /tmp/host-ssh/authorized_keys ]; then
+            mkdir -p /root/.ssh
+            cp /tmp/host-ssh/authorized_keys /root/.ssh/authorized_keys
+            chmod 700 /root/.ssh
+            chmod 600 /root/.ssh/authorized_keys
+          fi
 
           [ ! -f /etc/ssh/ssh_host_ed25519_key ] && ssh-keygen -A
 
