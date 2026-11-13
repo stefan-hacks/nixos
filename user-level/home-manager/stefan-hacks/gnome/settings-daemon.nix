@@ -20,7 +20,7 @@
     };
 
     "org/gnome/portal/filechooser/look" = {
-      last-folder-path = "/home/stefan-hacks/.config/nixos/assets/wallpapers/nixos_wallpapers";
+      last-folder-path = "/home/stefan-hacks/.config/nixos/assets/wallpapers";
     };
 
     "org/gnome/portal/filechooser/org.chromium.Chromium" = {
@@ -32,11 +32,11 @@
     };
 
     "org/gnome/portal/filechooser/org.gnome.Settings" = {
-      last-folder-path = "/home/stefan-hacks/.config/nixos/assets/wallpapers/nixos_wallpapers";
+      last-folder-path = "/home/stefan-hacks/.config/nixos/assets/wallpapers";
     };
 
     "org/gnome/portal/filechooser/org.mozilla.firefox" = {
-      last-folder-path = "/home/stefan-hacks/.config/nixos/assets/wallpapers/nixos_wallpapers";
+      last-folder-path = "/home/stefan-hacks/.config/nixos/assets/wallpapers";
     };
 
     "org/gnome/settings-daemon/global-shortcuts" = {

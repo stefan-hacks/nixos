@@ -18,7 +18,7 @@
     "org/gnome/desktop/screensaver" = {
       color-shading-type = "solid";
       picture-options = "zoom";
-      picture-uri = "file:///home/stefan-hacks/.local/share/backgrounds/2026-10-21-04-12-27-23970564.png";
+      picture-uri = "file:///home/stefan-hacks/.config/nixos/assets/wallpapers/wallpaper02.png";
       primary-color = "#000000000000";
       secondary-color = "#000000000000";
     };

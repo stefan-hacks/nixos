@@ -6,7 +6,7 @@
   # ═══════════════════════════════════════════════════════════════════════════
   # The image is copied to the Nix store so GDM can access it.
   # NOTE: Uses relative path so it works in pure flake evaluation mode.
-  wallpaperImage = ../assets/wallpapers/nixos_wallpapers/gdm_blur.png;
+  wallpaperImage = ../assets/wallpapers/wallpaper07.png;
 
   wallpaper = pkgs.runCommand "nixos-wallpaper" {} ''
     mkdir -p $out/share/wallpapers
