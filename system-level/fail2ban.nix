@@ -18,4 +18,14 @@ _: {
       bantime = 3600;
     };
   };
+
+  # Harden fail2ban — leaf service that only reads logs and updates firewall rules
+  systemd.services.fail2ban.serviceConfig = {
+    ProtectHome = true;
+    ProtectKernelModules = true;
+    ProtectKernelTunables = true;
+    ProtectControlGroups = true;
+    RestrictRealtime = true;
+    LockPersonality = true;
+  };
 }

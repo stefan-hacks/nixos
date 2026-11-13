@@ -1,15 +1,5 @@
-# Services configuration
+# Kanata keyboard remapping
 {pkgs, ...}: {
-  # Enable CUPS to print documents.
-  services.printing = {
-    enable = true;
-    drivers = [pkgs.hplip];
-  };
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Kanata Keyboard
   services.kanata = {
     enable = true;
     keyboards = {

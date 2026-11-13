@@ -20,11 +20,13 @@
     ./system-level/kanata.nix
     ./system-level/virtualization.nix
     ./system-level/packages.nix
+    ./system-level/printing.nix
     ./system-level/theming.nix
     ./system-level/flatpak.nix
     # ./system-level/kubernetes.nix
     # ./system-level/podman.nix
     ./system-level/nvf.nix
+    ./system-level/hardening.nix
   ];
 
   # System-level user account (Home Manager handles dotfiles and user config)

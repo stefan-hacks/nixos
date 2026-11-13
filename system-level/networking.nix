@@ -12,6 +12,9 @@ _: {
 
   services.mullvad-vpn.enable = true;
 
+  # Disable ModemManager — desktop workstation with no cellular/WWAN card
+  networking.modemmanager.enable = false;
+
   # Fix the "Invalid group-name group='netdev'" D-Bus warning.
   # This declaratively creates the netdev group that Avahi's D-Bus config expects.
   users.groups.netdev = {};
