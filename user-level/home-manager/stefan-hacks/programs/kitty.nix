@@ -148,7 +148,7 @@ in {
       hide_window_decorations = "no";
       active_border_color = "#B4BEFE";
       inactive_border_color = "#6C7086";
-      inactive_text_alpha 0.5
+      inactive_text_alpha = "0.5"
 
       # ── Window sizing ──
       remember_window_size = "no";
