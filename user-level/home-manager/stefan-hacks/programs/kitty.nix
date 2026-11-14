@@ -145,9 +145,10 @@ in {
       # ── Window appearance ──
       window_border_width = "1pt";
       draw_minimal_borders = "yes";
-      hide_window_decorations = "yes";
+      hide_window_decorations = "no";
       active_border_color = "#B4BEFE";
       inactive_border_color = "#6C7086";
+      inactive_text_alpha 0.5
 
       # ── Window sizing ──
       remember_window_size = "no";
