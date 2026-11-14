@@ -148,7 +148,6 @@ in {
       hide_window_decorations = "no";
       active_border_color = "#B4BEFE";
       inactive_border_color = "#6C7086";
-      inactive_text_alpha = "0.5";
 
       # ── Window sizing ──
       remember_window_size = "no";
@@ -158,7 +157,7 @@ in {
       window_margin_width = "5";
       single_window_margin_width = "0";
       window_padding_width = "2";
-      inactive_text_alpha = "0.7";
+      inactive_text_alpha = "0.5";
 
       # ── Layouts ──
       enabled_layouts = "splits,stack,tall,fat,grid,horizontal,vertical";
