@@ -24,8 +24,7 @@ _: let
     inactive_border_color   #6C7086
     bell_border_color       #F9E2AF
 
-    wayland_titlebar_color system
-    macos_titlebar_color system
+    wayland_titlebar_color background
 
     active_tab_foreground   #11111B
     active_tab_background   #CBA6F7
@@ -80,8 +79,7 @@ _: let
     inactive_border_color   #9CA0B0
     bell_border_color       #DF8E1D
 
-    wayland_titlebar_color system
-    macos_titlebar_color system
+    wayland_titlebar_color background
 
     active_tab_foreground   #EFF1F5
     active_tab_background   #8839EF
@@ -157,7 +155,7 @@ in {
       window_margin_width = "5";
       single_window_margin_width = "0";
       window_padding_width = "2";
-      inactive_text_alpha = "0.5";
+      inactive_text_alpha = "0.2";
 
       # ── Layouts ──
       enabled_layouts = "splits,stack,tall,fat,grid,horizontal,vertical";
