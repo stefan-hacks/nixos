@@ -123,6 +123,7 @@
     genhex = "openssl rand -hex 32";
     isodate = "date -u +%Y-%m-%dT%H:%M:%SZ";
     stamp = "date +%Y%m%dT%H%M%S";
+    aacls = "sudo find / -exec getfacl --skip-base {} + 2>/dev/null";
   };
 
   systemd = {
