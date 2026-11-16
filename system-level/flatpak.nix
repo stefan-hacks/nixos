@@ -72,5 +72,5 @@
   };
 
   # Also update on first activation (e.g. after nixos-rebuild switch)
-  services.flatpak.update.onActivation = true;
+  services.flatpak.update.onActivation = false;
 }
