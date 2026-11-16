@@ -9,7 +9,6 @@
     ./programs/carapace.nix
     ./programs/starship.nix
     ./programs/helix.nix
-    ./programs/vim.nix
     ./programs/zellij.nix
     ./programs/fastfetch.nix
     ./programs/bat.nix
@@ -32,6 +31,8 @@
       NH_FLAKE = "/home/stefan-hacks/.config/nixos";
     };
   };
+
+  programs.pure-vim.enable = true;
 
   programs.home-manager.enable = true;
 }

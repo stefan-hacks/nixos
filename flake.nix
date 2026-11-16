@@ -14,6 +14,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    pure-vim = {
+      url = "path:/home/stefan-hacks/Projects/pure-vim";
+    };
+
     nvf = {
       url = "github:NotAShelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -73,6 +77,7 @@
             home-manager.users.stefan-hacks = {
               imports = [
                 inputs.nixdatifier.homeManagerModules.default
+                inputs.pure-vim.homeManagerModules.default
                 ./user-level/home-manager/stefan-hacks/default.nix
               ];
             };

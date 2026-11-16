@@ -28,7 +28,6 @@
     zip
     p7zip
     evil-helix
-    vim
     hw-probe
     less
     lynis
