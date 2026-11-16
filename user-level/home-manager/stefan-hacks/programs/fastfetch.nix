@@ -50,6 +50,10 @@ _: {
                 "key": "{$4}├─ {icon}  {$1}{sysname}{$2}"
             },
             {
+                "type": "kernel",
+                "key": "{$4}├─ {icon}  {$1}Kernel{$2}"
+            },
+            {
                 "type": "de",
                 "key": "{$4}├─ {icon}  {$1}DE {$2}"
             },
