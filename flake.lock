@@ -203,8 +203,8 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1794855417,
-        "narHash": "sha256-3dCyXOlISzni+R4E7LM1EP+GeuOeMI0d1n3a/8+F1Uw=",
+        "lastModified": 1794855778,
+        "narHash": "sha256-H2XgJ3E5m0wX4fAGlOZlhx3ZKTEHQRGcIh7BWUdtiW8=",
         "path": "/home/stefan-hacks/Projects/pure-vim",
         "type": "path"
       },
