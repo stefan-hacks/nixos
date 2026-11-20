@@ -1,11 +1,13 @@
-# git.nix — Home Manager git configuration
-# All git aliases live here (not in bash.nix) so git provides tab-completion.
+# git.nix — Home Manager Git configuration
 {pkgs, ...}: let
-  # Complex shell-based alias: auto-commit with human-readable summary
+  # Auto-commit with a human-readable summary
   gitLazy = pkgs.writeShellScriptBin "git-lazy" ''
-    set -e
+    set -euo pipefail
+
     git add -A
-    status=$(git status --porcelain)
+
+    status="$(git status --porcelain)"
+
     if [ -z "$status" ]; then
       echo "No changes to commit."
       exit 0
@@ -13,48 +15,93 @@
 
     added_mods=""
     deletions=""
+
     while IFS= read -r line; do
-      state=$(echo "$line" | cut -c1-2)
-      file=$(echo "$line" | cut -c4-)
-      if echo "$state" | grep -q '[AMR]'; then
-        added_mods="$added_mods\n  - $file"
-      elif echo "$state" | grep -q 'D'; then
-        deletions="$deletions\n  - $file"
+      state="''${line:0:2}"
+      file="''${line:3}"
+
+      if [[ "$state" =~ [AMR] ]]; then
+        added_mods+="\n  - $file"
+      fi
+
+      if [[ "$state" == *D* ]]; then
+        deletions+="\n  - $file"
       fi
     done <<< "$status"
 
     msg="Auto-commit summary:"
+
     if [ -n "$added_mods" ]; then
-      msg="$msg\n\n[Added/Modified]:$added_mods"
-    fi
-    if [ -n "$deletions" ]; then
-      msg="$msg\n\n[Deleted]:$deletions"
+      msg+=$'\n\n[Added/Modified]:'"$added_mods"
     fi
 
-    echo -e "$msg"
-    git commit -m "$(echo -e "$msg")"
+    if [ -n "$deletions" ]; then
+      msg+=$'\n\n[Deleted]:'"$deletions"
+    fi
+
+    printf '%b\n' "$msg"
+
+    git commit -m "$msg"
     git push
   '';
 in {
-  programs.git = {
+  # ─────────────────────────────────────────────
+  # GitHub CLI
+  # ─────────────────────────────────────────────
+
+  programs.gh.enable = true;
+
+  # ─────────────────────────────────────────────
+  # SSH authentication
+  # ─────────────────────────────────────────────
+
+  services.ssh-agent = {
+    enable = true;
+  };
+
+  # Never launch graphical ssh-askpass.
+  # Unlock keys interactively in the terminal instead.
+  home.sessionVariables = {
+    SSH_ASKPASS_REQUIRE = "never";
+  };
+
+  programs.ssh = {
     enable = true;
 
     settings = {
-      user.name = "stefan-hacks";
-      user.email = "stefanmrobertson@gmail.com";
+      AddKeysToAgent = "yes";
+    };
+  };
 
-      credential."https://github.com".helper = "!gh auth git-credential";
-      credential."https://gist.github.com".helper = "!gh auth git-credential";
+  # ─────────────────────────────────────────────
+  # Git
+  # ─────────────────────────────────────────────
 
+  programs.git = {
+    enable = true;
+
+    package = pkgs.git;
+
+    settings = {
+      # Identity
+      user = {
+        name = "stefan-hacks";
+        email = "stefanmrobertson@gmail.com";
+      };
+
+      # GitHub HTTPS authentication through GitHub CLI.
+      # No PAT is stored in this Nix configuration.
+      credential."https://github.com".helper = "!${pkgs.gh}/bin/gh auth git-credential";
+
+      # General behaviour
       init.defaultBranch = "main";
       push.autoSetupRemote = true;
       pull.rebase = false;
       fetch.prune = true;
       log.date = "iso";
 
-      # ── Power-programmer aliases ──
+      # ── Basics ──
       alias = {
-        # ── Basics ──
         s = "status -sb";
         st = "status";
         ss = "status --short";
@@ -65,6 +112,7 @@ in {
         ap = "add -p";
         unstage = "restore --staged";
         "unstage-all" = "restore --staged :";
+
         co = "checkout";
         cob = "checkout -b";
 
@@ -97,7 +145,9 @@ in {
         l = "log --oneline --graph --decorate --all -20";
         lg = "log --oneline --graph --decorate --all";
         lga = "log --oneline --graph --decorate --all --branches";
+
         hist = "log --pretty=format:'%C(yellow)%h%Creset %C(cyan)%ad%Creset %C(blue)%an%Creset %s' --date=short --graph";
+
         who = "log -p -M --follow --stat --";
         contributors = "shortlog -sne";
 
@@ -125,10 +175,11 @@ in {
         rbc = "rebase --continue";
 
         # ── Cleanup ──
-        cleanup = "!git fetch --all --prune && git branch -vv | grep ': gone]' | awk '{print \$1}' | xargs -r git branch -D";
+        cleanup = "!git fetch --all --prune && git branch -vv | grep ': gone]' | awk '{print \\$1}' | xargs -r git branch -D";
+
         nuke = "!git reset --hard HEAD && git clean -fd";
 
-        # ── Lazy auto-commit ──
+        # ── Auto-commit ──
         lazy = "!${gitLazy}/bin/git-lazy";
       };
     };
