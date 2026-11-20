@@ -123,6 +123,7 @@
     tcpdump
     wireshark
     openssh
+    lxqt.lxqt-openssh-askpass
     lazyssh
     socat
     netcat

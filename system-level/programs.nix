@@ -1,5 +1,5 @@
 # System-wide program configuration
-_: {
+{ pkgs, ... }: {
   # programs.firefox.enable = true;
   programs.gpaste.enable = true;
 
@@ -14,5 +14,13 @@ _: {
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
+  };
+
+  # Use lxqt-openssh-askpass instead of the default x11-ssh-askpass.
+  # The default X11 askpass triggers a GNOME/Wayland "Allow inhibiting shortcuts"
+  # portal dialog on every invocation because it has no .desktop file registered.
+  programs.ssh = {
+    enableAskPassword = true;
+    askPassword = "${pkgs.lxqt.lxqt-openssh-askpass}/bin/lxqt-openssh-askpass";
   };
 }
