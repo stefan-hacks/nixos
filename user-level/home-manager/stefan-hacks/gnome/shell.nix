@@ -11,6 +11,8 @@
     };
 
     "org/gnome/shell/keybindings" = {
+      screen-brightness-down = ["F3"];
+      screen-brightness-up = ["F4"];
       show-screen-recording-ui = [];
       show-screenshot-ui = ["<Shift><Control><Alt>r"];
     };

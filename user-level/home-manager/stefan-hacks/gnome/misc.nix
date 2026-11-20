@@ -18,7 +18,7 @@
     "org/gnome/desktop/screensaver" = {
       color-shading-type = "solid";
       picture-options = "zoom";
-      picture-uri = "file:///home/stefan-hacks/.local/share/backgrounds/2026-11-13-09-50-22-wp12329531-nixos-wallpapers.png";
+      picture-uri = "file:///home/stefan-hacks/.local/share/backgrounds/2026-11-20-13-18-47-wallpaper36.png";
       primary-color = "#000000000000";
       secondary-color = "#000000000000";
     };
@@ -43,7 +43,7 @@
     };
 
     "org/gnome/software" = {
-      check-timestamp = lib.hm.gvariant.mkInt64 1794578139;
+      check-timestamp = lib.hm.gvariant.mkInt64 1795198239;
       first-run = false;
       flatpak-purge-timestamp = lib.hm.gvariant.mkInt64 1794588159;
     };

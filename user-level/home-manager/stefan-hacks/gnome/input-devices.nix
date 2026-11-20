@@ -7,7 +7,8 @@
     };
 
     "org/gnome/desktop/input-sources" = {
-      sources = [(lib.hm.gvariant.mkTuple ["xkb" "us"])];
+      mru-sources = [(lib.hm.gvariant.mkTuple ["xkb" "us"])];
+      sources = [(lib.hm.gvariant.mkTuple ["xkb" "us"]) (lib.hm.gvariant.mkTuple ["xkb" "gb"])];
       xkb-options = [];
     };
 
@@ -17,6 +18,7 @@
     };
 
     "org/gnome/desktop/peripherals/touchpad" = {
+      speed = 1.0;
       two-finger-scrolling-enabled = true;
     };
   };

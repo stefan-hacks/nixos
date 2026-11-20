@@ -3,7 +3,7 @@
 {lib, ...}: {
   dconf.settings = {
     "org/gnome/control-center" = {
-      last-panel = "background";
+      last-panel = "keyboard";
       window-state = lib.hm.gvariant.mkTuple [980 640 false];
     };
 
@@ -45,6 +45,10 @@
 
     "org/gnome/settings-daemon/global-shortcuts" = {
       applications = ["hermes"];
+    };
+
+    "org/gnome/settings-daemon/global-shortcuts/com.onepassword.OnePassword" = {
+      shortcuts = [(lib.hm.gvariant.mkTuple ["0BA056A38582480003B7C98E11D160FF-Ctrl+Shift+Space" [(lib.hm.gvariant.mkDictionaryEntry ["shortcuts" (lib.hm.gvariant.mkVariant ["<Shift><Control>space"])]) (lib.hm.gvariant.mkDictionaryEntry ["description" (lib.hm.gvariant.mkVariant "1Password shortcut: Ctrl+Shift+Space")])]]) (lib.hm.gvariant.mkTuple ["80D3592B74381D3B4ADF3F5C41BE37C1-" [(lib.hm.gvariant.mkDictionaryEntry ["description" (lib.hm.gvariant.mkVariant "1Password shortcut: ")])]])];
     };
 
     "org/gnome/settings-daemon/global-shortcuts/hermes" = {

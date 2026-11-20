@@ -5,8 +5,8 @@
     "org/gnome/desktop/background" = {
       color-shading-type = "solid";
       picture-options = "zoom";
-      picture-uri = "file:///home/stefan-hacks/.local/share/backgrounds/2026-11-13-09-50-22-wp12329531-nixos-wallpapers.png";
-      picture-uri-dark = "file:///home/stefan-hacks/.local/share/backgrounds/2026-11-13-09-50-22-wp12329531-nixos-wallpapers.png";
+      picture-uri = "file:///home/stefan-hacks/.local/share/backgrounds/2026-11-20-13-18-47-wallpaper36.png";
+      picture-uri-dark = "file:///home/stefan-hacks/.local/share/backgrounds/2026-11-20-13-18-47-wallpaper36.png";
       primary-color = "#000000000000";
       secondary-color = "#000000000000";
     };
@@ -18,6 +18,7 @@
       font-name = "JetBrainsMono Nerd Font Thin 11";
       gtk-theme = "Adwaita-dark";
       monospace-font-name = "JetBrainsMono Nerd Font 11";
+      show-battery-percentage = true;
     };
 
     "org/gnome/desktop/session" = {
