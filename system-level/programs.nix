@@ -1,5 +1,5 @@
 # System-wide program configuration
-{ pkgs, ... }: {
+{pkgs, ...}: {
   # programs.firefox.enable = true;
   programs.gpaste.enable = true;
 
