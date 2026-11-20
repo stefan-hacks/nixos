@@ -19,20 +19,20 @@
 
   # Ensure the Logitech HID++ driver is loaded early for BT HID devices
   # (MX Master 3S, MX Keys, etc.).
-  boot.kernelModules = ["hid_logitech_hidpp"];
+  # boot.kernelModules = ["hid_logitech_hidpp"];
 
   # Load btusb in initrd so the Bluetooth controller is initialised early
   # after hibernate (S4), where the kernel must re-enumerate USB devices
   # before userspace is available.
-  boot.initrd.kernelModules = ["btusb"];
+  # boot.initrd.kernelModules = ["btusb"];
 
   # Disable USB autosuspend for the MediaTek Bluetooth controller (13d3:3621).
   # This controller fails to resume properly when the USB root hub suspends it
   # during S3/S4, causing HID devices (mouse/keyboard) to stop responding even
   # though the Bluetooth link appears "Connected".
-  services.udev.extraRules = ''
-    ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="13d3", ATTR{idProduct}=="3621", ATTR{power/control}="on"
-  '';
+  # services.udev.extraRules = ''
+    # ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="13d3", ATTR{idProduct}=="3621", ATTR{power/control}="on"
+  # '';
 
   # ═══════════════════════════════════════════════════════════════════════════
   # Post-resume: restart bluetooth.service after suspend/hibernate.
@@ -41,18 +41,17 @@
   # If restart alone doesn't reconnect the mouse, we fall back to an
   # explicit bluetoothctl connect after a short delay.
   # ═══════════════════════════════════════════════════════════════════════════
-  systemd.services.bluetooth-resume = {
-    description = "Restart Bluetooth after suspend/hibernate";
-    after = ["suspend.target" "hibernate.target" "hybrid-sleep.target" "suspend-then-hibernate.target"];
-    wantedBy = ["suspend.target" "hibernate.target" "hybrid-sleep.target" "suspend-then-hibernate.target"];
-    serviceConfig = {
-      Type = "oneshot";
-      # Give the USB controller time to finish re-initialising before
-      # touching bluetoothd. 3s is the sweet spot for the MediaTek chip.
-      ExecStartPre = "${pkgs.coreutils}/bin/sleep 3";
-      ExecStart = "${pkgs.systemd}/bin/systemctl restart bluetooth.service";
-    };
-  };
+
+  #   after = ["suspend.target" "hibernate.target" "hybrid-sleep.target" "suspend-then-hibernate.target"];
+  #   wantedBy = ["suspend.target" "hibernate.target" "hybrid-sleep.target" "suspend-then-hibernate.target"];
+  #   serviceConfig = {
+  #     Type = "oneshot";
+  #     # Give the USB controller time to finish re-initialising before
+  #     # touching bluetoothd. 3s is the sweet spot for the MediaTek chip.
+  #     ExecStartPre = "${pkgs.coreutils}/bin/sleep 3";
+  #     ExecStart = "${pkgs.systemd}/bin/systemctl restart bluetooth.service";
+  #   };
+  # };
 
   # Optional fallback: explicitly reconnect the mouse if the restart
   # doesn't auto-reconnect it. This runs 5 seconds after the restart.
