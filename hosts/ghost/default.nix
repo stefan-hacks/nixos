@@ -15,9 +15,9 @@
 
   networking.hostName = "ghost";
 
-  # LUKS encrypted root (shared UUID with titan)
+  # LUKS encrypted root 
   boot.initrd.luks.devices."cryptroot" = {
-    device = "/dev/disk/by-uuid/bcf8be51-1c8a-4da2-8dec-c728b7082e6d";
+    device = "/dev/disk/by-uuid/88885349-8ff1-433e-82d6-5d62717c1cac";
   };
 
   system.stateVersion = "26.05";
