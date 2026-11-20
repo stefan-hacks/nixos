@@ -5,15 +5,14 @@
 {pkgs, ...}: {
   hardware.bluetooth = {
     enable = true;
-    powerOnBoot = true;
-    settings = {
-      General = {
-        # Experimental mode improves BLE HID support (required by MX Master 3S).
-        Experimental = true;
-      };
-      Policy = {
-        AutoEnable = true;
-      };
+
+    #   General = {
+    #     # Experimental mode improves BLE HID support (required by MX Master 3S).
+    #     Experimental = true;
+    #   };
+    #   Policy = {
+    #     AutoEnable = true;
+      # };
     };
   };
 
