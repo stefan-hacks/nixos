@@ -52,7 +52,7 @@
     };
 
     "org/gnome/settings-daemon/global-shortcuts/hermes" = {
-      shortcuts = [(lib.hm.gvariant.mkTuple ["F7DEEBF2AF2CE89BF4BBBB294C5B0FB1-Ctrl+Shift+Space" [(lib.hm.gvariant.mkDictionaryEntry ["shortcuts" (lib.hm.gvariant.mkVariant ["<Shift><Control>space"])]) (lib.hm.gvariant.mkDictionaryEntry ["description" (lib.hm.gvariant.mkVariant "Hermes shortcut: Ctrl+Shift+Space")])]])];
+      shortcuts = [(lib.hm.gvariant.mkTuple ["9E977326B32C7DE4C1D63DB9F1339B88-Ctrl+Shift+Space" [(lib.hm.gvariant.mkDictionaryEntry ["shortcuts" (lib.hm.gvariant.mkVariant ["<Control>3"])]) (lib.hm.gvariant.mkDictionaryEntry ["description" (lib.hm.gvariant.mkVariant "Hermes shortcut: Ctrl+Shift+Space")])]])];
     };
 
     "org/gnome/settings-daemon/plugins/color" = {
