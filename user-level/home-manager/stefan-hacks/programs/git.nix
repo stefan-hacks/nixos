@@ -1,6 +1,6 @@
 # git.nix — Home Manager Git configuration
 {pkgs, ...}: let
-  # Auto-commit with a human-readable summary
+  # Complex shell-based alias: auto-commit with human-readable summary
   gitLazy = pkgs.writeShellScriptBin "git-lazy" ''
     set -euo pipefail
 
@@ -46,62 +46,36 @@
   '';
 in {
   # ─────────────────────────────────────────────
-  # GitHub CLI
+  # GitHub CLI authentication
   # ─────────────────────────────────────────────
 
   programs.gh.enable = true;
 
   # ─────────────────────────────────────────────
-  # SSH authentication
-  # ─────────────────────────────────────────────
-
-  services.ssh-agent = {
-    enable = true;
-  };
-
-  # Never launch graphical ssh-askpass.
-  # Unlock keys interactively in the terminal instead.
-  home.sessionVariables = {
-    SSH_ASKPASS_REQUIRE = "never";
-  };
-
-  programs.ssh = {
-    enable = true;
-
-    settings = {
-      AddKeysToAgent = "yes";
-    };
-  };
-
-  # ─────────────────────────────────────────────
-  # Git
+  # Git configuration
   # ─────────────────────────────────────────────
 
   programs.git = {
     enable = true;
 
-    package = pkgs.git;
-
     settings = {
-      # Identity
-      user = {
-        name = "stefan-hacks";
-        email = "stefanmrobertson@gmail.com";
-      };
+      # ── Identity ──
+      user.name = "stefan-hacks";
+      user.email = "stefanmrobertson@gmail.com";
 
-      # GitHub HTTPS authentication through GitHub CLI.
-      # No PAT is stored in this Nix configuration.
-      credential."https://github.com".helper = "!${pkgs.gh}/bin/gh auth git-credential";
-
-      # General behaviour
+      # ── Git defaults ──
       init.defaultBranch = "main";
       push.autoSetupRemote = true;
       pull.rebase = false;
       fetch.prune = true;
       log.date = "iso";
 
-      # ── Basics ──
+      # ─────────────────────────────────────────
+      # Power-programmer aliases
+      # ─────────────────────────────────────────
+
       alias = {
+        # ── Basics ──
         s = "status -sb";
         st = "status";
         ss = "status --short";
@@ -112,7 +86,6 @@ in {
         ap = "add -p";
         unstage = "restore --staged";
         "unstage-all" = "restore --staged :";
-
         co = "checkout";
         cob = "checkout -b";
 
@@ -175,11 +148,11 @@ in {
         rbc = "rebase --continue";
 
         # ── Cleanup ──
-        cleanup = "!git fetch --all --prune && git branch -vv | grep ': gone]' | awk '{print \\$1}' | xargs -r git branch -D";
+        cleanup = "!git fetch --all --prune && git branch -vv | grep ': gone]' | awk '{print $1}' | xargs -r git branch -D";
 
         nuke = "!git reset --hard HEAD && git clean -fd";
 
-        # ── Auto-commit ──
+        # ── Lazy auto-commit ──
         lazy = "!${gitLazy}/bin/git-lazy";
       };
     };
