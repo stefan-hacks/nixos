@@ -1,29 +1,13 @@
 # aliases.nix — Bash shell aliases, organised by category.
 # Imported by bash.nix; kept separate so bash.nix stays focused on shell mechanics.
 {lib, ...}: let
-  colourised =
-    lib.genAttrs [
-      "blkid"
-      "dig"
-      "fdisk"
-      "findmnt"
-      "ifconfig"
-      "lsof"
-      "mount"
-      "mtr"
-      "netstat"
-      "ping"
-      "ss"
-      "traceroute"
-      "whois"
-    ] (cmd: "colourify ${cmd}")
-    // {
-      colourify = "grc -es --colour=auto";
-      df = "colourify df -hT --exclude-type=tmpfs --exclude-type=devtmpfs";
-      free = "colourify free -h";
-      lsblk = "colourify lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,UUID";
-      lspci = "colourify lspci -v";
-    };
+  # grc-enhanced aliases with custom flags (grc.nix provides the base colourify)
+  grcExtras = {
+    df = "colourify df -hT --exclude-type=tmpfs --exclude-type=devtmpfs";
+    free = "colourify free -h";
+    lsblk = "colourify lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,UUID";
+    lspci = "colourify lspci -v";
+  };
 
   shell = {
     sudo = "sudo "; # trailing space: aliases (colourify, ...) expand after sudo
@@ -275,7 +259,7 @@
     shell
     bat
     eza
-    colourised
+    grcExtras
     system
     systemd
     network

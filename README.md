@@ -361,7 +361,7 @@ If you already have a working NixOS system and just want the user dotfiles:
 | `firewall.nix` | nftables rules (specific ports, no wide ranges) |
 | `flatpak.nix` | Declarative flatpak apps (system-level) |
 | `fwupd.nix` | Firmware update daemon (fwupdmgr) |
-| `grc.nix` | Generic Colouriser aliases for 50+ system commands |
+| `grc.nix` | Generic Colouriser aliases for 80+ system commands |
 | `kanata.nix` | Keyboard remapping (KDL) |
 | `locale.nix` | Timezone, locale, keymap |
 | `logging.nix` | Journald settings |
@@ -475,7 +475,7 @@ All terminal output is colorized with **context-aware** tools (not generic rainb
 
 ### grc — System Command Output
 
-Regex-based colorization for 50+ commands. Examples:
+Regex-based colorization for **80+ commands** (every command with a `conf.*` file in the grc package). Examples:
 
 ```bash
 df -h                    # disk usage with colored thresholds
@@ -497,6 +497,13 @@ env                      # environment variables colorized
 sysctl -a                # kernel parameters colorized
 iostat 1 5               # I/O stats colorized
 vmstat 1 5               # memory stats colorized
+
+# Additional commands covered:
+ant, blkid, configure, curl, cvs, diff, dig, dnf, fdisk, findmnt
+free, getfacl, getsebool, head, id, ifconfig, iwconfig, jobs, kubectl
+last, ldap, lsof, lspci, lsblk, mtr, nmap, php, sensors, sql
+stat, tail, tcpdump, tune2fs, ulimit, uptime, wdiff, whois, yaml
+# + all docker subcommands (dockerps, dockerimages, dockerinfo, etc.)
 ```
 
 ### bat + bat-extras — File Viewing & Search
