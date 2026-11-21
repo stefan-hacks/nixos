@@ -348,10 +348,12 @@ If you already have a working NixOS system and just want the user dotfiles:
 | `audio.nix` | PipeWire (pulse, alsa, jack) |
 | `bluetooth.nix` | BlueZ + USB autosuspend fix for IMC 13d3:3621 |
 | `boot.nix` | systemd-boot, kernel params, initrd, Plymouth removed (now in desktop) |
+| `color-output.nix` | Context-aware terminal colorization (grc, bat, delta, ccze, glow, fx) |
 | `desktop.nix` | GNOME DE + extensions list |
 | `fail2ban.nix` | SSH brute-force protection |
 | `firewall.nix` | nftables rules (specific ports, no wide ranges) |
 | `flatpak.nix` | Declarative flatpak apps (system-level) |
+| `grc.nix` | Generic Colouriser aliases for 50+ system commands |
 | `kanata.nix` | Keyboard remapping (KDL) |
 | `locale.nix` | Timezone, locale, keymap |
 | `logging.nix` | Journald settings |
@@ -455,7 +457,132 @@ All shell tools are installed via Home Manager (not system-level) to control ini
 
 ---
 
+| **ICC profiles in repo** | GNOME color calibrations stored per-host under `assets/icc/<host>/` and linked via Home Manager. |
+
+---
+
+## Terminal Colorization
+
+All terminal output is colorized with **context-aware** tools (not generic rainbow prettifiers). Each tool understands the syntax or semantics of what it colors:
+
+### grc — System Command Output
+
+Regex-based colorization for 50+ commands. Examples:
+
+```bash
+df -h                    # disk usage with colored thresholds
+du -sh *                 # directory sizes colorized
+ip addr                  # network interfaces with colored IPs
+ping 8.8.8.8             # latency colorized
+ps aux                   # processes with colored CPU/memory
+journalctl -u sshd       # logs with colored severity levels
+systemctl status sshd    # service status with colored states
+iptables -L              # firewall rules colorized
+netstat -tlnp            # ports with colored states
+ss -tlnp                 # sockets with colored states
+traceroute google.com    # hop colors by latency
+mount                    # mount points colorized
+gcc main.c               # compiler errors in red, warnings in yellow
+make                     # build output colorized
+lsmod                    # kernel modules colorized
+env                      # environment variables colorized
+sysctl -a                # kernel parameters colorized
+iostat 1 5               # I/O stats colorized
+vmstat 1 5               # memory stats colorized
+```
+
+### bat + bat-extras — File Viewing & Search
+
+Syntax-highlighting for any source file, with Catppuccin-Mocha theme:
+
+```bash
+bat script.py            # Python syntax highlighting
+bat --diff file1 file2   # Diff with syntax highlighting
+man ssh                  # Man pages with syntax highlighting (batman)
+g docker                 # Help output colorized (bathelp)
+grep -r TODO src/        # Grep with syntax highlighting (batgrep)
+diff -u a.txt b.txt      # Diff with syntax highlighting (batdiff)
+watch -n1 'cat log'      # Auto-refresh with highlighting (batwatch)
+```
+
+### delta — Git Diffs
+
+Syntax-aware diff pager with side-by-side support:
+
+```bash
+git diff                 # colored by filetype, line numbers, decorations
+git log -p               # patch view with syntax highlighting
+git show HEAD            # commit diff with highlighting
+git diff --staged        # staged changes with color
+git merge conflict       # diff3 conflict style with highlighting
+```
+
+### ccze — Log Files
+
+Colorizes log files by severity (ERROR red, WARN yellow, INFO green):
+
+```bash
+logs                     # alias: ccze -A (generic log colorizer)
+syslog                   # system logs via ccze
+dmesg                    # kernel ring buffer colorized
+cat /var/log/nginx/*.log | ccze -A
+journalctl --no-pager | ccze -A
+```
+
+### glow — Markdown
+
+Renders markdown files in the terminal:
+
+```bash
+md README.md             # alias for glow README.md
+md                       # interactive markdown browser
+```
+
+### fx — JSON
+
+Interactive JSON viewer with color and tree navigation:
+
+```bash
+cat data.json | fx       # interactive tree with colors
+curl -s api.github.com/users/octocat | fx
+```
+
+### source-highlight — Source Code Cat
+
+Syntax-highlighting cat replacement for any source file:
+
+```bash
+ccat script.py           # Python with syntax highlighting
+ccat main.c              # C with syntax highlighting
+ccat config.yaml         # YAML with syntax highlighting
+```
+
+### hexyl — Binary Inspection
+
+Colorized hex viewer for binary files:
+
+```bash
+hex /bin/ls              # colorized hex dump
+hex firmware.bin         # binary inspection with color
+```
+
+### Environment Variables
+
+Color is forced in these tools via environment variables:
+
+| Variable | Tool |
+|---|---|
+| `GCC_COLORS` | GCC/Clang compiler diagnostics |
+| `CARGO_TERM_COLOR` | Rust/cargo |
+| `NPM_CONFIG_COLOR` | npm |
+| `MAKE_TERMOUT` | GNU make |
+| `SYSTEMD_COLORS` | systemd status output |
+| `GREP_COLORS` | grep match highlighting |
+
+---
+
 ## Tooling in `packages.nix`
+
 
 - `nh` — NixOS helper
 - `nix-output-monitor` (`nom`) — Live build TUI

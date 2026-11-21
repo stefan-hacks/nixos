@@ -14,6 +14,7 @@ _: {
     ./system-level/hardening.nix
     ./system-level/grc.nix
     ./system-level/color-output.nix
+    ./system-level/fwupd.nix
   ];
 
   # Base user account (Home Manager manages dotfiles)
