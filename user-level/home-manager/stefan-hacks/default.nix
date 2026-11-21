@@ -33,6 +33,7 @@
   };
 
   programs.pure-vim.enable = true;
+  programs.por-cli.enable = true;
 
   programs.home-manager.enable = true;
 }

@@ -42,6 +42,11 @@
       flake = false;
     };
 
+    por-cli = {
+      url = "github:stefan-hacks/por-cli";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     kitty-scrollback = {
       url = "github:mikesmithgh/kitty-scrollback.nvim/v8.0.0";
       flake = false;
@@ -78,6 +83,7 @@
               imports = [
                 inputs.nixdatifier.homeManagerModules.default
                 inputs.pure-vim.homeManagerModules.default
+                inputs.por-cli.homeManagerModules.default
                 ./user-level/home-manager/stefan-hacks/default.nix
               ];
             };
