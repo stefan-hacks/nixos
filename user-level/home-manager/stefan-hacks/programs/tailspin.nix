@@ -1,10 +1,14 @@
 # tailspin.nix — Log file highlighter with Catppuccin-Mocha theme.
-{ config, pkgs, ... }: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   # Tailspin package is installed system-wide via color-output.nix.
   # This module deploys the theme file and environment config.
 
   home = {
-    packages = [ pkgs.tailspin ];
+    packages = [pkgs.tailspin];
 
     file.".config/tailspin/theme.toml".text = ''
       # Catppuccin Mocha theme for tailspin
