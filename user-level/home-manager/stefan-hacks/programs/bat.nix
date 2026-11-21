@@ -13,6 +13,6 @@
         ".ignore:Git Ignore"
       ];
     };
-    extraPackages = [ pkgs.bat-extras.core ];
+    extraPackages = [pkgs.bat-extras.core];
   };
 }
