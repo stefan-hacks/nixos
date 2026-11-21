@@ -64,6 +64,9 @@
 
       initExtra = lib.mkMerge [
         ''
+          # Source system-wide grc aliases (not limited to login shells)
+          [[ -r /etc/profile.d/grc-aliases.sh ]] && source /etc/profile.d/grc-aliases.sh
+
           export NIXCFG="''${NIXCFG:-$HOME/.config/nixos}"
           export EDITOR=vim
           export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
