@@ -13,13 +13,6 @@
         ".ignore:Git Ignore"
       ];
     };
-    extraPackages = with pkgs.bat-extras; [
-      batdiff
-      batgrep
-      batman
-      batpipe
-      batwatch
-      prettybat
-    ];
+    extraPackages = [ pkgs.bat-extras.core ];
   };
 }
