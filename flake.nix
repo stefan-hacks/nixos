@@ -102,5 +102,37 @@
   in {
     formatter.${system} = treefmtEval.config.build.wrapper;
     nixosConfigurations = nixpkgs.lib.genAttrs hostNames mkHost;
+
+    # Development shell with quality-check tools
+    devShells.${system}.default = nixpkgs.legacyPackages.${system}.mkShellNoCC {
+      name = "nixos-quality";
+      packages = with nixpkgs.legacyPackages.${system}; [
+        deadnix
+        statix
+        nixpkgs-fmt
+        treefmtEval.config.build.wrapper
+      ];
+      shellHook = ''
+        echo "NixOS quality-check environment"
+        echo "  deadnix .       # scan for dead code"
+        echo "  statix check    # lint Nix code"
+        echo "  nix fmt         # auto-format all files"
+        echo "  nix flake check # evaluate all checks"
+      '';
+    };
+
+    # Flake checks — run automatically during `nix flake check`
+    checks.${system}.deadnix =
+      nixpkgs.legacyPackages.${system}.runCommand "deadnix-check"
+      {
+        nativeBuildInputs = [nixpkgs.legacyPackages.${system}.deadnix];
+      }
+      ''
+        cp -r ${./.} src
+        chmod -R +w src
+        cd src
+        deadnix --fail .
+        touch $out
+      '';
   };
 }

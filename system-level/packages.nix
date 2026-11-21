@@ -94,6 +94,7 @@
     clippy
     shellcheck
     statix
+    deadnix
     yamllint
     markdownlint-cli
     markdownlint-cli2
@@ -184,7 +185,6 @@
     nix-diff
     nix-init
     nixpkgs-fmt
-    statix
     nixos-generators
     nix-top
     cached-nix-shell

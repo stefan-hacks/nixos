@@ -23,6 +23,13 @@ sudo nixos-rebuild switch --flake .#titan
 
 # Format the repo
 nix fmt
+
+# Lint and check for dead code
+deadnix .
+statix check
+
+# Enter dev shell with quality tools
+nix develop
 ```
 
 ---
@@ -579,6 +586,20 @@ Color is forced in these tools via environment variables:
 | `MAKE_TERMOUT` | GNU make |
 | `SYSTEMD_COLORS` | systemd status output |
 | `GREP_COLORS` | grep match highlighting |
+
+---
+
+## Code Quality
+
+Quality checks run automatically on `nix flake check`. A development shell with all tools is available via `nix develop`.
+
+| Tool | Purpose | Run |
+|---|---|---|
+| `deadnix` | Scan `.nix` files for unused bindings (dead code) | `deadnix .` |
+| `statix` | Lint Nix code — repeated keys, empty patterns, etc. | `statix check` |
+| `treefmt-nix` | Auto-format with `alejandra` + `deadnix` | `nix fmt` |
+
+All three are configured in `flake.nix` and run as part of the flake `checks` output.
 
 ---
 
