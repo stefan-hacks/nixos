@@ -353,6 +353,7 @@ If you already have a working NixOS system and just want the user dotfiles:
 | `fail2ban.nix` | SSH brute-force protection |
 | `firewall.nix` | nftables rules (specific ports, no wide ranges) |
 | `flatpak.nix` | Declarative flatpak apps (system-level) |
+| `fwupd.nix` | Firmware update daemon (fwupdmgr) |
 | `grc.nix` | Generic Colouriser aliases for 50+ system commands |
 | `kanata.nix` | Keyboard remapping (KDL) |
 | `locale.nix` | Timezone, locale, keymap |
@@ -595,6 +596,33 @@ Color is forced in these tools via environment variables:
 - `statix` — Linter with `--fix`
 - `alejandra` / `nixpkgs-fmt` — Formatters
 - `comma` — Run packages without installing: `, cowsay hello`
+
+---
+
+## Firmware Updates (fwupd)
+
+The `fwupd` service is enabled on all hosts for firmware updates via `fwupdmgr`:
+
+```bash
+# Check for available firmware updates
+fwupdmgr get-updates
+
+# Install updates
+fwupdmgr update
+
+# Show device firmware status
+fwupdmgr get-devices
+```
+
+The `fwupd-refresh` timer runs periodically in the background to download the
+latest firmware metadata from the [Linux Vendor Firmware Service (LVFS)](https://fwupd.org).
+
+To disable automatic background refreshes:
+
+```nix
+# In your host configuration
+systemd.timers.fwupd-refresh.enable = false;
+```
 
 ---
 
