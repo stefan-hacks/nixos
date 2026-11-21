@@ -24,6 +24,9 @@
 
     # Hex viewer with color coding
     hexyl
+
+    # Auto-detecting log/stream highlighter (dates, IPs, UUIDs, severity)
+    tailspin
   ];
 
   # ---------------------------------------------------------------------------
@@ -118,6 +121,14 @@
       # ---------------------------------------------------------------
       if command -v colordiff >/dev/null 2>&1; then
         alias cdiff='colordiff'
+      fi
+
+      # ---------------------------------------------------------------
+      # tailspin — auto-detecting log/stream highlighter
+      # ---------------------------------------------------------------
+      if command -v tspin >/dev/null 2>&1; then
+        alias spin='tspin'
+        alias tlog='tspin --follow'
       fi
 
       # ---------------------------------------------------------------
