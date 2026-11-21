@@ -42,7 +42,6 @@
         alias iptables='colourify iptables'
         alias irclog='colourify irclog'
         alias iwconfig='colourify iwconfig'
-        alias jobs='colourify jobs'
         alias journalctl='colourify journalctl'
         alias kubectl='colourify kubectl'
         alias last='colourify last'
