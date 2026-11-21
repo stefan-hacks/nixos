@@ -1,6 +1,6 @@
 # bat.nix — Home Manager bat configuration
 # Catppuccin-Mocha theme. Requires bat installed at system-level.
-{ pkgs, ... }: {
+{pkgs, ...}: {
   programs.bat = {
     enable = true;
     config = {

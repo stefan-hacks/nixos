@@ -1,7 +1,7 @@
 # color-output.nix — Context-aware terminal colorization for all users.
 # Uses grc, bat, delta, ccze, glow, fx, and source-highlight for semantic,
 # language-aware colorization (not generic rainbow prettifiers).
-{ pkgs, ... }: {
+{pkgs, ...}: {
   # Core context-aware colorization tools
   environment.systemPackages = with pkgs; [
     # Syntax-aware diff pager (replaces diff, git diff)

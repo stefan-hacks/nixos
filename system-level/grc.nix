@@ -1,7 +1,7 @@
 # grc.nix — Generic Colouriser (grc) for all users.
 # Provides colorised terminal output for supported system commands.
 {pkgs, ...}: {
-  environment.systemPackages = [ pkgs.grc ];
+  environment.systemPackages = [pkgs.grc];
 
   # Enable grc aliases for all users via a system-wide profile script.
   environment.etc."profile.d/grc-aliases.sh".text = ''
