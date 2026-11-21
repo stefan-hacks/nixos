@@ -52,7 +52,6 @@
 
   # bat extras — all bat-related aliases in one place
   bat = {
-    bathelp = "bat -plhelp";
     man = "batman";
     diff = "batdiff";
     grep = "batgrep";

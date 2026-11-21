@@ -11,115 +11,115 @@
     packages = [pkgs.tailspin];
 
     file.".config/tailspin/theme.toml".text = ''
-      # Catppuccin Mocha theme for tailspin
+      # Catppuccin Mocha theme for tailspin (ANSI named colours only)
       # See: https://github.com/bensadeh/tailspin#customizing-highlight-groups
 
       [numbers]
-      style = { fg = "#89dceb" }
+      style = { fg = "cyan" }
 
       [uuids]
-      number = { fg = "#89b4fa", italic = true }
-      letter = { fg = "#f5c2e7", italic = true }
-      separator = { fg = "#f38ba8" }
+      number = { fg = "blue", italic = true }
+      letter = { fg = "magenta", italic = true }
+      separator = { fg = "red" }
 
       [quotes]
       quote_token = '"'
-      style = { fg = "#f9e2af" }
+      style = { fg = "yellow" }
 
       [ipv4]
-      number = { fg = "#89b4fa", italic = true }
-      separator = { fg = "#f38ba8" }
+      number = { fg = "blue", italic = true }
+      separator = { fg = "red" }
 
       [ipv6]
-      number = { fg = "#89b4fa", italic = true }
-      letter = { fg = "#f5c2e7", italic = true }
-      separator = { fg = "#f38ba8" }
+      number = { fg = "blue", italic = true }
+      letter = { fg = "magenta", italic = true }
+      separator = { fg = "red" }
 
       [dates]
-      date = { fg = "#f5c2e7" }
-      time = { fg = "#89b4fa" }
-      zone = { fg = "#f38ba8" }
+      date = { fg = "magenta" }
+      time = { fg = "blue" }
+      zone = { fg = "red" }
       separator = { faint = true }
 
       [durations]
-      value = { fg = "#89b4fa" }
-      separator = { fg = "#f5c2e7" }
-      unit = { fg = "#f5c2e7", italic = true }
+      value = { fg = "blue" }
+      separator = { fg = "magenta" }
+      unit = { fg = "magenta", italic = true }
 
       [paths]
-      segment = { fg = "#a6e3a1" }
-      separator = { fg = "#f9e2af" }
+      segment = { fg = "green" }
+      separator = { fg = "yellow" }
 
       [urls]
-      http = { fg = "#f38ba8", faint = true }
-      https = { fg = "#a6e3a1", faint = true }
-      host = { fg = "#89b4fa", faint = true }
-      path = { fg = "#89b4fa" }
-      query_params_key = { fg = "#f5c2e7" }
-      query_params_value = { fg = "#89dceb" }
-      symbols = { fg = "#f38ba8" }
+      http = { fg = "red", faint = true }
+      https = { fg = "green", faint = true }
+      host = { fg = "blue", faint = true }
+      path = { fg = "blue" }
+      query_params_key = { fg = "magenta" }
+      query_params_value = { fg = "cyan" }
+      symbols = { fg = "red" }
 
       [emails]
-      local_part = { fg = "#a6e3a1", underline = true }
-      at_sign = { fg = "#f38ba8" }
-      domain = { fg = "#a6e3a1", underline = true }
-      dot = { fg = "#f38ba8" }
+      local_part = { fg = "green", underline = true }
+      at_sign = { fg = "red" }
+      domain = { fg = "green", underline = true }
+      dot = { fg = "red" }
 
       [pointers]
-      number = { fg = "#89b4fa", italic = true }
-      letter = { fg = "#f5c2e7", italic = true }
-      x = { fg = "#f38ba8" }
+      number = { fg = "blue", italic = true }
+      letter = { fg = "magenta", italic = true }
+      x = { fg = "red" }
 
       [processes]
-      name = { fg = "#f9e2af" }
-      id = { fg = "#89dceb" }
-      bracket = { fg = "#f38ba8" }
+      name = { fg = "yellow" }
+      id = { fg = "cyan" }
+      bracket = { fg = "red" }
 
       [key_value_pairs]
-      key = { fg = "#cdd6f4", faint = true }
-      separator = { fg = "#bac2de" }
+      key = { fg = "white", faint = true }
+      separator = { fg = "bright_black" }
 
       [json]
-      key = { fg = "#cdd6f4", faint = true }
+      key = { fg = "white", faint = true }
       quote_token = { faint = true }
-      curly_bracket = { fg = "#f9e2af" }
-      square_bracket = { fg = "#f9e2af" }
+      curly_bracket = { fg = "yellow" }
+      square_bracket = { fg = "yellow" }
       comma = { faint = true }
       colon = { faint = true }
 
       [jvm_stack_traces]
       caused_by = { bold = true }
-      package = { fg = "#f38ba8", faint = true }
-      exception = { fg = "#f38ba8" }
-      frame = { fg = "#f38ba8", faint = true }
-      file = { fg = "#f9e2af" }
-      unknown_source = { fg = "#f9e2af", faint = true }
-      line_number = { fg = "#89dceb" }
+      package = { fg = "red", faint = true }
+      exception = { fg = "red" }
+      frame = { fg = "red", faint = true }
+      file = { fg = "yellow" }
+      unknown_source = { fg = "yellow", faint = true }
+      line_number = { fg = "cyan" }
 
       # Custom keyword groups — log severities and Nix-specific terms
       [[keywords]]
       words = ["ERROR", "FATAL", "CRITICAL", "PANIC"]
-      style = { fg = "#f38ba8", bold = true }
+      style = { fg = "red", bold = true }
 
       [[keywords]]
       words = ["WARN", "WARNING", "DEPRECATED", "OBSOLETE"]
-      style = { fg = "#f9e2af", bold = true }
+      style = { fg = "yellow", bold = true }
 
       [[keywords]]
       words = ["INFO", "NOTICE", "SUCCESS", "OK", "PASS", "DONE"]
-      style = { fg = "#a6e3a1", bold = true }
+      style = { fg = "green", bold = true }
 
       [[keywords]]
       words = ["DEBUG", "TRACE", "VERBOSE"]
-      style = { fg = "#89dceb", italic = true }
+      style = { fg = "cyan", italic = true }
 
       [[keywords]]
       words = ["null", "true", "false", "undefined", "None", "nil"]
-      style = { fg = "#f5c2e7", italic = true }
+      style = { fg = "magenta", italic = true }
 
       [[keywords]]
       words = ["nix", "nixpkgs", "flake", "derivation", "build", "switch"]
-      style = { fg = "#cba6f7", italic = true }
+      style = { fg = "bright_magenta", italic = true }
     '';
 
     sessionVariables = {
