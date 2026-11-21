@@ -1,5 +1,5 @@
 # Nix package manager settings
-{ inputs, ... }: {
+{inputs, ...}: {
   nixpkgs.config.allowUnfree = true;
 
   nix = {
@@ -9,7 +9,7 @@
 
     # Legacy nixPath for tools that still use angle-bracket syntax.
     # Points to the flake registry entry above rather than a channel.
-    nixPath = [ "nixpkgs=flake:nixpkgs" ];
+    nixPath = ["nixpkgs=flake:nixpkgs"];
 
     settings = {
       auto-optimise-store = true;
