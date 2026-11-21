@@ -379,8 +379,10 @@ in {
   };
 
   # Place theme files and kitten in ~/.config/kitty/
-  xdg.configFile."kitty/dark-theme.auto.conf".text = darkTheme;
-  xdg.configFile."kitty/light-theme.auto.conf".text = lightTheme;
-  xdg.configFile."kitty/no-preference-theme.auto.conf".text = lightTheme;
-  xdg.configFile."kitty/kitty_scrollback_nvim.py".text = kittyScrollbackNvimPy;
+  xdg.configFile = {
+    "kitty/dark-theme.auto.conf".text = darkTheme;
+    "kitty/light-theme.auto.conf".text = lightTheme;
+    "kitty/no-preference-theme.auto.conf".text = lightTheme;
+    "kitty/kitty_scrollback_nvim.py".text = kittyScrollbackNvimPy;
+  };
 }

@@ -1,6 +1,6 @@
 # fwupd.nix — Firmware update daemon (fwupd).
 # Enables fwupdmgr for querying and installing firmware updates.
-{...}: {
+_: {
   # Enable the fwupd DBus service.
   services.fwupd.enable = true;
 
