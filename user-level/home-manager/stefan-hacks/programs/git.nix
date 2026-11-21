@@ -70,6 +70,20 @@ in {
       fetch.prune = true;
       log.date = "iso";
 
+      # ── Delta: syntax-aware diff pager ──
+      core.pager = "delta";
+      interactive.diffFilter = "delta --color-only --features=interactive";
+      delta = {
+        features = "line-numbers decorations navigate";
+        navigate = true;
+        light = false;
+        line-numbers = true;
+        side-by-side = false;
+        syntax-theme = "Catppuccin Mocha";
+      };
+      merge.conflictstyle = "diff3";
+      diff.colorMoved = "default";
+
       # ─────────────────────────────────────────
       # Power-programmer aliases
       # ─────────────────────────────────────────

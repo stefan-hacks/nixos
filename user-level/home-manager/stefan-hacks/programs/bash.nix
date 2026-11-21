@@ -7,7 +7,6 @@
 }: {
   home.packages = with pkgs; [
     blesh
-    grc
     libnotify
     nvd
     nix-output-monitor
@@ -169,6 +168,21 @@
 
         # 'help' is a bash builtin — use 'g' instead
         g() { "$@" --help 2>&1 | bathelp; }
+
+        # bathelp: colorised help output using bat
+        bathelp() {
+          bat --language=help --style=plain --paging=never "$@"
+        }
+
+        # Colorised man pages via batman (bat-extras)
+        export MANPAGER="batman --paging=always"
+        export MANROFFOPT="-c"
+
+        # Additional bat-extras convenience aliases
+        alias man='batman'
+        alias diff='batdiff'
+        alias grep='batgrep'
+        alias watch='batwatch'
 
         # batpipe: make `less` automatically use bat for syntax-highlighted previews
         export LESSOPEN="|batpipe %s"
