@@ -1,16 +1,17 @@
 # Desktop environment — GNOME on X11
 {pkgs, ...}: {
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
+  services = {
+    # Enable the X11 windowing system.
+    xserver = {
+      enable = true;
+      xkb.layout = "us";
+    };
 
-  # GNOME Desktop
-  services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = true;
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
+  };
 
   programs.dconf.enable = true;
-
-  # Configure keymap in X11
-  services.xserver.xkb.layout = "us";
 
   # GNOME Extensions
   environment.systemPackages = with pkgs.gnomeExtensions; [

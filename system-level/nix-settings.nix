@@ -2,15 +2,15 @@
 { inputs, ... }: {
   nixpkgs.config.allowUnfree = true;
 
-  # Register the flake's locked nixpkgs in the Nix registry so
-  # `nix run nixpkgs#foo` uses the exact same nixpkgs revision.
-  nix.registry.nixpkgs.flake = inputs.nixpkgs;
-
-  # Legacy nixPath for tools that still use angle-bracket syntax.
-  # Points to the flake registry entry above rather than a channel.
-  nix.nixPath = [ "nixpkgs=flake:nixpkgs" ];
-
   nix = {
+    # Register the flake's locked nixpkgs in the Nix registry so
+    # `nix run nixpkgs#foo` uses the exact same nixpkgs revision.
+    registry.nixpkgs.flake = inputs.nixpkgs;
+
+    # Legacy nixPath for tools that still use angle-bracket syntax.
+    # Points to the flake registry entry above rather than a channel.
+    nixPath = [ "nixpkgs=flake:nixpkgs" ];
+
     settings = {
       auto-optimise-store = true;
       warn-dirty = false;

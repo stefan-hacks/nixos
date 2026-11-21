@@ -14,6 +14,7 @@
     ./programs/bat.nix
     ./programs/btop.nix
     ./programs/nixdatifier.nix
+    ./programs/color-profiles.nix
     ./gnome
   ];
 
@@ -32,8 +33,9 @@
     };
   };
 
-  programs.pure-vim.enable = true;
-  programs.por-cli.enable = true;
-
-  programs.home-manager.enable = true;
+  programs = {
+    pure-vim.enable = true;
+    por-cli.enable = true;
+    home-manager.enable = true;
+  };
 }

@@ -75,17 +75,19 @@
         modules = [
           home-manager.nixosModules.home-manager
           {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "backup";
-            home-manager.extraSpecialArgs = {inherit inputs;};
-            home-manager.users.stefan-hacks = {
-              imports = [
-                inputs.nixdatifier.homeManagerModules.default
-                inputs.pure-vim.homeManagerModules.default
-                inputs.por-cli.homeManagerModules.default
-                ./user-level/home-manager/stefan-hacks/default.nix
-              ];
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              backupFileExtension = "backup";
+              extraSpecialArgs = {inherit inputs;};
+              users.stefan-hacks = {
+                imports = [
+                  inputs.nixdatifier.homeManagerModules.default
+                  inputs.pure-vim.homeManagerModules.default
+                  inputs.por-cli.homeManagerModules.default
+                  ./user-level/home-manager/stefan-hacks/default.nix
+                ];
+              };
             };
           }
           ./hosts/${hostName}
