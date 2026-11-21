@@ -96,13 +96,6 @@
         alias dockerpull='colourify dockerpull'
         alias dockersearch='colourify dockersearch'
         alias dockerversion='colourify dockerversion'
-
-        # ── package managers (NixOS rarely uses these, but keep for shells) ──
-        alias apt='colourify apt'
-        alias apt-get='colourify apt-get'
-        alias emerge='colourify emerge'
-        alias pacman='colourify pacman'
-        alias yum='colourify yum'
       fi
     fi
   '';
