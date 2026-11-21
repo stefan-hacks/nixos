@@ -34,18 +34,23 @@ Three layers, no mixing:
 ```
 ┌──────────────────────────────────────────────────────────────────────┐
 │  HOST          hosts/<host>/default.nix                              │
-│  ├── hardware-configuration.nix   (generated, per-machine)         │
+│  ├── hardware-configuration.nix   (generated, per-machine)           │
 │  ├── sensors.nix                  (host-specific hardware quirks)    │
-│  └── imports → system.nix                                            │
+│  └── imports → system-core.nix + system-desktop.nix (optional)     │
 │                                                                      │
-│  SYSTEM        system.nix                                            │
+│  SYSTEM-CORE   system-core.nix                                       │
 │  └── system-level/                                                   │
-│      ├── boot.nix, desktop.nix, audio.nix, networking.nix           │
-│      ├── firewall.nix, fail2ban.nix, bluetooth.nix                  │
-│      ├── locale.nix, logging.nix, maintenance.nix                     │
-│      ├── programs.nix, kanata.nix, virtualization.nix                 │
-│      ├── packages.nix, theming.nix, flatpak.nix                      │
-│      └── nvf.nix                                                     │
+│      ├── boot.nix, networking.nix, firewall.nix                      │
+│      ├── locale.nix, logging.nix, maintenance.nix                      │
+│      ├── programs.nix, nix-settings.nix                              │
+│      └── hardening, boot, nix daemon, etc.                           │
+│                                                                      │
+│  SYSTEM-DESKTOP system-desktop.nix                                   │
+│  └── system-level/                                                   │
+│      ├── desktop.nix, audio.nix, bluetooth.nix                        │
+│      ├── theming.nix, flatpak.nix, nvf.nix                           │
+│      ├── kanata.nix, virtualization.nix, printing.nix                │
+│      └── podman.nix, avatar.nix                                     │
 │                                                                      │
 │  USER          user-level/home-manager/stefan-hacks/                │
 │  ├── programs/  →  bash, kitty, starship, atuin, helix, etc.         │
@@ -54,10 +59,13 @@ Three layers, no mixing:
 ```
 
 | Layer | Responsibility |
-|-------|-------------|
+|---|---|
 | **Host** | Hardware, LUKS, GPU drivers, hostname, per-host imports. Thin wrapper. |
-| **System** | OS-wide settings. Each file is one category (boot, audio, firewall, etc.). |
-| **User** | Dotfiles, program configs, shell aliases, GNOME dconf. Declarative via Home Manager. |
+| **System Core** | Universal OS settings imported by ALL hosts (boot, networking, hardening, nix, maintenance). |
+| **System Desktop** | GUI-only modules imported by desktop hosts (GNOME, audio, flatpak, theming, podman). |
+| **User** | Dotfiles, program configs, shell aliases, GNOME dconf, ICC color profiles. Declarative via Home Manager. |
+
+**Split rule:** `minimal` and `server` import only `system-core.nix`. `ghost` and `titan` import both.
 
 ---
 
@@ -66,7 +74,9 @@ Three layers, no mixing:
 ```
 ~/.config/nixos/
 ├── flake.nix
-├── system.nix                      # Shared OS entry point
+├── system-core.nix                 # Universal OS modules (all hosts)
+├── system-desktop.nix              # GUI-only modules (desktop hosts)
+├── system.nix                      # User account definition only
 ├── README.md
 │
 ├── hosts/
@@ -74,17 +84,17 @@ Three layers, no mixing:
 │   │   ├── default.nix             # AMD GPU, LUKS, hostname
 │   │   ├── hardware-configuration.nix
 │   │   ├── sensors.nix             # k10temp (no it87 — EC firmware limitation)
-│   │   └── disko-config.nix      # LUKS + LVM (install-time only)
+│   │   └── disko-config.nix        # LUKS + LVM (install-time only)
 │   ├── ghost/
 │   │   ├── default.nix             # LUKS (shares cryptroot UUID with titan)
 │   │   ├── hardware-configuration.nix
 │   │   └── disko-config.nix
 │   ├── minimal/
-│   │   ├── default.nix             # Bare-minimum host
+│   │   ├── default.nix             # Bare-minimum host (core only)
 │   │   ├── hardware-configuration.nix
 │   │   └── disko-config.nix        # Simple ext4
 │   └── server/
-│       ├── default.nix             # Headless
+│       ├── default.nix             # Headless (core only)
 │       ├── hardware-configuration.nix
 │       └── disko-config.nix        # Simple ext4
 │
@@ -100,16 +110,21 @@ Three layers, no mixing:
 │   ├── kubernetes.nix              # (commented out)
 │   ├── locale.nix                  # Timezone, locale, keymap
 │   ├── logging.nix                 # Journal settings
-│   ├── maintenance.nix             # Auto-upgrade, GC
+│   ├── maintenance.nix             # Flake-based auto-upgrade, GC
 │   ├── networking.nix              # NetworkManager
-│   ├── nix-settings.nix            # Nix daemon, experimental-features
+│   ├── nix-settings.nix            # Nix daemon, flakes, registry, nixPath
 │   ├── nvf.nix                     # Declarative Neovim
 │   ├── packages.nix                # System-wide packages
-│   ├── podman.nix                  # (commented out)
+│   ├── podman.nix                  # Declarative containers (Debian, Rocky)
+│   ├── printing.nix                # CUPS
 │   ├── programs.nix                # fzf, mtr, gnupg agent
 │   ├── sensors.nix                 # OpenRGB + OpenTabletDriver
 │   ├── theming.nix                 # GDM wallpaper (gnome-shell SCSS overlay)
 │   └── virtualization.nix          # QEMU/KVM, virt-manager
+│
+├── assets/
+│   └── icc/
+│       └── ghost/                  # GNOME color calibration profiles
 │
 └── user-level/home-manager/stefan-hacks/
     ├── default.nix                 # HM entry point
@@ -120,6 +135,7 @@ Three layers, no mixing:
     │   ├── bat.nix                 # Syntax-highlighted cat
     │   ├── btop.nix                # System monitor
     │   ├── carapace.nix            # Multi-shell completions
+    │   ├── color-profiles.nix      # GNOME ICC profile deployment
     │   ├── fastfetch.nix           # System info display
     │   ├── git.nix                 # Git config + aliases
     │   ├── helix.nix               # Evil-helix editor
@@ -327,45 +343,48 @@ If you already have a working NixOS system and just want the user dotfiles:
 
 ### System-level modules
 
-| Module | Lines | What it does |
-|--------|-------|-------------|
-| `audio.nix` | ~15 | PipeWire (pulse, alsa, jack) |
-| `bluetooth.nix` | ~45 | BlueZ + USB autosuspend fix for IMC 13d3:3621 |
-| `boot.nix` | ~35 | systemd-boot, kernel params, initrd |
-| `desktop.nix` | ~30 | GNOME DE + extensions list |
-| `fail2ban.nix` | ~25 | SSH brute-force protection |
-| `firewall.nix` | ~20 | nftables rules |
-| `flatpak.nix` | ~70 | Declarative flatpak apps (system-level) |
-| `kanata.nix` | ~290 | Keyboard remapping (KDL) |
-| `locale.nix` | ~15 | Timezone, locale, keymap |
-| `logging.nix` | ~25 | Journald settings |
-| `maintenance.nix` | ~25 | Auto-upgrade, GC |
-| `networking.nix` | ~25 | NetworkManager, firewall basics |
-| `nix-settings.nix` | ~45 | Nix daemon config, flakes, GC |
-| `nvf.nix` | ~350 | Declarative Neovim (LSP, DAP, treesitter) |
-| `packages.nix` | ~350 | System-wide packages |
-| `programs.nix` | ~20 | fzf, mtr, gnupg agent |
-| `sensors.nix` | ~35 | OpenRGB + OpenTabletDriver |
-| `theming.nix` | ~45 | GDM login wallpaper (gnome-shell SCSS overlay) |
-| `virtualization.nix` | ~35 | QEMU/KVM, virt-manager |
+| Module | What it does |
+|---|---|
+| `audio.nix` | PipeWire (pulse, alsa, jack) |
+| `bluetooth.nix` | BlueZ + USB autosuspend fix for IMC 13d3:3621 |
+| `boot.nix` | systemd-boot, kernel params, initrd, Plymouth removed (now in desktop) |
+| `desktop.nix` | GNOME DE + extensions list |
+| `fail2ban.nix` | SSH brute-force protection |
+| `firewall.nix` | nftables rules (specific ports, no wide ranges) |
+| `flatpak.nix` | Declarative flatpak apps (system-level) |
+| `kanata.nix` | Keyboard remapping (KDL) |
+| `locale.nix` | Timezone, locale, keymap |
+| `logging.nix` | Journald settings |
+| `maintenance.nix` | Flake-based auto-upgrade, GC |
+| `networking.nix` | NetworkManager, firewall basics |
+| `nix-settings.nix` | Nix daemon config, flakes, registry pinning, nixPath |
+| `nvf.nix` | Declarative Neovim (LSP, DAP, treesitter) |
+| `packages.nix` | System-wide packages |
+| `podman.nix` | Declarative OCI containers (Debian @ :2222, Rocky @ :2223) |
+| `printing.nix` | CUPS printing |
+| `programs.nix` | fzf, mtr, gnupg agent |
+| `sensors.nix` | OpenRGB + OpenTabletDriver |
+| `theming.nix` | GDM login wallpaper (gnome-shell SCSS overlay) |
+| `virtualization.nix` | QEMU/KVM, virt-manager |
 
 ### User-level programs
 
-| Module | Lines | What it does |
-|--------|-------|-------------|
-| `aliases.nix` | ~290 | All bash aliases (shell, bat, eza, git, nix, systemd, network, infra) |
-| `bash.nix` | ~200 | ble.sh, vi mode, custom functions, init order |
-| `atuin.nix` | ~15 | Shell history sync |
-| `bat.nix` | ~25 | Syntax highlighting (`Catppuccin Mocha`) |
-| `btop.nix` | ~15 | System monitor |
-| `carapace.nix` | ~10 | Multi-shell completions |
-| `fastfetch.nix` | ~80 | System info (Catppuccin-Mocha palette) |
-| `git.nix` | ~45 | Git config + aliases |
-| `helix.nix` | ~15 | Editor theme |
-| `kitty.nix` | ~390 | Terminal (inline Catppuccin-Mocha theme) |
-| `nixdatifier.nix` | ~15 | NixOS desktop widget |
-| `starship.nix` | ~70 | Shell prompt (Catppuccin-Mocha palette) |
-| `zellij.nix` | ~25 | Terminal multiplexer (KDL config) |
+| Module | What it does |
+|---|---|
+| `aliases.nix` | All bash aliases (shell, bat, eza, git, nix, systemd, network, infra) |
+| `bash.nix` | ble.sh, vi mode, custom functions, init order |
+| `atuin.nix` | Shell history sync |
+| `bat.nix` | Syntax highlighting (`Catppuccin Mocha`) |
+| `btop.nix` | System monitor |
+| `carapace.nix` | Multi-shell completions |
+| `color-profiles.nix` | GNOME ICC color profile deployment (per-host) |
+| `fastfetch.nix` | System info (Catppuccin-Mocha palette) |
+| `git.nix` | Git config + aliases |
+| `helix.nix` | Editor theme |
+| `kitty.nix` | Terminal (inline Catppuccin-Mocha theme) |
+| `nixdatifier.nix` | NixOS desktop widget |
+| `starship.nix` | Shell prompt (Catppuccin-Mocha palette) |
+| `zellij.nix` | Terminal multiplexer (KDL config) |
 
 ---
 
@@ -389,7 +408,7 @@ All shell tools are installed via Home Manager (not system-level) to control ini
 ## Key Design Decisions
 
 | Decision | Rationale |
-|----------|-----------|
+|---|---|
 | **Single-purpose modules** | A module named `audio.nix` only touches audio. No kitchen-sink files. |
 | **Flakes** | Reproducible inputs with lockfile. All hosts share one `flake.nix`. |
 | **Home Manager** | Declarative per-user config. Clean separation from system modules. |
@@ -399,13 +418,18 @@ All shell tools are installed via Home Manager (not system-level) to control ini
 | **All shell tools in HM** | atuin, zoxide, carapace, starship, blesh are all user-level to avoid init-order conflicts. |
 | **nix-my-gnome for dconf** | GNOME settings are generated from a live dconf dump, not hand-edited. Reproducible and version-controlled. |
 | **KDL for complex configs** | Zellij and Kanata use raw KDL instead of Nix attrset serialization for readability. |
+| **System split: core vs desktop** | `minimal`/`server` import only `system-core.nix`. `ghost`/`titan` import both. Eliminates desktop bloat on headless hosts. |
+| **Flake-based auto-upgrade** | `system.autoUpgrade.flake` with `--update-input nixpkgs` replaces deprecated channel-based upgrades. |
+| **Registry pinning** | `nix.registry.nixpkgs.flake = inputs.nixpkgs` pins `nix run nixpkgs#foo` to the exact locked nixpkgs. |
+| **Declarative containers** | Podman containers (Debian, Rocky Linux) declared in Nix for reproducible local dev environments. |
+| **ICC profiles in repo** | GNOME color calibrations stored per-host under `assets/icc/<host>/` and linked via Home Manager. |
 
 ---
 
 ## Flake Inputs
 
 | Input | URL | Purpose |
-|-------|-----|---------|
+|---|---|---|
 | `nixpkgs` | `github:NixOS/nixpkgs/nixos-26.05` | Primary package set |
 | `home-manager` | `github:nix-community/home-manager/release-26.05` | Per-user dotfiles |
 | `treefmt-nix` | `github:numtide/treefmt-nix` | Tree-wide formatter (alejandra, deadnix) |
@@ -415,17 +439,19 @@ All shell tools are installed via Home Manager (not system-level) to control ini
 | `nix-flatpak` | `github:gmodena/nix-flatpak/?ref=latest` | Declarative system-wide flatpaks |
 | `vellum` | `github:blackhat-7/vellum.nvim` | Extra nvim plugin (non-flake) |
 | `kitty-scrollback` | `github:mikesmithgh/kitty-scrollback.nvim/v8.0.0` | Kitty scrollback plugin (non-flake) |
+| `pure-vim` | `github:stefan-hacks/pure-vim` | Declarative Vim configuration |
+| `por-cli` | `github:stefan-hacks/por-cli` | Terminal video search & playback |
 
 ---
 
 ## Host Reference
 
-| Host | Hardware | Notes |
-|------|----------|-------|
-| **titan** | AZW SER mini-PC, AMD GPU, LUKS encrypted root | Shared LUKS UUID with ghost. k10temp only (no it87 fan sensor — EC limitation). |
-| **ghost** | Intel/AMD, LUKS encrypted root | Shared LUKS UUID with titan. |
-| **minimal** | Generic | No GPU drivers, no desktop extras. |
-| **server** | Headless | No desktop, minimal packages. |
+| Host | Hardware | Imports | Notes |
+|---|---|---|---|
+| **titan** | AZW SER mini-PC, AMD GPU, LUKS encrypted root | core + desktop | Shared LUKS UUID with ghost. k10temp only (no it87 fan sensor — EC limitation). |
+| **ghost** | Intel/AMD, LUKS encrypted root | core + desktop | Shared LUKS UUID with titan. ICC color profiles in `assets/icc/ghost/`. |
+| **minimal** | Generic | core only | No GPU drivers, no desktop, no Plymouth, no audio. |
+| **server** | Headless | core only | No desktop, minimal packages, no graphical boot. |
 
 ---
 
