@@ -1,5 +1,5 @@
 # Kanata keyboard remapping
-{...}: {
+_: {
   services.kanata = {
     enable = true;
     keyboards = {

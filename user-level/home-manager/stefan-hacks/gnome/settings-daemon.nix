@@ -3,7 +3,7 @@
 {lib, ...}: {
   dconf.settings = {
     "org/gnome/control-center" = {
-      last-panel = "keyboard";
+      last-panel = "color";
       window-state = lib.hm.gvariant.mkTuple [980 640 false];
     };
 
@@ -36,15 +36,15 @@
     };
 
     "org/gnome/portal/filechooser/org.gnome.Settings" = {
-      last-folder-path = "/home/stefan-hacks/.config/nixos/assets/wallpapers";
+      last-folder-path = "/home/stefan-hacks/Pictures";
     };
 
     "org/gnome/portal/filechooser/org.mozilla.firefox" = {
-      last-folder-path = "/home/stefan-hacks/Pictures/Screenshots";
+      last-folder-path = "/home/stefan-hacks/Pictures";
     };
 
     "org/gnome/settings-daemon/global-shortcuts" = {
-      applications = ["hermes"];
+      applications = ["hermes" "com.onepassword.OnePassword"];
     };
 
     "org/gnome/settings-daemon/global-shortcuts/com.onepassword.OnePassword" = {

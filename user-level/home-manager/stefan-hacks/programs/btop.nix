@@ -1,5 +1,5 @@
 # btop configuration with Catppuccin-Mocha theme
-{...}: {
+_: {
   xdg.configFile."btop/btop.conf".text = ''
     # btop configuration — managed by Nix
     color_theme = "catppuccin-mocha"

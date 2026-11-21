@@ -2,7 +2,7 @@
 # Addresses post-suspend/hibernate HID reconnection failures (e.g. Logitech MX Master 3S).
 # The Bluetooth controller resumes but BlueZ does not re-trigger HID enumeration.
 # Fix: restart bluetooth.service after resume + kernel-side HID handling.
-{ ...}: {
+_: {
   hardware.bluetooth = {
     enable = true;
 

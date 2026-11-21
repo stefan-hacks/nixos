@@ -12,7 +12,7 @@
     };
 
     "org/gnome/desktop/interface" = {
-      accent-color = "slate";
+      accent-color = "pink";
       color-scheme = "prefer-dark";
       document-font-name = "JetBrainsMono Nerd Font Thin 12";
       font-name = "JetBrainsMono Nerd Font Thin 11";

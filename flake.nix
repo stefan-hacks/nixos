@@ -15,7 +15,7 @@
     };
 
     pure-vim = {
-      url = "path:/home/stefan-hacks/Projects/pure-vim";
+      url = "github:stefan-hacks/pure-vim";
     };
 
     nvf = {

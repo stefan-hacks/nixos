@@ -3,7 +3,7 @@
 { ...}: {
   dconf.settings = {
     "org/gnome/desktop/notifications" = {
-      application-children = ["firefox" "org-gnome-console" "org-gnome-characters" "gnome-about-panel" "gnome-power-panel" "de-haeckerfelix-shortwave" "discord" "org-gnome-pomodoro" "com-ktechpit-whatsie" "org-gnome-nautilus" "chromium-browser" "1password" "org-gnome-papers" "org-gnome-loupe" "gnome-printers-panel" "org-gnome-extensions" "org-gnome-shell-extensions" "virt-manager" "mpv" "org-mozilla-firefox" "org-gnome-settings" "org-gnome-epiphany" "org-gnome-evolution" "mullvad-vpn" "org-gnome-evolution-alarm-notify" "org-gnome-software"];
+      application-children = ["firefox" "org-gnome-console" "org-gnome-characters" "gnome-about-panel" "gnome-power-panel" "de-haeckerfelix-shortwave" "discord" "org-gnome-pomodoro" "com-ktechpit-whatsie" "org-gnome-nautilus" "chromium-browser" "1password" "org-gnome-papers" "org-gnome-loupe" "gnome-printers-panel" "org-gnome-extensions" "org-gnome-shell-extensions" "virt-manager" "mpv" "org-mozilla-firefox" "org-gnome-settings" "org-gnome-epiphany" "org-gnome-evolution" "mullvad-vpn" "org-gnome-evolution-alarm-notify" "org-gnome-software" "com-onepassword-onepassword"];
       show-banners = true;
     };
 
@@ -21,6 +21,10 @@
 
     "org/gnome/desktop/notifications/application/com-ktechpit-whatsie" = {
       application-id = "com.ktechpit.whatsie.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/com-onepassword-onepassword" = {
+      application-id = "com.onepassword.OnePassword.desktop";
     };
 
     "org/gnome/desktop/notifications/application/de-haeckerfelix-shortwave" = {

@@ -203,14 +203,17 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1795178200,
-        "narHash": "sha256-jLSsVB752GU6N5pjk35fEC5XxSOy0whwq6pX+GFbXHs=",
-        "path": "/home/stefan-hacks/Projects/pure-vim",
-        "type": "path"
+        "lastModified": 1795216982,
+        "narHash": "sha256-mXlIOWHbNLg+N0BDkUWPxvFgutbiGB++H4Es3tlHeLQ=",
+        "owner": "stefan-hacks",
+        "repo": "pure-vim",
+        "rev": "f9e57268ae4fd86ee44a885ed8d601a928c78d4f",
+        "type": "github"
       },
       "original": {
-        "path": "/home/stefan-hacks/Projects/pure-vim",
-        "type": "path"
+        "owner": "stefan-hacks",
+        "repo": "pure-vim",
+        "type": "github"
       }
     },
     "root": {

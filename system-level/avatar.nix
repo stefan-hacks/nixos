@@ -1,6 +1,6 @@
 # User avatar via AccountsService (system-level, required for GDM/GNOME display).
 # AccountsService does NOT read ~/.face on NixOS; it only uses /var/lib/AccountsService/.
-{...}: let
+_: let
   username = "stefan-hacks";
   avatar = ../assets/icon2.png;
 in {
