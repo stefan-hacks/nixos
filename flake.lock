@@ -226,11 +226,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794751393,
-        "narHash": "sha256-tfaPe1ffczLFEDKg/rgyE+u62G0LFwgXw4URl1KqAAE=",
+        "lastModified": 1795231360,
+        "narHash": "sha256-mlJJjCLRyzmyxXyUlS6sHAK5T9QViQmW4SKk0aJ94iM=",
         "owner": "stefan-hacks",
         "repo": "por-cli",
-        "rev": "ca5b5fb600e7e9b2f463dce3c7eaa0076c93c53f",
+        "rev": "e4a8dd0acde309b207c99bc16ca75e65cdc6d29f",
         "type": "github"
       },
       "original": {
