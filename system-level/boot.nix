@@ -11,7 +11,7 @@ _: {
     };
 
     # Quiet boot: suppress kernel and systemd status messages.
-    # Flow: systemd-boot menu → LUKS prompt → GDM → desktop
+    # Flow on desktop hosts: systemd-boot menu → LUKS prompt → GDM
     kernelParams = [
       "quiet" # Suppress kernel boot messages
       "systemd.show_status=auto" # Only show status on error

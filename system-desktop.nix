@@ -13,4 +13,8 @@ _: {
     ./system-level/flatpak.nix
     ./system-level/nvf.nix
   ];
+
+  # Plymouth graphical boot splash (desktop-only).
+  # Uses the default theme (spinner) showing a lock icon for LUKS unlock.
+  boot.plymouth.enable = true;
 }

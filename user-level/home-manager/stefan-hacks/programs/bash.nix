@@ -29,11 +29,11 @@
   # Zoxide's Bash hook is initialized explicitly in initExtra below.
   programs.eza = {
     enable = true;
-    enableBashIntegration = lib.mkForce false;
+    enableBashIntegration = false;
   };
   programs.zoxide = {
     enable = true;
-    enableBashIntegration = lib.mkForce false;
+    enableBashIntegration = false;
   };
 
   # ---------------------------------------------------------------------------
