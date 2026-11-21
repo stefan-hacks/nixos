@@ -183,6 +183,7 @@
         alias diff='batdiff'
         alias grep='batgrep'
         alias watch='batwatch'
+        alias ts='tspin'
 
         # batpipe: make `less` automatically use bat for syntax-highlighted previews
         export LESSOPEN="|batpipe %s"

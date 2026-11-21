@@ -15,6 +15,7 @@
     ./programs/btop.nix
     ./programs/nixdatifier.nix
     ./programs/color-profiles.nix
+    ./programs/tailspin.nix
     ./gnome
   ];
 
