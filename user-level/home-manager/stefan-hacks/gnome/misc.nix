@@ -43,7 +43,7 @@
     };
 
     "org/gnome/software" = {
-      check-timestamp = lib.hm.gvariant.mkInt64 1795198239;
+      check-timestamp = lib.hm.gvariant.mkInt64 1795301224;
       first-run = false;
       flatpak-purge-timestamp = lib.hm.gvariant.mkInt64 1795222605;
     };

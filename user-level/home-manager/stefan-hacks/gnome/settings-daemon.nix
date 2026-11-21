@@ -3,7 +3,7 @@
 {lib, ...}: {
   dconf.settings = {
     "org/gnome/control-center" = {
-      last-panel = "color";
+      last-panel = "background";
       window-state = lib.hm.gvariant.mkTuple [980 640 false];
     };
 
@@ -12,7 +12,7 @@
     };
 
     "org/gnome/portal/filechooser/hermes" = {
-      last-folder-path = "/home/stefan-hacks/Documents/nix_docs";
+      last-folder-path = "/home/stefan-hacks/Pictures/Screenshots";
     };
 
     "org/gnome/portal/filechooser/io.gitlab.adhami3310.Impression" = {
