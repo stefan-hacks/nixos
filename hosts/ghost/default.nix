@@ -18,6 +18,7 @@ _: {
   # LUKS encrypted root
   boot.initrd.luks.devices."cryptroot" = {
     device = "/dev/disk/by-uuid/88885349-8ff1-433e-82d6-5d62717c1cac";
+    allowDiscards = true;
   };
 
   system.stateVersion = "26.05";

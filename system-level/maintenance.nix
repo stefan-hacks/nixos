@@ -6,8 +6,15 @@ _: {
     # Run daily at 4:00 AM.
     dates = "04:00";
 
-    # Use the nixos-26.05 stable channel for automatic updates.
-    channel = "https://nixos.org/channels/nixos-26.05";
+    # Flake-based auto-upgrade (replaces channel).
+    # Updates the flake inputs and rebuilds from the locked flake.
+    flake = "/home/stefan-hacks/.config/nixos";
+    flags = [
+      "--update-input"
+      "nixpkgs"
+      "--no-write-lock-file"
+      "-L" # print build logs
+    ];
 
     # Allow reboot if required (for kernel updates).
     allowReboot = false; # Set to true for automatic reboots.

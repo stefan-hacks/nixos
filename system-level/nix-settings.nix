@@ -1,22 +1,14 @@
 # Nix package manager settings
-_: {
+{ inputs, ... }: {
   nixpkgs.config.allowUnfree = true;
 
-  # nix.nixPath is used by `nix-shell`, `nix repl`, and tools that use
-  # angle-bracket syntax like `<nixpkgs>` and `<nixos-config>`.
-  #
-  # IMPORTANT: This repo lives in ~/.config/nixos and uses a multi-host
-  # modular layout. `nixos-rebuild` must be run from that directory with
-  # the -I flag pointing to the correct host entry:
-  #
-  #   cd ~/.config/nixos
-  #   sudo nixos-rebuild switch -I nixos-config=hosts/titan/default.nix
-  #
-  # The legacy /etc/nixos/configuration.nix is intentionally NOT referenced
-  # here — it contains the old monolith and is no longer the source of truth.
-  nix.nixPath = [
-    "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
-  ];
+  # Register the flake's locked nixpkgs in the Nix registry so
+  # `nix run nixpkgs#foo` uses the exact same nixpkgs revision.
+  nix.registry.nixpkgs.flake = inputs.nixpkgs;
+
+  # Legacy nixPath for tools that still use angle-bracket syntax.
+  # Points to the flake registry entry above rather than a channel.
+  nix.nixPath = [ "nixpkgs=flake:nixpkgs" ];
 
   nix = {
     settings = {
