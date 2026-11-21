@@ -42,14 +42,12 @@
     direnv
     eza
     bat
-    bat-extras.core
     ripgrep
     fd
     zathura
     jq
     yq-go
     lolcat
-    grc
     toolong
 
     ###########################################################################
