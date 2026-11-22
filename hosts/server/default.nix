@@ -1,7 +1,7 @@
 _: {
   imports = [
     ./hardware-configuration.nix
-    ../../system-core.nix
+    ../../system-level/system-core.nix
 
     # ── Disko (uncomment during initial install only) ──
     # Imports the disko module from nix-community/disko and the declarative

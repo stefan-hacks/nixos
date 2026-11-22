@@ -1,20 +1,20 @@
 # system-core.nix — Core modules shared by ALL hosts (desktop and headless).
 _: {
   imports = [
-    ./system-level/boot.nix
-    ./system-level/nix-settings.nix
-    ./system-level/networking.nix
-    ./system-level/locale.nix
-    ./system-level/firewall.nix
-    ./system-level/fail2ban.nix
-    ./system-level/logging.nix
-    ./system-level/maintenance.nix
-    ./system-level/programs.nix
-    ./system-level/packages.nix
-    ./system-level/hardening.nix
-    ./system-level/grc.nix
-    ./system-level/color-output.nix
-    ./system-level/fwupd.nix
+    ./boot.nix
+    ./nix-settings.nix
+    ./networking.nix
+    ./locale.nix
+    ./firewall.nix
+    ./fail2ban.nix
+    ./logging.nix
+    ./maintenance.nix
+    ./programs.nix
+    ./packages.nix
+    ./hardening.nix
+    ./grc.nix
+    ./color-output.nix
+    ./fwupd.nix
   ];
 
   # Base user account (Home Manager manages dotfiles)

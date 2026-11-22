@@ -2,16 +2,16 @@
 # Import this alongside system-core.nix for hosts that run a graphical desktop.
 _: {
   imports = [
-    ./system-level/bluetooth.nix
-    ./system-level/desktop.nix
-    ./system-level/audio.nix
-    ./system-level/avatar.nix
-    ./system-level/kanata.nix
-    ./system-level/virtualization.nix
-    ./system-level/printing.nix
-    ./system-level/theming.nix
-    ./system-level/flatpak.nix
-    ./system-level/nvf.nix
+    ./bluetooth.nix
+    ./desktop.nix
+    ./audio.nix
+    ./avatar.nix
+    ./kanata.nix
+    ./virtualization.nix
+    ./printing.nix
+    ./theming.nix
+    ./flatpak.nix
+    ./nvf.nix
   ];
 
   # Plymouth graphical boot splash (desktop-only).

@@ -43,16 +43,16 @@ Three layers, no mixing:
 │  HOST          hosts/<host>/default.nix                              │
 │  ├── hardware-configuration.nix   (generated, per-machine)           │
 │  ├── sensors.nix                  (host-specific hardware quirks)    │
-│  └── imports → system-core.nix + system-desktop.nix (optional)     │
-│                                                                      │
-│  SYSTEM-CORE   system-core.nix                                       │
-│  └── system-level/                                                   │
-│      ├── boot.nix, networking.nix, firewall.nix                      │
-│      ├── locale.nix, logging.nix, maintenance.nix                      │
-│      ├── programs.nix, nix-settings.nix                              │
-│      └── hardening, boot, nix daemon, etc.                           │
-│                                                                      │
-│  SYSTEM-DESKTOP system-desktop.nix                                   │
+│  └── imports → system-level/system-core.nix + system-level/system-desktop.nix (optional)
+│
+│  SYSTEM-CORE   system-level/system-core.nix
+│  └── system-level/
+│      ├── boot.nix, networking.nix, firewall.nix
+│      ├── locale.nix, logging.nix, maintenance.nix
+│      ├── programs.nix, nix-settings.nix
+│      └── hardening, boot, nix daemon, etc.
+│
+│  SYSTEM-DESKTOP system-level/system-desktop.nix
 │  └── system-level/                                                   │
 │      ├── desktop.nix, audio.nix, bluetooth.nix                        │
 │      ├── theming.nix, flatpak.nix, nvf.nix                           │
@@ -72,7 +72,7 @@ Three layers, no mixing:
 | **System Desktop** | GUI-only modules imported by desktop hosts (GNOME, audio, flatpak, theming, podman). |
 | **User** | Dotfiles, program configs, shell aliases, GNOME dconf, ICC color profiles. Declarative via Home Manager. |
 
-**Split rule:** `minimal` and `server` import only `system-core.nix`. `ghost` and `titan` import both.
+**Split rule:** `minimal` and `server` import only `system-level/system-core.nix`. `ghost` and `titan` import both.
 
 ---
 
@@ -81,8 +81,9 @@ Three layers, no mixing:
 ```
 ~/.config/nixos/
 ├── flake.nix
-├── system-core.nix                 # Universal OS modules (all hosts)
-├── system-desktop.nix              # GUI-only modules (desktop hosts)
+├── system-level/
+│   ├── system-core.nix             # Universal OS modules (all hosts)
+│   ├── system-desktop.nix          # GUI-only modules (desktop hosts)
 ├── system.nix                      # User account definition only
 ├── README.md
 │
@@ -428,7 +429,7 @@ All shell tools are installed via Home Manager (not system-level) to control ini
 | **All shell tools in HM** | atuin, zoxide, carapace, starship, blesh are all user-level to avoid init-order conflicts. |
 | **nix-my-gnome for dconf** | GNOME settings are generated from a live dconf dump, not hand-edited. Reproducible and version-controlled. |
 | **KDL for complex configs** | Zellij and Kanata use raw KDL instead of Nix attrset serialization for readability. |
-| **System split: core vs desktop** | `minimal`/`server` import only `system-core.nix`. `ghost`/`titan` import both. Eliminates desktop bloat on headless hosts. |
+| **System split: core vs desktop** | `minimal`/`server` import only `system-level/system-core.nix`. `ghost`/`titan` import both. Eliminates desktop bloat on headless hosts. |
 | **Flake-based auto-upgrade** | `system.autoUpgrade.flake` with `--update-input nixpkgs` replaces deprecated channel-based upgrades. |
 | **Registry pinning** | `nix.registry.nixpkgs.flake = inputs.nixpkgs` pins `nix run nixpkgs#foo` to the exact locked nixpkgs. |
 | **Declarative containers** | Podman containers (Debian, Rocky Linux) declared in Nix for reproducible local dev environments. |
