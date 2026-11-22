@@ -62,6 +62,7 @@
       # ── User-requested additions ──
       "io.github.diegopvlk.Cine"
       "net.donnybeelo.Convey"
+      "org.gnome.Connections"
     ];
 
     # ── Auto-updates ──
