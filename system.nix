@@ -2,7 +2,7 @@
 # Simply imports both core and desktop modules.
 _: {
   imports = [
-    ./system-core.nix
-    ./system-desktop.nix
+    ./system-level/system-core.nix
+    ./system-level/system-desktop.nix
   ];
 }
