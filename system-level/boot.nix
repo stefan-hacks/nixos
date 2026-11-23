@@ -6,6 +6,11 @@ _: {
       systemd-boot = {
         enable = true;
         configurationLimit = 10;
+        # systemd 260+ outputs ANSI color codes in bootctl status even in
+        # non-interactive contexts, breaking the version-detection regex in
+        # systemd-boot-builder.py.  graceful = true prevents the script from
+        # hard-failing when it cannot detect the installed bootloader version.
+        graceful = true;
       };
       efi.canTouchEfiVariables = true;
     };
