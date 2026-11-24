@@ -1,28 +1,4 @@
-# System maintenance and auto-upgrade
+# System maintenance — auto-upgrade is intentionally disabled.
+# The owner prefers to run upgrades manually with `nh os switch`.
 _: {
-  system.autoUpgrade = {
-    enable = true;
-
-    # Run daily at 4:00 AM.
-    dates = "04:00";
-
-    # Flake-based auto-upgrade (replaces channel).
-    # Updates the flake inputs and rebuilds from the locked flake.
-    flake = "/home/stefan-hacks/.config/nixos";
-    flags = [
-      "--update-input"
-      "nixpkgs"
-      "--no-write-lock-file"
-      "-L" # print build logs
-    ];
-
-    # Allow reboot if required (for kernel updates).
-    allowReboot = false; # Set to true for automatic reboots.
-  };
-
-  # Copy the NixOS configuration file and link it from the resulting system
-  # (/run/current-system/configuration.nix). This is useful in case you
-  # accidentally delete configuration.nix.
-  # NOTE: Disabled because flakes do not support copySystemConfiguration.
-  # system.copySystemConfiguration = true;
 }
