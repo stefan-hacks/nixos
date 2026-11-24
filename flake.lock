@@ -60,11 +60,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1795525547,
-        "narHash": "sha256-yswQpHd7/Q0ZuKXz/o4ErB6LZHvNkTNqCeQmMb3v9gc=",
+        "lastModified": 1795529295,
+        "narHash": "sha256-8Dy8QlQ0ewiAxmPRqfmtIeWcprOH5KTn8muexghRtos=",
         "owner": "stefan-hacks",
         "repo": "gnome-island",
-        "rev": "5ff0460e685902a87369760f638beed8fbde5dc5",
+        "rev": "9f406595f5960bb3d4c52201523b6b21a65ecaef",
         "type": "github"
       },
       "original": {
