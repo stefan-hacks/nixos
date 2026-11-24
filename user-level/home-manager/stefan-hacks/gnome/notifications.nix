@@ -71,6 +71,10 @@
       application-id = "nixdatifier.desktop";
     };
 
+    "org/gnome/desktop/notifications/application/org-chromium-chromium" = {
+      application-id = "org.chromium.Chromium.desktop";
+    };
+
     "org/gnome/desktop/notifications/application/org-gnome-characters" = {
       application-id = "org.gnome.Characters.desktop";
     };
@@ -149,6 +153,10 @@
 
     "org/gnome/desktop/notifications/application/virt-manager" = {
       application-id = "virt-manager.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/xdg-desktop-portal-gnome" = {
+      application-id = "xdg-desktop-portal-gnome.desktop";
     };
   };
 }

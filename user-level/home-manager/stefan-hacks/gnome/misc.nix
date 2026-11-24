@@ -15,12 +15,26 @@
       window-width = 861;
     };
 
+    "org/gnome/desktop/break-reminders/eyesight" = {
+      play-sound = true;
+    };
+
+    "org/gnome/desktop/break-reminders/movement" = {
+      duration-seconds = lib.hm.gvariant.mkUint32 300;
+      interval-seconds = lib.hm.gvariant.mkUint32 1800;
+      play-sound = true;
+    };
+
     "org/gnome/desktop/screensaver" = {
       color-shading-type = "solid";
       picture-options = "zoom";
       picture-uri = "file:///home/stefan-hacks/.local/share/backgrounds/2026-11-20-13-18-47-wallpaper36.png";
       primary-color = "#000000000000";
       secondary-color = "#000000000000";
+    };
+
+    "org/gnome/desktop/search-providers" = {
+      sort-order = ["org.gnome.Settings.desktop" "org.gnome.Contacts.desktop" "org.gnome.Nautilus.desktop"];
     };
 
     "org/gnome/epiphany/state" = {
@@ -43,7 +57,7 @@
     };
 
     "org/gnome/software" = {
-      check-timestamp = lib.hm.gvariant.mkInt64 1795301224;
+      check-timestamp = lib.hm.gvariant.mkInt64 1795501842;
       first-run = false;
       flatpak-purge-timestamp = lib.hm.gvariant.mkInt64 1795222605;
     };

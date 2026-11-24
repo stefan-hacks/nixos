@@ -45,6 +45,11 @@
       vm-window-size = lib.hm.gvariant.mkTuple [1536 795];
     };
 
+    "org/virt-manager/virt-manager/vms/acb20943c0b746db911832b444b55bb5" = {
+      autoconnect = 1;
+      vm-window-size = lib.hm.gvariant.mkTuple [1280 842];
+    };
+
     "org/virt-manager/virt-manager/vms/f2814f7d032e4d48b5db91b3fa5a0e60" = {
       autoconnect = 1;
       vm-window-size = lib.hm.gvariant.mkTuple [1280 842];
