@@ -8,7 +8,11 @@
 # symlinks because colord tries to overwrite generated profiles,
 # and writing through a symlink fails with "Too many levels of
 # symbolic links".
-{ config, lib, ... }: {
+{
+  config,
+  lib,
+  ...
+}: {
   home.activation.copyIccProfiles = lib.hm.dag.entryAfter ["writeBoundary"] ''
     $DRY_RUN_CMD mkdir -p ${config.home.homeDirectory}/.local/share/icc
     $DRY_RUN_CMD cp -f ${../../../../assets/icc/ghost/edid-a6f8f533d7d106c2a2c48e4d69fe4b8a.icc} \
