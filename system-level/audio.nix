@@ -11,7 +11,7 @@ _: {
       "context.modules" = [
         {
           name = "libpipewire-module-x11-bell";
-          flags = [ "disabled" ];
+          flags = ["disabled"];
         }
       ];
     };
