@@ -38,5 +38,6 @@
     pure-vim.enable = true;
     por-cli.enable = true;
     home-manager.enable = true;
+    gnome-island.enable = true;
   };
 }

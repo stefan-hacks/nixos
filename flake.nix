@@ -47,6 +47,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    gnome-island = {
+      url = "github:stefan-hacks/gnome-island";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     kitty-scrollback = {
       url = "github:mikesmithgh/kitty-scrollback.nvim/v8.0.0";
       flake = false;
@@ -85,6 +90,7 @@
                   inputs.nixdatifier.homeManagerModules.default
                   inputs.pure-vim.homeManagerModules.default
                   inputs.por-cli.homeManagerModules.default
+                  inputs.gnome-island.homeManagerModules.gnome-island
                   ./user-level/home-manager/stefan-hacks/default.nix
                 ];
               };
