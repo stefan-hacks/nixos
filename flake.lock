@@ -60,11 +60,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1795557821,
-        "narHash": "sha256-BgG6CeanK/I4zLFAk7WjG7QH36X+ZtkWvakFK/Sl/AA=",
+        "lastModified": 1795564254,
+        "narHash": "sha256-s90zihGeqta23X4Ztj/SLCvIzCLbbcrB+OlAi3nHH2k=",
         "owner": "stefan-hacks",
         "repo": "gnome-island",
-        "rev": "3867710595582bba21676c9bd7a809c91c69e7ee",
+        "rev": "b36547a178e4ccee2bc602c93c8b4deaada13c8a",
         "type": "github"
       },
       "original": {
@@ -190,11 +190,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794916538,
-        "narHash": "sha256-Jh3At3Fl6/dqgdS3V456vhiQngvG/OekjtGkj8kp3Cs=",
+        "lastModified": 1795588807,
+        "narHash": "sha256-3Wyl02hgqH3yob2ylpAJ7u0l5UPzuMKpuA9cn7qwwvc=",
         "owner": "Muddyblack",
         "repo": "nixdatifier",
-        "rev": "6692c30d7565b9fb468d61bc8e3c529cfd3efb09",
+        "rev": "4dd983a89071d0c6435abc6af3a554f99424bab8",
         "type": "github"
       },
       "original": {
