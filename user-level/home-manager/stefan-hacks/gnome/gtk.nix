@@ -12,7 +12,9 @@
     };
 
     "org/gnome/desktop/interface" = {
-      accent-color = "slate";
+      # accent-color is managed dynamically by the gnome-island extension
+      # when auto-theme is enabled; do not hard-code here.
+      # accent-color = "slate";
       color-scheme = "prefer-dark";
       document-font-name = "JetBrainsMono Nerd Font Thin 12";
       font-name = "JetBrainsMono Nerd Font Thin 11";

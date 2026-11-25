@@ -1,6 +1,6 @@
 # kitty.nix — Home Manager kitty terminal configuration
-# Includes kitty-scrollback.nvim integration and Catppuccin-Mocha themes.
-_: let
+# Includes kitty-scrollback.nvim integration and themes from kitty-themes.
+{pkgs, ...}: let
   # Catppuccin-Mocha theme (dark)
   darkTheme = ''
     # vim:ft=kitty
@@ -199,9 +199,10 @@ in {
     # Extra Kitty config (verbatim) — themes + key mappings + kittens
     extraConfig = ''
       # ═══════════════════════════════════════════════════════════════════════════
-      # THEME
+      # THEME — managed dynamically by gnome-island extension; do not hard-code.
+      # The extension writes the matched theme to gnome-island-theme.conf.
       # ═══════════════════════════════════════════════════════════════════════════
-      include dark-theme.auto.conf
+      include ~/.config/kitty/gnome-island-theme.conf
 
       # ═══════════════════════════════════════════════════════════════════════════
       # KEYBINDINGS
@@ -380,9 +381,15 @@ in {
 
   # Place theme files and kitten in ~/.config/kitty/
   xdg.configFile = {
+    # Fallback reference themes when auto-theme is off.
     "kitty/dark-theme.auto.conf".text = darkTheme;
     "kitty/light-theme.auto.conf".text = lightTheme;
     "kitty/no-preference-theme.auto.conf".text = lightTheme;
     "kitty/kitty_scrollback_nvim.py".text = kittyScrollbackNvimPy;
+    # Full kitty themes collection for gnome-island auto-theme.
+    "kitty/themes".source = "${pkgs.kitty-themes}/share/kitty-themes/themes";
+    # Initial empty dynamic theme file — the gnome-island extension overwrites this
+    # at runtime with an `include` pointing to the matched theme.
+    "kitty/gnome-island-theme.conf".text = "# Placeholder — replaced by gnome-island auto-theme.\n";
   };
 }

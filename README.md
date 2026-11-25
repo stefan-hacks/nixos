@@ -392,7 +392,7 @@ If you already have a working NixOS system and just want the user dotfiles:
 | `fastfetch.nix` | System info (Catppuccin-Mocha palette) |
 | `git.nix` | Git config + aliases |
 | `helix.nix` | Editor theme |
-| `kitty.nix` | Terminal (inline Catppuccin-Mocha theme) |
+| `kitty.nix` | Terminal (dynamic themes via gnome-island; kitty-themes collection) |
 | `nixdatifier.nix` | NixOS desktop widget |
 | `starship.nix` | Shell prompt (Catppuccin-Mocha palette) |
 | `zellij.nix` | Terminal multiplexer (KDL config) |
