@@ -3,7 +3,7 @@
 {lib, ...}: {
   dconf.settings = {
     "org/gnome/control-center" = {
-      last-panel = "display";
+      last-panel = "background";
       window-state = lib.hm.gvariant.mkTuple [980 640 false];
     };
 

@@ -25,6 +25,13 @@
       play-sound = true;
     };
 
+    "org/gnome/desktop/privacy" = {
+      old-files-age = lib.hm.gvariant.mkUint32 7;
+      recent-files-max-age = 7;
+      remove-old-temp-files = true;
+      remove-old-trash-files = true;
+    };
+
     "org/gnome/desktop/screensaver" = {
       color-shading-type = "solid";
       picture-options = "zoom";
@@ -57,7 +64,7 @@
     };
 
     "org/gnome/software" = {
-      check-timestamp = lib.hm.gvariant.mkInt64 1795501842;
+      check-timestamp = lib.hm.gvariant.mkInt64 1795590238;
       first-run = false;
       flatpak-purge-timestamp = lib.hm.gvariant.mkInt64 1795222605;
     };

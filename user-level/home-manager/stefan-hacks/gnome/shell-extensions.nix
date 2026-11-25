@@ -51,6 +51,7 @@
     };
 
     "org/gnome/shell/extensions/blur-my-shell/panel" = {
+      blur = false;
       brightness = 0.59999999999999998;
       corner-radius = 0;
       pipeline = "pipeline_default";
@@ -81,6 +82,27 @@
       visualizer-bars = 16;
       visualizer-padding = 4;
       visualizer-style = 3;
+    };
+
+    "org/gnome/shell/extensions/isle" = {
+      app-usage = true;
+      cava-enabled = true;
+      clipboard-layout = "horizontal";
+      clock-date = false;
+      compact-song-title = true;
+      devices-page = true;
+      glass-tint = 100;
+      hover-delay = 80;
+      island-in-top-bar = true;
+      island-shape = "notch";
+      island-theme = "gnome";
+      lyrics-providers-off = ["musixmatch"];
+      mini-bars-cover-color = true;
+      preview-settings = true;
+      top-bar-black-with-windows = false;
+      top-bar-color = true;
+      top-bar-opacity = 0;
+      top-bar-style = "glass";
     };
 
     "org/gnome/shell/extensions/libpanel" = {
