@@ -254,6 +254,7 @@
     ###########################################################################
     gnome-tweaks
     gnome-themes-extra
+    yaru-theme
     adw-gtk3
     stirling-pdf-desktop
 
