@@ -4,28 +4,24 @@
   ...
 }: let
   cfg = config.services.ollama;
-  baseModel = "qwen3:4b";
+  # Swap to "qwen2.5-coder:3b" if you want ~2x faster generation at the cost of some complex multi-file accuracy
+  baseModel = "qwen2.5-coder:7b";
   embedModel = "nomic-embed-text:latest";
   customModel = "infra-systems-coder";
-
-  # Optional: Once you train a GGUF LoRA adapter on your NixOS/Rust/GJS/RHEL/Debian docs,
-  # point `adapterPath` to it and uncomment the `ADAPTER` line in `modelfile` below.
-  # adapterPath = "/var/lib/ollama/adapters/infra-systems-lora.gguf";
 
   modelfile = pkgs.writeText "Modelfile.${customModel}" ''
     FROM ${baseModel}
     # ADAPTER /var/lib/ollama/adapters/infra-systems-lora.gguf
 
-    # Hermes requires >=64k context so its full tool schema & memory prompts aren't truncated
-    PARAMETER num_ctx 65536
+    # 32k context fits Hermes's tool schemas + local manuals while keeping CPU prefill fast
+    PARAMETER num_ctx 32768
     # Pin to the 4 physical CPU cores on the HP EliteBook G8
     PARAMETER num_thread 4
-    PARAMETER temperature 0.15
+    PARAMETER temperature 0.1
     PARAMETER top_p 0.9
 
     SYSTEM """
-    /no_think
-    You are a pragmatic, highly focused systems architect, Linux administrator, and software engineer.
+    You are a pragmatic, decisive systems architect, Linux administrator, and software engineer.
 
     CORE DOMAINS:
     1. NixOS & Nix: Declarative flakes, NixOS modules, Home Manager, overlays, derivations, systemd hardening, and reproducible builds.
@@ -38,9 +34,10 @@
        - NixOS: atomic rollbacks, nix-store diagnostics, declarative networking, and service isolation.
 
     OPERATING & LEARNING RULES (STRICT):
+    - Act Immediately: Execute the appropriate tool call or give the direct answer on the first token. Never deliberate out loud or second-guess straightforward requests.
     - Source-Grounded Learning: Treat local manuals, man pages, official documentation, and checked-out Git repositories as the single source of truth. Inspect actual files/schemas/headers before writing code or commands.
     - Zero Guessing on Interfaces: Never invent NixOS options, RHEL/Debian flags, GJS/GNOME Shell APIs, or Terraform provider attributes. If unverified, inspect the local manual/source or state what needs verification.
-    - Pragmatic & Concise: Respond directly without internal monologues. Lead with working code, exact commands, or minimal diffs.
+    - Pragmatic & Concise: Lead with working code, exact commands, or minimal diffs. Keep prose to a minimum.
     """
   '';
 
