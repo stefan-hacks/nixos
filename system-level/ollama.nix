@@ -1,22 +1,31 @@
 {
   config,
+  lib,
   pkgs,
   ...
 }: let
   cfg = config.services.ollama;
-  baseModel = "qwen3.6:35b-a3b-coding";
+  baseModel = "qwen3:4b";
   embedModel = "nomic-embed-text:latest";
   customModel = "infra-systems-coder";
 
+  # Optional: Once you train a GGUF LoRA adapter on your NixOS/Rust/GJS/RHEL/Debian docs,
+  # point `adapterPath` to it and uncomment the `ADAPTER` line in `modelfile` below.
+  # adapterPath = "/var/lib/ollama/adapters/infra-systems-lora.gguf";
+
   modelfile = pkgs.writeText "Modelfile.${customModel}" ''
     FROM ${baseModel}
+    # ADAPTER /var/lib/ollama/adapters/infra-systems-lora.gguf
 
-    # 64k context window to hold retrieved man pages, Git diffs, NixOS options, and GJS/Rust docs
+    # Hermes requires >=64k context so its full tool schema & memory prompts aren't truncated
     PARAMETER num_ctx 65536
+    # Pin to the 4 physical CPU cores on the HP EliteBook G8
+    PARAMETER num_thread 4
     PARAMETER temperature 0.15
     PARAMETER top_p 0.9
 
     SYSTEM """
+    /no_think
     You are a pragmatic, highly focused systems architect, Linux administrator, and software engineer.
 
     CORE DOMAINS:
@@ -30,16 +39,15 @@
        - NixOS: atomic rollbacks, nix-store diagnostics, declarative networking, and service isolation.
 
     OPERATING & LEARNING RULES (STRICT):
-    - Source-Grounded Learning: Treat local manuals, man pages, official documentation, and checked-out Git repositories as the single source of truth. When given documentation paths, repo files, or tool access, inspect the actual files/schemas/headers before writing code or commands.
-    - Zero Guessing on Interfaces: Never invent NixOS options, RHEL/Debian flags, GJS/GNOME Shell APIs, or Terraform provider attributes. If a version-specific API or option is unverified, inspect the local manual/source or explicitly state what needs verification.
-    - Pragmatic & Concise: Lead with working, idiomatic code, exact commands, or minimal diffs. Skip filler prose. Highlight subtle edge cases (e.g., SELinux labels, GNOME Shell version metadata.json compatibility, Nix purity/store paths, or idempotency).
+    - Source-Grounded Learning: Treat local manuals, man pages, official documentation, and checked-out Git repositories as the single source of truth. Inspect actual files/schemas/headers before writing code or commands.
+    - Zero Guessing on Interfaces: Never invent NixOS options, RHEL/Debian flags, GJS/GNOME Shell APIs, or Terraform provider attributes. If unverified, inspect the local manual/source or state what needs verification.
+    - Pragmatic & Concise: Respond directly without internal monologues. Lead with working code, exact commands, or minimal diffs.
     """
   '';
 
   createProfileScript = pkgs.writeShellScript "create-${customModel}" ''
     set -euo pipefail
 
-    # Wait until the Ollama HTTP server is accepting connections
     for _ in $(seq 1 30); do
       if ${cfg.package}/bin/ollama list >/dev/null 2>&1; then
         break
@@ -47,7 +55,6 @@
       sleep 1
     done
 
-    # Ensure the base model is present locally before creating the derived profile
     if ! ${cfg.package}/bin/ollama list | grep -q "^${baseModel}"; then
       ${cfg.package}/bin/ollama pull "${baseModel}"
     fi
