@@ -35,6 +35,25 @@
     - Pragmatic & Concise: Lead with working, idiomatic code, exact commands, or minimal diffs. Skip filler prose. Highlight subtle edge cases (e.g., SELinux labels, GNOME Shell version metadata.json compatibility, Nix purity/store paths, or idempotency).
     """
   '';
+
+  createProfileScript = pkgs.writeShellScript "create-${customModel}" ''
+    set -euo pipefail
+
+    # Wait until the Ollama HTTP server is accepting connections
+    for _ in $(seq 1 30); do
+      if ${cfg.package}/bin/ollama list >/dev/null 2>&1; then
+        break
+      fi
+      sleep 1
+    done
+
+    # Ensure the base model is present locally before creating the derived profile
+    if ! ${cfg.package}/bin/ollama list | grep -q "^${baseModel}"; then
+      ${cfg.package}/bin/ollama pull "${baseModel}"
+    fi
+
+    exec ${cfg.package}/bin/ollama create "${customModel}" -f "${modelfile}"
+  '';
 in {
   services.ollama = {
     enable = true;
@@ -43,34 +62,37 @@ in {
     port = 11434;
     openFirewall = false;
 
-    # Pulls the MoE coding model (~23-24 GB) and a fast local embedding model for indexing manuals/repos
     loadModels = [
       baseModel
       embedModel
     ];
 
     environmentVariables = {
-      # Keep the active model resident across multi-step tool/doc lookups
       OLLAMA_KEEP_ALIVE = "45m";
       OLLAMA_NUM_PARALLEL = "1";
       OLLAMA_MAX_LOADED_MODELS = "2";
-      # Keep 64k context memory footprint compact on DDR4 RAM
       OLLAMA_FLASH_ATTENTION = "1";
       OLLAMA_KV_CACHE_TYPE = "q8_0";
     };
   };
 
-  # Rebuilds `infra-systems-coder` whenever `modelfile` changes in your NixOS flake
   systemd.services.ollama-custom-profile = {
     description = "Build specialized infra-systems-coder Ollama profile";
-    after = ["ollama.service" "ollama-model-loader.service"];
-    wants = ["ollama.service" "ollama-model-loader.service"];
+    after = ["ollama.service" "ollama-model-loader.service" "network-online.target"];
+    wants = ["ollama.service" "network-online.target"];
     wantedBy = ["multi-user.target"];
     restartTriggers = [modelfile];
+    environment = {
+      HOME = cfg.home;
+      OLLAMA_HOST = "${cfg.host}:${toString cfg.port}";
+      OLLAMA_MODELS = cfg.models;
+    };
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
-      ExecStart = "${cfg.package}/bin/ollama create ${customModel} -f ${modelfile}";
+      User = cfg.user;
+      Group = cfg.group;
+      ExecStart = createProfileScript;
     };
   };
 
