@@ -12,7 +12,7 @@ _: {
     ./theming.nix
     ./flatpak.nix
     ./nvf.nix
-    ./ollama.nix
+    # ./ollama.nix
   ];
 
   # Plymouth graphical boot splash (desktop-only).
