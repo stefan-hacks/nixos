@@ -33,6 +33,8 @@ _: {
             ;; Left Ctrl → Layer 4: Text editing / mouse wheel emulation
             l4 (tap-hold $tap-time $hold-time lctl (layer-toggle four))
 
+            ;; Right Meta (S key) → Layer 5: Numbers
+            l5 (tap-hold $tap-time $hold-time rmet (layer-toggle five))
 
             ;; Home row tap-hold modifiers
             ;; S key: tap=s, hold=Left Meta (Super/Windows key)
@@ -258,7 +260,7 @@ _: {
             tab  @qq  @ww  e    @rr  @tt  @yy  @uu  @ii  @oo  p    @so  @sc  @pi
             esc  @aa  @ss  @dd  @ff  g    @hh  @jj  @kk  @ll  @se  @ap  ret
             lsft @zz  @xx  @cc  @vv  b    n    m    @co  @fu  @fs  rsft
-            @l4  @l3  @la           @l2             @ra  _    rctl
+            @l4  @l3  @la           @l2             @ra  @l5    rctl
           )
 
           ;; LAYER TWO - Symbols - programming layer - spacebar held
@@ -288,6 +290,16 @@ _: {
             _    _    _    _    _    _    @dwb @dwf @tbd @tfd _    _
             _    _    _           _                 _    _    _
           )
+
+           ;; LAYER FIVE - Editing - text and terminal editing layer - right super key held
+           (deflayer five
+            caps @qtd @pum @dsb @isb @mut @vdn @vup @mic @psc @lts _    _
+            grv  _    _    _    _    _    _    _    _    _    _    _    _    bspc
+            tab  _    1    2    3    _    _    _    _    _    _    _    _    _
+            esc  _    4    5    6    0    _    _    _    _    _    _    _    ret
+            _    _    7    8    9    _    _    _    _    _    _    _
+            _    _    _           _                 _    _    _
+           )
 
           ;; lrld is a default shortcut to reload the configuration found on layer 3 in place of f12
         '';
