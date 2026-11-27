@@ -296,7 +296,7 @@ _: {
             caps @qtd @pum @dsb @isb @mut @vdn @vup @mic @psc @lts _    _
             grv  _    _    _    _    _    _    _    _    _    _    _    _    bspc
             tab  _    1    2    3    _    _    _    _    _    _    _    _    _
-            esc  _    4    5    6    0    _    _    _    _    _    _    _    ret
+            esc  _    4    5    6    0    _    _    _    _    _    _    ret
             _    _    7    8    9    _    _    _    _    _    _    _
             _    _    _           _                 _    _    _
            )
